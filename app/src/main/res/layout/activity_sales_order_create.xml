@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".sd.ActivitySalesOrderCreate">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarCSO"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/side_nav_bar"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/custom_progressbar"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Create Sales Order Screen"
+        android:textSize="24dp"
+        android:textColor="@color/colorVisible"
+        android:gravity="center"
+        android:background="@color/text_background"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:id="@+id/dateShow"
+        android:textSize="18dp"
+        android:layout_marginRight="12dp"
+        android:textColor="@color/colorVisible"
+        android:layout_gravity="right"
+        android:gravity="center_vertical"/>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:id="@+id/scrollViewSalesOrder"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|left"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <Spinner
+            android:layout_marginTop="16dp"
+            android:id="@+id/spinnerCustomers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_marginTop="10dp"
+                android:id="@+id/editTextCustomerNameForSO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="Customer Name" />
+
+
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Order Particulars"
+            android:textSize="18dp"
+            android:background="@color/text_background"
+            android:gravity="center"
+            android:textColor="@color/colorVisible"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+            <Spinner
+                android:id="@+id/spinnerMaterials10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="6dp"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/quantity10"
+                        android:inputType="number"
+                        android:layout_width="140dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Quantity"/>
+                </android.support.design.widget.TextInputLayout>
+                <Button
+                    android:id="@+id/addButton10"
+                    android:layout_width="wrap_content"
+                    android:background="@drawable/roundedbutton"
+                    android:layout_height="wrap_content"
+                    android:text="Add Item"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textViewCost10"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="18dp"
+                    android:text="0"
+                    android:textColor="@color/colorVisible"
+                    android:hint="Cost"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical">
+            <Spinner
+                android:id="@+id/spinnerMaterials20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="6dp"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/quantity20"
+                        android:inputType="number"
+                        android:layout_width="140dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Quantity"/>
+                </android.support.design.widget.TextInputLayout>
+                <Button
+                    android:id="@+id/addButton20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/roundedbutton"
+                    android:text="Add Item"/>
+                <TextView
+                    android:layout_marginLeft="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textViewCost20"
+                    android:textSize="18dp"
+                    android:text="0"
+                    android:textColor="@color/colorVisible"
+                    android:hint="Cost"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+            <Spinner
+                android:id="@+id/spinnerMaterials30"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="6dp"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/quantity30"
+                        android:inputType="number"
+                        android:layout_width="140dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Quantity"/>
+                </android.support.design.widget.TextInputLayout>
+                <Button
+                    android:id="@+id/addButton30"
+                    android:background="@drawable/roundedbutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Item"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textViewCost30"
+                    android:textSize="18dp"
+                    android:text="0"
+                    android:layout_marginLeft="16dp"
+                    android:textColor="@color/colorVisible"
+                    android:hint="Cost"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+            <Spinner
+                android:id="@+id/spinnerMaterials40"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="6dp"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/quantity40"
+                        android:inputType="number"
+                        android:layout_width="140dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Quantity"/>
+                </android.support.design.widget.TextInputLayout>
+                <Button
+                    android:id="@+id/addButton40"
+                    android:background="@drawable/roundedbutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Item"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textViewCost40"
+                    android:textSize="18dp"
+                    android:text="0"
+                    android:layout_marginLeft="16dp"
+                    android:textColor="@color/colorVisible"
+                    android:hint="Cost"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:textSize="18dp"
+                android:gravity="right"
+                android:id="@+id/txtViewTotalCost"
+                android:textColor="@color/colorVisible"
+                android:layout_height="wrap_content" />
+        <Button
+            android:layout_marginTop="15dp"
+            android:id="@+id/btnCreateSalesOrder"
+            android:background="@drawable/roundedbutton"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="Create Sales Order"
+            android:layout_marginRight="8dp"/>
+
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>
