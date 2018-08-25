@@ -509,22 +509,25 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                                             map.put("sales_doc_no", sales_doc_no);
                                             map.put("Customer_id",Customer_id);
 
+                                            if(!eTxtQuantity1.getText().toString().isEmpty()){
                                             map.put("material_code0",material_code[0]);
                                             map.put("quantity0", quantity[0]);
-                                            map.put("price0", price[0]);
+                                            map.put("price0", price[0]);}
 
+                                            if(!eTxtQuantity2.getText().toString().isEmpty()){
                                             map.put("material_code1",material_code[1]);
                                             map.put("quantity1", quantity[1]);
-                                            map.put("price1", price[1]);
+                                            map.put("price1", price[1]);}
 
+                                            if(!eTxtQuantity3.getText().toString().isEmpty()){
                                             map.put("material_code2",material_code[2]);
                                             map.put("quantity2", quantity[2]);
-                                            map.put("price2", price[2]);
+                                            map.put("price2", price[2]);}
 
+                                            if(!eTxtQuantity4.getText().toString().isEmpty()){
                                             map.put("material_code3",material_code[3]);
                                             map.put("quantity3", quantity[3]);
-                                            map.put("price3", price[3]);
-
+                                            map.put("price3", price[3]);}
 
                                             return map;
 
