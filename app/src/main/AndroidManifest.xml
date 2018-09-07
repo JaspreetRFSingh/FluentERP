@@ -7,7 +7,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_applogo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -24,14 +24,17 @@
         </activity>
         <activity
             android:name=".masterdata.ActivityCustomerCreate"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".masterdata.ActivityCustomerDisplay"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".sd.ActivitySalesOrderCreate"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".mm.ActivityMaterialDisplay"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".masterdata.ActivityCustomerModify"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".mm.ActivityMaterialDisplay"></activity>
     </application>
 
 </manifest>
