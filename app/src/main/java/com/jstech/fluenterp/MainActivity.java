@@ -19,7 +19,9 @@ import android.widget.Toast;
 import com.jstech.fluenterp.adapters.ExpandableListAdapter;
 import com.jstech.fluenterp.masterdata.ActivityCustomerCreate;
 import com.jstech.fluenterp.masterdata.ActivityCustomerDisplay;
+import com.jstech.fluenterp.masterdata.ActivityEmployeeCreate;
 import com.jstech.fluenterp.sd.ActivitySalesOrderCreate;
+import com.jstech.fluenterp.sd.ActivitySalesOrderList;
 import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
 import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 
@@ -117,6 +119,23 @@ public class MainActivity extends AppCompatActivity
                 {
 
                 }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Sales Orders List"))
+                {
+                    Intent intent = new Intent(MainActivity.this, ActivitySalesOrderList.class);
+                    startActivity(intent);
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Quotation"))
+                {
+
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Change Quotation"))
+                {
+
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Quotation"))
+                {
+
+                }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Material Cost Estimate"))
                 {
 
@@ -143,7 +162,8 @@ public class MainActivity extends AppCompatActivity
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Employee"))
                 {
-
+                    Intent intent = new Intent(MainActivity.this, ActivityEmployeeCreate.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Change Employee"))
                 {

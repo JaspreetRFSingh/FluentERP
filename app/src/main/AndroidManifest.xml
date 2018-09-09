@@ -31,9 +31,16 @@
         <activity
             android:name=".sd.ActivitySalesOrderCreate"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".mm.ActivityMaterialDisplay"
+        <activity
+            android:name=".mm.ActivityMaterialDisplay"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".masterdata.ActivityCustomerModify"
+        <activity
+            android:name=".masterdata.ActivityCustomerModify"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".sd.ActivitySalesOrderList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".masterdata.ActivityEmployeeCreate"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".masterdata.ActivityCustomerCreate">
+    tools:context=".masterdata.ActivityEmployeeCreate">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarCC"
+            android:id="@+id/toolbarCE"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/side_nav_bar"
@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:id="@+id/dateShowCC"
+        android:id="@+id/dateShowCE"
         android:textSize="18dp"
         android:layout_marginRight="12dp"
         android:textColor="@color/colorVisible"
@@ -32,7 +32,7 @@
         android:gravity="center_vertical"/>
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBarCE"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -46,84 +46,104 @@
         android:padding="16dp"
         android:layout_height="match_parent">
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/createEmployeeName"
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:hint="Enter Employee's Name"
+                android:inputType="textAutoComplete"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/createEmployeeAddress"
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:hint="Enter Employee's Address"
+                android:inputType="textAutoComplete"
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
-            android:text = "CREATE CUSTOMER"
-            android:layout_marginBottom="30dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="26dp"/>
+            android:orientation="horizontal">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/CreateCustomerName"
+            <Spinner
+                android:layout_width="120dp"
+                android:id="@+id/spinnerEmployeeType"
+                android:layout_marginRight="5dp"
+                android:layout_height="wrap_content"/>
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="20dp"
-                android:hint="Enter Customer's Name"
-                android:inputType="textAutoComplete"
-                android:layout_height="wrap_content" />
-        </android.support.design.widget.TextInputLayout>
-
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/createEmployeeType"
+                    android:layout_width="match_parent"
+                    android:inputType="textAutoComplete"
+                    android:focusable="false"
+                    android:hint="Employee Type"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
-                android:id="@+id/CreateCustomerAddress"
-                android:layout_width="match_parent"
-                android:layout_marginTop="20dp"
-                android:hint="Enter Customer's Address"
-                android:inputType="textAutoComplete"
-                android:layout_height="wrap_content" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/CreateCustomerCity"
-                android:layout_width="match_parent"
-                android:inputType="textAutoComplete"
-                android:hint="Enter Customer's City"
-                android:layout_marginTop="20dp"
-                android:layout_height="wrap_content" />
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/CreateCustomerPhone"
+                android:id="@+id/createEmployeePhone"
                 android:layout_width="match_parent"
                 android:inputType="phone"
-                android:hint="Enter Customer's Phone"
+                android:hint="Enter Employee's Phone"
                 android:layout_marginTop="20dp"
                 android:layout_height="wrap_content" />
         </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/editTextDateOfBirth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:hint="Date Of Birth" />
+            </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
             android:layout_height="wrap_content">
             <EditText
-                android:id="@+id/CreateCustomerGSTNumber"
+                android:id="@+id/editTextDateOfJoining"
                 android:layout_width="match_parent"
-                android:inputType="textAutoComplete"
-                android:hint="Enter Customer's GST Number"
-                android:layout_marginTop="20dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="Date Of Joining" />
         </android.support.design.widget.TextInputLayout>
 
+
         <Button
-            android:id="@+id/btnCreateCustomer"
+            android:id="@+id/btnCreateEmployee"
             android:layout_gravity="center"
             android:gravity="center"
+            android:textSize="18dp"
             android:layout_marginTop="35dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:background="@drawable/roundedbutton"
             android:layout_height="wrap_content"
-            android:text="Create Customer"/>
+            android:text="Create Employee"/>
     </LinearLayout>
 
 </LinearLayout>

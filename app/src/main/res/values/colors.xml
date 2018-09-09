@@ -6,4 +6,6 @@
     <color name="status_bar_colour">#4DB6AC</color>
     <color name="text_background">#e9e9e9</color>
     <color name="colorVisible">#00695C</color>
+    <color name="colorCardText">#004139</color>
+    <color name="card_background">#ecffe3</color>
 </resources>

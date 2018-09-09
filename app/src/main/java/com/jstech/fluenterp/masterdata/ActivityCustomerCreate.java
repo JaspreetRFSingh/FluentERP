@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,7 +24,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.jstech.fluenterp.MainActivity;
 import com.jstech.fluenterp.R;
+import com.jstech.fluenterp.sd.ActivitySalesOrderCreate;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,7 +80,7 @@ public class ActivityCustomerCreate extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCC);
         setSupportActionBar(toolbar);
-        setTitle(R.string.app_name);
+        setTitle("Create Customer Screen");
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -138,8 +141,6 @@ public class ActivityCustomerCreate extends AppCompatActivity {
                         public void onResponse(String response) {
                             try{
                                 JSONObject jsonObject = new JSONObject(response);
-                                //int success = jsonObject.getInt("success");
-                                //String message = jsonObject.getString("message");
                                 progressBar.setVisibility(View.GONE);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivityCustomerCreate.this);
                                 builder.setTitle(eTxtCustomerName.getText().toString());
@@ -165,6 +166,7 @@ public class ActivityCustomerCreate extends AppCompatActivity {
                             }catch (Exception e){
                                 Toast.makeText(ActivityCustomerCreate.this,"Some Exception: "+e,Toast.LENGTH_LONG).show();
                                 e.printStackTrace();
+                                progressBar.setVisibility(View.GONE);
                             }
 
                         }
@@ -174,6 +176,7 @@ public class ActivityCustomerCreate extends AppCompatActivity {
                         public void onErrorResponse(VolleyError error) {
                             Toast.makeText(ActivityCustomerCreate.this,"Some Error: "+error,Toast.LENGTH_LONG).show();
                             error.printStackTrace();
+                            progressBar.setVisibility(View.GONE);
                         }
                     }
             )
@@ -197,6 +200,69 @@ public class ActivityCustomerCreate extends AppCompatActivity {
 
         else{
             return;
+        }
+    }
+
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home)
+        {
+            if(!eTxtCustomerName.getText().toString().trim().isEmpty() || !eTxtCustomerAddress.getText().toString().trim().isEmpty() || !eTxtCustomerCity.getText().toString().trim().isEmpty() || !eTxtCustomerGST.getText().toString().trim().isEmpty() || !eTxtCustomerPhone.getText().toString().trim().isEmpty())
+            {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityCustomerCreate.this);
+                builder.setTitle("BACK!\n\n");
+                builder.setMessage("Your form is currently under progress. Are you sure you want to go back?");
+                builder.setPositiveButton("Yes, I'm sure!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(ActivityCustomerCreate.this, MainActivity.class));
+                    }
+                });
+                /*builder.setNegativeButton("No!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });*/
+                AlertDialog dialog = builder.create();
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+                dialog.show();
+            }else
+            {
+                startActivity(new Intent(ActivityCustomerCreate.this, MainActivity.class));
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(!eTxtCustomerName.getText().toString().trim().isEmpty() || !eTxtCustomerAddress.getText().toString().trim().isEmpty() || !eTxtCustomerCity.getText().toString().trim().isEmpty() || !eTxtCustomerGST.getText().toString().trim().isEmpty() || !eTxtCustomerPhone.getText().toString().trim().isEmpty())
+        {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityCustomerCreate.this);
+            builder.setTitle("BACK!\n\n");
+            builder.setMessage("Your form is currently under progress. Are you sure you want to go back?");
+            builder.setPositiveButton("Yes, I'm sure!", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(ActivityCustomerCreate.this, MainActivity.class));
+                }
+            });
+                /*builder.setNegativeButton("No!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });*/
+            AlertDialog dialog = builder.create();
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+            dialog.show();
+        }else
+        {
+            startActivity(new Intent(ActivityCustomerCreate.this, MainActivity.class));
         }
     }
 }
