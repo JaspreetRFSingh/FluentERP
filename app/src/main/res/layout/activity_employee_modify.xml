@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".masterdata.ActivityEmployeeModify">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarEM"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/side_nav_bar"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarEM"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/custom_progressbar"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:id="@+id/dateShowME"
+        android:textSize="18dp"
+        android:layout_marginRight="12dp"
+        android:textColor="@color/colorVisible"
+        android:layout_gravity="right"
+        android:gravity="center_vertical"/>
+
+    <ProgressBar
+        android:id="@+id/progressBarME"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/custom_progressbar"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_height="match_parent">
+
+            <Spinner
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:id="@+id/spinnerEmployeeChoice"
+                android:layout_marginRight="5dp"
+                android:layout_height="wrap_content"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/createEmployeeNameME"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:hint="Enter Employee's Name"
+                    android:inputType="textAutoComplete"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/createEmployeeAddressME"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:hint="Enter Employee's Address"
+                    android:inputType="textAutoComplete"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:layout_width="120dp"
+                    android:id="@+id/spinnerEmployeeTypeME"
+                    android:layout_marginRight="5dp"
+                    android:layout_height="wrap_content"/>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/createEmployeeTypeME"
+                        android:layout_width="match_parent"
+                        android:inputType="textAutoComplete"
+                        android:focusable="false"
+                        android:hint="Employee Type"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/createEmployeePhoneME"
+                    android:layout_width="match_parent"
+                    android:inputType="phone"
+                    android:hint="Enter Employee's Phone"
+                    android:layout_marginTop="20dp"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/editTextDateOfBirthME"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:hint="Date Of Birth" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/editTextDateOfJoiningME"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:hint="Date Of Joining" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <Button
+                android:id="@+id/btnModifyEmployee"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:layout_marginTop="35dp"
+                android:layout_width="match_parent"
+                android:background="@drawable/roundedbutton"
+                android:layout_height="wrap_content"
+                android:text="Modify Employee"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -152,6 +152,48 @@
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxCreated"
+            android:visibility="gone"
+            android:onClick="onCheckboxClicked"
+            android:textColor="@color/colorVisible"
+            android:text="Created"/>
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:onClick="onCheckboxClicked"
+            android:textColor="@color/colorVisible"
+            android:id="@+id/checkBoxProcessing"
+            android:text="Processing"/>
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxProcessed"
+            android:visibility="gone"
+            android:onClick="onCheckboxClicked"
+            android:textColor="@color/colorVisible"
+            android:text="Processed"/>
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:onClick="onCheckboxClicked"
+            android:textColor="@color/colorVisible"
+            android:id="@+id/checkBoxDispatched"
+            android:text="Dispatched"/>
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:onClick="onCheckboxClicked"
+            android:textColor="@color/colorVisible"
+            android:id="@+id/checkBoxDelivered"
+            android:layout_marginBottom="10dp"
+            android:text="Delivered"/>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

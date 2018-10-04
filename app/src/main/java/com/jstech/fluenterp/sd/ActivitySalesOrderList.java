@@ -3,6 +3,7 @@ package com.jstech.fluenterp.sd;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -54,6 +56,11 @@ public class ActivitySalesOrderList extends AppCompatActivity{
     EditText eTxtCustomerNumber;
     EditText editTextDate1;
     EditText editTextDate2;
+    CheckBox cbCreated;
+    CheckBox cbProcessing;
+    CheckBox cbProcessed;
+    CheckBox cbDispatched;
+    CheckBox cbDelivered;
     ArrayAdapter<String> adapterChoice;
     String choiceStr;
 
@@ -78,6 +85,13 @@ public class ActivitySalesOrderList extends AppCompatActivity{
     String dateStr;
     String dateStr2;
 
+    //CheckBoxes
+    String strCreated = "";
+    String strProcessing = "";
+    String strProcessed = "";
+    String strDispatched = "";
+    String strDelivered = "";
+
     void initViews(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSOL);
         setSupportActionBar(toolbar);
@@ -95,6 +109,11 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         editTextDate2 = findViewById(R.id.editTextDate2);
         datePicker2 = findViewById(R.id.datePicker2);
         retrieve = findViewById(R.id.btnRetrieveRecords);
+        cbCreated = findViewById(R.id.checkBoxCreated);
+        cbProcessing = findViewById(R.id.checkBoxProcessing);
+        cbProcessed = findViewById(R.id.checkBoxProcessed);
+        cbDispatched = findViewById(R.id.checkBoxDispatched);
+        cbDelivered = findViewById(R.id.checkBoxDelivered);
         llChoice = findViewById(R.id.layoutChoice);
         llResults = findViewById(R.id.layoutResult);
         llResults.setVisibility(View.GONE);
@@ -104,6 +123,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         adapterChoice.add("Display by sales document number");
         adapterChoice.add("Display by date");
         adapterChoice.add("Display by range of dates");
+        adapterChoice.add("Display by order status");
         spinnerChoice.setAdapter(adapterChoice);
         choiceStr = "";
 
@@ -162,10 +182,21 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                     editTextDate2.setVisibility(View.GONE);
                     datePicker2.setVisibility(View.GONE);
                     spinnerCustomer.setVisibility(View.GONE);
+                    cbCreated.setVisibility(View.GONE);
+                    cbProcessing.setVisibility(View.GONE);
+                    cbProcessed.setVisibility(View.GONE);
+                    cbDispatched.setVisibility(View.GONE);
+                    cbDelivered.setVisibility(View.GONE);
                     eTxtCustomerNumber.setText("");
                     eTxtSalesDocumentNumber.setText("");
                     editTextDate1.setText("");
                     editTextDate2.setText("");
+                    cbCreated.setChecked(false);
+                    cbProcessing.setChecked(false);
+                    cbProcessed.setChecked(false);
+                    cbDispatched.setChecked(false);
+                    cbDelivered.setChecked(false);
+
                 }
                 else if (choiceStr.equals("Display by customer"))
                 {
@@ -176,9 +207,19 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                     datePicker1.setVisibility(View.GONE);
                     editTextDate2.setVisibility(View.GONE);
                     datePicker2.setVisibility(View.GONE);
+                    cbCreated.setVisibility(View.GONE);
+                    cbProcessing.setVisibility(View.GONE);
+                    cbProcessed.setVisibility(View.GONE);
+                    cbDispatched.setVisibility(View.GONE);
+                    cbDelivered.setVisibility(View.GONE);
                     eTxtSalesDocumentNumber.setText("");
                     editTextDate1.setText("");
                     editTextDate2.setText("");
+                    cbCreated.setChecked(false);
+                    cbProcessing.setChecked(false);
+                    cbProcessed.setChecked(false);
+                    cbDispatched.setChecked(false);
+                    cbDelivered.setChecked(false);
                     initCustomer();
 
                 }
@@ -191,9 +232,19 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                     datePicker1.setVisibility(View.GONE);
                     editTextDate2.setVisibility(View.GONE);
                     datePicker2.setVisibility(View.GONE);
+                    cbCreated.setVisibility(View.GONE);
+                    cbProcessing.setVisibility(View.GONE);
+                    cbProcessed.setVisibility(View.GONE);
+                    cbDispatched.setVisibility(View.GONE);
+                    cbDelivered.setVisibility(View.GONE);
                     eTxtCustomerNumber.setText("");
                     editTextDate1.setText("");
                     editTextDate2.setText("");
+                    cbCreated.setChecked(false);
+                    cbProcessing.setChecked(false);
+                    cbProcessed.setChecked(false);
+                    cbDispatched.setChecked(false);
+                    cbDelivered.setChecked(false);
 
                 }
                 else if (choiceStr.equals("Display by date"))
@@ -205,9 +256,19 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                     eTxtCustomerNumber.setVisibility(View.GONE);
                     editTextDate2.setVisibility(View.GONE);
                     datePicker2.setVisibility(View.GONE);
+                    cbCreated.setVisibility(View.GONE);
+                    cbProcessing.setVisibility(View.GONE);
+                    cbProcessed.setVisibility(View.GONE);
+                    cbDispatched.setVisibility(View.GONE);
+                    cbDelivered.setVisibility(View.GONE);
                     eTxtCustomerNumber.setText("");
                     eTxtSalesDocumentNumber.setText("");
                     editTextDate2.setText("");
+                    cbCreated.setChecked(false);
+                    cbProcessing.setChecked(false);
+                    cbProcessed.setChecked(false);
+                    cbDispatched.setChecked(false);
+                    cbDelivered.setChecked(false);
                 }
                 else if (choiceStr.equals("Display by range of dates")){
                     editTextDate1.setVisibility(View.VISIBLE);
@@ -216,6 +277,33 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                     eTxtCustomerNumber.setVisibility(View.GONE);
                     editTextDate2.setVisibility(View.VISIBLE);
                     datePicker2.setVisibility(View.VISIBLE);
+                    spinnerCustomer.setVisibility(View.GONE);
+                    cbCreated.setVisibility(View.GONE);
+                    cbProcessing.setVisibility(View.GONE);
+                    cbProcessed.setVisibility(View.GONE);
+                    cbDispatched.setVisibility(View.GONE);
+                    cbDelivered.setVisibility(View.GONE);
+                    eTxtCustomerNumber.setText("");
+                    eTxtSalesDocumentNumber.setText("");
+                    cbCreated.setChecked(false);
+                    cbProcessing.setChecked(false);
+                    cbProcessed.setChecked(false);
+                    cbDispatched.setChecked(false);
+                    cbDelivered.setChecked(false);
+
+                }
+                else if (choiceStr.equals("Display by order status")){
+                    cbCreated.setVisibility(View.VISIBLE);
+                    cbProcessing.setVisibility(View.VISIBLE);
+                    cbProcessed.setVisibility(View.VISIBLE);
+                    cbDispatched.setVisibility(View.VISIBLE);
+                    cbDelivered.setVisibility(View.VISIBLE);
+                    editTextDate1.setVisibility(View.GONE);
+                    datePicker1.setVisibility(View.GONE);
+                    eTxtSalesDocumentNumber.setVisibility(View.GONE);
+                    eTxtCustomerNumber.setVisibility(View.GONE);
+                    editTextDate2.setVisibility(View.GONE);
+                    datePicker2.setVisibility(View.GONE);
                     spinnerCustomer.setVisibility(View.GONE);
                     eTxtCustomerNumber.setText("");
                     eTxtSalesDocumentNumber.setText("");
@@ -309,6 +397,18 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                    url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithTwoDates.php";
 
                 }
+                else if (choiceStr.equals("Display by order status")){
+
+                    if(!cbCreated.isChecked()&&!cbProcessing.isChecked()&&!cbProcessed.isChecked()&&!cbDispatched.isChecked()&&!cbDelivered.isChecked()){
+                        Toast.makeText(ActivitySalesOrderList.this, "You must checkmark atleast one status!", Toast.LENGTH_LONG).show();
+                    return;}
+                    /*else
+                    {
+
+                    }*/
+                    url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithOrderStatus.php";
+
+                }
                 retrieveRecords();
                 //clearFields();
 
@@ -345,6 +445,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                             long sdn = 0;
                             String d="";
                             double p = 0;
+                            String os = "";
                             if(success == 1){
                                 JSONArray jsonArray = jsonObject.getJSONArray("sales_orders_list");
                                 for(int i=0;i<jsonArray.length();i++){
@@ -353,7 +454,8 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                                     c = jObj.getInt("Customer");
                                     d = jObj.getString("date_of_order");
                                     p = jObj.getDouble("bill_price");
-                                    SalesOrder so = new SalesOrder(sdn, c, d, p);
+                                    os = jObj.getString("order_status");
+                                    SalesOrder so = new SalesOrder(sdn, c, d, p, os);
                                     data.add(so);
                                 }
                                 adapter = new CustomAdapterSalesOrdersList(data);
@@ -398,6 +500,9 @@ public class ActivitySalesOrderList extends AppCompatActivity{
             {
                 map.put("date_of_order1", dateStr);
                 map.put("date_of_order2", dateStr2);
+            }
+            else if((cbCreated.isChecked()||cbProcessing.isChecked()||cbDelivered.isChecked()||cbProcessed.isChecked()||cbDispatched.isChecked()) && (eTxtCustomerNumber.getText().toString().isEmpty() && eTxtSalesDocumentNumber.getText().toString().isEmpty() && editTextDate1.getText().toString().isEmpty() && editTextDate2.getText().toString().isEmpty())){
+                map.put("string_condition",strCreated+strProcessing+strProcessed+strDispatched+strDelivered);
             }
             return map;
         }
@@ -553,4 +658,52 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         editTextDate1.setText("");
         editTextDate2.setText("");
     }
+
+
+    public void onCheckboxClicked(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        switch(view.getId()) {
+            case R.id.checkBoxCreated:
+                if (checked){
+                    strCreated = " order_status = 'Created' OR ";
+                }
+                else{
+                    strCreated = "";
+                }
+                break;
+            case R.id.checkBoxProcessing:
+                if (checked){
+                    strProcessing = " order_status = 'Processing' OR ";
+                }
+                else{
+                    strProcessing = "";
+                }
+                break;
+            case R.id.checkBoxProcessed:
+                if (checked){
+                    strProcessed = " order_status = 'Processed' OR ";
+                }
+                else{
+                    strProcessed = "";
+                }
+                break;
+            case R.id.checkBoxDispatched:
+                if (checked){
+                    strDispatched = " order_status = 'Dispatched' OR ";
+                }
+                else{
+                    strDispatched = "";
+                }
+                break;
+            case R.id.checkBoxDelivered:
+                if (checked){
+                    strDelivered = " order_status = 'Delivered' OR ";
+                }
+                else{
+                    strDelivered = "";
+                }
+                break;
+        }
+    }
+
 }

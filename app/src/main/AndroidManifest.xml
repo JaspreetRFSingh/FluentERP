@@ -40,8 +40,44 @@
         <activity
             android:name=".sd.ActivitySalesOrderList"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".masterdata.ActivityEmployeeCreate"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".masterdata.ActivityEmployeeCreate"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".masterdata.ActivityEmployeeModify"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".masterdata.ActivityEmployeeDisplay"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".hr.ActivityDisplayEmployeeList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".mm.ActivityMaterialCreate"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".mm.ActivityMaterialModify"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".misc.GraphicalAnalysisActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".misc.AboutActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".misc.ServerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".misc.ReportsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".sd.ActivitySalesOrderModify"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".sd.ActivitySalesOrderDisplay"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".misc.TCodeHelpActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

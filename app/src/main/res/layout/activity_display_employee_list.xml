@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".masterdata.ActivityCustomerModify">
+    tools:context=".hr.ActivityDisplayEmployeeList">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarCM"
+            android:id="@+id/toolbarDEL"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/side_nav_bar"
@@ -22,7 +22,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <ProgressBar
-        android:id="@+id/progressBarCM"
+        android:id="@+id/progressBarDEL"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -30,4 +30,19 @@
         android:indeterminateDrawable="@drawable/custom_progressbar"
         android:visibility="gone" />
 
+    <EditText
+        android:layout_marginTop="20dp"
+        android:layout_margin="8dp"
+        android:id="@+id/editTextSearchEmployee"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search Employee..."/>
+
+    <ListView
+        android:layout_marginTop="10dp"
+        android:padding="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listViewEmployees">
+    </ListView>
 </LinearLayout>

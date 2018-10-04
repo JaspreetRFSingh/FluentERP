@@ -27,6 +27,7 @@ public class CustomAdapterSalesOrdersList extends RecyclerView.Adapter<CustomAda
         TextView textViewSalesOrderNumber;
         TextView textViewDateOfOrder;
         TextView textViewPrice;
+        TextView textViewOrderStatus;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -34,6 +35,7 @@ public class CustomAdapterSalesOrdersList extends RecyclerView.Adapter<CustomAda
             this.textViewCustomer = itemView.findViewById(R.id.textViewCustomerNumber);
             this.textViewDateOfOrder = itemView.findViewById(R.id.textViewDate);
             this.textViewPrice = itemView.findViewById(R.id.textViewOrderPrice);
+            this.textViewOrderStatus = itemView.findViewById(R.id.textViewOrderStatus);
         }
     }
     @NonNull
@@ -51,10 +53,12 @@ public class CustomAdapterSalesOrdersList extends RecyclerView.Adapter<CustomAda
         TextView textViewCustomerNumber = holder.textViewCustomer;
         TextView textViewOrderDate = holder.textViewDateOfOrder;
         TextView textViewOrderPrice = holder.textViewPrice;
+        TextView textViewOrderStatus = holder.textViewOrderStatus;
         textViewSalesOrderNumber.setText(String.valueOf(dataSet.get(position).getSalesDocNumber()));
         textViewCustomerNumber.setText(String.valueOf(dataSet.get(position).getCustomerNumber()));
         textViewOrderDate.setText(String.valueOf(dataSet.get(position).getOrderDate()));
         textViewOrderPrice.setText(String.valueOf(dataSet.get(position).getOrderPrice()));
+        textViewOrderStatus.setText(String.valueOf(dataSet.get(position).getOrderStatus()));
     }
 
     @Override

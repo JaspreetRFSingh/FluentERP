@@ -8,4 +8,6 @@
     <color name="colorVisible">#00695C</color>
     <color name="colorCardText">#004139</color>
     <color name="card_background">#ecffe3</color>
+    <color name="card_parent_background">#edfff4</color>
+    <color name="white">#ffffff</color>
 </resources>

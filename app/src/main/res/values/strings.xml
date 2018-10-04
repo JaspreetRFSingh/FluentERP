@@ -6,4 +6,6 @@
     <string name="nav_header_subtitle">care@jstech.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="explore"><i>Explore More >></i></string>
+    <string name="visit"><u>Visit Website</u></string>
 </resources>

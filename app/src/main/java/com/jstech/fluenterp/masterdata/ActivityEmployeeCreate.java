@@ -154,7 +154,7 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
                     eTxtEmployeeType.setText("EE-2");
                 }
                 else if(typeStr.equals("EE-1")){
-                    eTxtEmployeeType.setText("EE-3");
+                    eTxtEmployeeType.setText("EE-1");
                 }
             }
 
@@ -224,8 +224,6 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
                                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
                                 dialog.show();
                                 clearFields();
-                                //Toast.makeText(ActivityCustomerCreate.this,message,Toast.LENGTH_LONG).show();
-
                             }catch (Exception e){
                                 Toast.makeText(ActivityEmployeeCreate.this,"Some Exception: "+e,Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);
@@ -312,7 +310,7 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
                 builder.setPositiveButton("Yes, I'm sure!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(ActivityEmployeeCreate.this, MainActivity.class));
+                        finish();
                     }
                 });
                 AlertDialog dialog = builder.create();
@@ -320,7 +318,7 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
                 dialog.show();
             }else
             {
-                startActivity(new Intent(ActivityEmployeeCreate.this, MainActivity.class));
+                finish();
             }
             return true;
         }
@@ -338,7 +336,7 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
             builder.setPositiveButton("Yes, I'm sure!", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(ActivityEmployeeCreate.this, MainActivity.class));
+                    finish();
                 }
             });
             AlertDialog dialog = builder.create();
@@ -346,7 +344,7 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
             dialog.show();
         }else
         {
-            startActivity(new Intent(ActivityEmployeeCreate.this, MainActivity.class));
+            finish();
         }
     }
 

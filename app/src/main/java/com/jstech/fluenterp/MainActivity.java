@@ -1,13 +1,17 @@
 package com.jstech.fluenterp;
 
-import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.RequiresApi;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,13 +19,31 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.jstech.fluenterp.adapters.ExpandableListAdapter;
+import com.jstech.fluenterp.adapters.MainActivityRecyclerViewAdapter;
+import com.jstech.fluenterp.hr.ActivityDisplayEmployeeList;
 import com.jstech.fluenterp.masterdata.ActivityCustomerCreate;
 import com.jstech.fluenterp.masterdata.ActivityCustomerDisplay;
+import com.jstech.fluenterp.masterdata.ActivityCustomerModify;
 import com.jstech.fluenterp.masterdata.ActivityEmployeeCreate;
+import com.jstech.fluenterp.masterdata.ActivityEmployeeDisplay;
+import com.jstech.fluenterp.masterdata.ActivityEmployeeModify;
+import com.jstech.fluenterp.misc.AboutActivity;
+import com.jstech.fluenterp.misc.GraphicalAnalysisActivity;
+import com.jstech.fluenterp.misc.ReportsActivity;
+import com.jstech.fluenterp.misc.ServerActivity;
+import com.jstech.fluenterp.misc.TCodeHelpActivity;
+import com.jstech.fluenterp.mm.ActivityMaterialCreate;
+import com.jstech.fluenterp.mm.ActivityMaterialDisplay;
+import com.jstech.fluenterp.mm.ActivityMaterialModify;
+import com.jstech.fluenterp.models.DataModel;
 import com.jstech.fluenterp.sd.ActivitySalesOrderCreate;
+import com.jstech.fluenterp.sd.ActivitySalesOrderDisplay;
 import com.jstech.fluenterp.sd.ActivitySalesOrderList;
+import com.jstech.fluenterp.sd.ActivitySalesOrderModify;
 import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
 import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 
@@ -30,18 +52,39 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MainActivityRecyclerViewAdapter.ItemListener {
 
-    //private DrawerLayout mDrawerLayout;
 
-    //1
     private FlowingDrawer mDrawer;
-
-
     ExpandableListAdapter mMenuAdapter;
     ExpandableListView expandableList;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+
+
+
+    //Main Activity Content
+    RecyclerView recyclerView;
+    ArrayList arrayList;
+    ImageView imgLogo;
+    TextView txtVisitWebsite;
+
+    void initMainContent(){
+        imgLogo = findViewById(R.id.imgLogo);
+        txtVisitWebsite = findViewById(R.id.txtVisitWebsite);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        arrayList = new ArrayList();
+        arrayList.add(new DataModel("Graphical Analysis", R.drawable.graph64, "#ffffff"));
+        arrayList.add(new DataModel("Reports", R.drawable.report64, "#ffffff"));
+        arrayList.add(new DataModel("Request Account Credentials", R.drawable.account64, "#ffffff"));
+        arrayList.add(new DataModel("T-Code Help", R.drawable.help64, "#ffffff"));
+        arrayList.add(new DataModel("Server", R.drawable.server64, "#ffffff"));
+        arrayList.add(new DataModel("About", R.drawable.about64, "#ffffff"));
+
+        MainActivityRecyclerViewAdapter adapter = new MainActivityRecyclerViewAdapter(this, arrayList, this);
+        recyclerView.setAdapter(adapter);
+    }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -56,10 +99,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
-
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -68,21 +107,26 @@ public class MainActivity extends AppCompatActivity
         }
 
         setContentView(R.layout.activity_main);
-
-
         mDrawer = (FlowingDrawer) findViewById(R.id.drawer_layout);
         mDrawer.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL);
         setupToolbar();
-
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar)
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();*/
-
-        //mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //Activity
+        initMainContent();
+        GridLayoutManager manager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(manager);
+        imgLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://herocycles.com/")));
+            }
+        });
+        txtVisitWebsite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://herocycles.com/")));
+            }
+        });
+        //Activity
         expandableList = (ExpandableListView) findViewById(R.id.navigationmenu);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -97,7 +141,6 @@ public class MainActivity extends AppCompatActivity
 
         // setting list adapter
         expandableList.setAdapter(mMenuAdapter);
-
         expandableList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView,
@@ -113,11 +156,13 @@ public class MainActivity extends AppCompatActivity
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Change Sales Order"))
                 {
-
+                    Intent intent = new Intent(MainActivity.this, ActivitySalesOrderModify.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Sales Order"))
                 {
-
+                    Intent intent = new Intent(MainActivity.this, ActivitySalesOrderDisplay.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Sales Orders List"))
                 {
@@ -126,39 +171,41 @@ public class MainActivity extends AppCompatActivity
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Quotation"))
                 {
-
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Change Quotation"))
                 {
-
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Quotation"))
                 {
-
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Material Cost Estimate"))
                 {
-
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Change Material Cost Estimate"))
                 {
-
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Material Cost Estimate"))
                 {
-
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Material"))
                 {
-
+                    Intent intent = new Intent(MainActivity.this, ActivityMaterialCreate.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Change Material"))
                 {
-
+                    Intent intent = new Intent(MainActivity.this, ActivityMaterialModify.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Material"))
                 {
-
+                    Intent intent = new Intent(MainActivity.this, ActivityMaterialDisplay.class);
+                    startActivity(intent);
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display List of Employees"))
+                {
+                    Intent intent = new Intent(MainActivity.this, ActivityDisplayEmployeeList.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Employee"))
                 {
@@ -167,31 +214,30 @@ public class MainActivity extends AppCompatActivity
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Change Employee"))
                 {
-
+                    Intent intent = new Intent(MainActivity.this, ActivityEmployeeModify.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Employee"))
                 {
-
+                    Intent intent = new Intent(MainActivity.this, ActivityEmployeeDisplay.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Customer"))
                 {
-                    Intent intent =new Intent(MainActivity.this, ActivityCustomerCreate.class);
+                    Intent intent = new Intent(MainActivity.this, ActivityCustomerCreate.class);
                     startActivity(intent);
-
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Change Customer"))
                 {
-
+                    Intent intent = new Intent(MainActivity.this, ActivityCustomerModify.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Customer"))
                 {
-
-                    Intent intent =new Intent(MainActivity.this, ActivityCustomerDisplay.class);
+                    Intent intent = new Intent(MainActivity.this, ActivityCustomerDisplay.class);
                     startActivity(intent);
                 }
-
                 //Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition) + " -> " + listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition), Toast.LENGTH_LONG).show();
-
                 mDrawer.closeMenu();
                 return false;
             }
@@ -265,9 +311,6 @@ public class MainActivity extends AppCompatActivity
         headingPUR.add("Display Purchase Order");
 
         List<String> headingHR = new ArrayList<String>();
-        headingHR.add("Create Employee");
-        headingHR.add("Change Employee");
-        headingHR.add("Display Employee");
         headingHR.add("Display List of Employees");
         headingHR.add("Attendance Record");
         headingHR.add("Display Employee Salary Schema");
@@ -308,20 +351,15 @@ public class MainActivity extends AppCompatActivity
                 });
     }
 
-    @Override
+   /* @Override
     public void onBackPressed() {
-        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        *//*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        }*/
-        if (mDrawer.isMenuVisible()) {
-            mDrawer.closeMenu();
-        } else {
-            super.onBackPressed();
-        }
-    }
+        }*//*
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -368,5 +406,63 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    int doubleBackToExitPressed = 1;
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public void onBackPressed() {
+
+        if (mDrawer.isMenuVisible()) {
+            mDrawer.closeMenu();
+        } else {
+            if (doubleBackToExitPressed == 2) {
+                finishAffinity();
+                System.exit(0);
+            }
+            else {
+                doubleBackToExitPressed++;
+                Toast.makeText(this, "Press back again to exit!", Toast.LENGTH_SHORT).show();
+            }
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressed=1;
+                }
+            }, 2000);
+        }
+    }
+
+    @Override
+    public void onItemClick(DataModel item) {
+        String itemName = item.text;
+        if(itemName.equals("Graphical Analysis")){
+            Intent intent = new Intent(MainActivity.this, GraphicalAnalysisActivity.class);
+            startActivity(intent);
+        }
+        else if(itemName.equals("Reports")){
+            Intent intent = new Intent(MainActivity.this, ReportsActivity.class);
+            startActivity(intent);
+        }
+        else if(itemName.equals("Server")){
+            Intent intent = new Intent(MainActivity.this, ServerActivity.class);
+            startActivity(intent);
+        }
+        else if(itemName.equals("About")){
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(intent);
+        }
+        else if(itemName.equals("Request Account Credentials")){
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(intent);
+        }
+        else if(itemName.equals("T-Code Help")){
+            Intent intent = new Intent(MainActivity.this, TCodeHelpActivity.class);
+            startActivity(intent);
+        }
+        else{
+
+        }
     }
 }

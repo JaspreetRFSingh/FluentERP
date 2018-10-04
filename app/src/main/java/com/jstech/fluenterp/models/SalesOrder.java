@@ -5,16 +5,26 @@ public class SalesOrder {
     int customerNumber;
     String orderDate;
     double orderPrice;
+    String orderStatus;
 
     public SalesOrder(){
 
     }
 
-    public SalesOrder(long salesDocNumber, int customerNumber, String orderDate, double orderPrice) {
+    public SalesOrder(long salesDocNumber, int customerNumber, String orderDate, double orderPrice, String orderStatus) {
         this.salesDocNumber = salesDocNumber;
         this.customerNumber = customerNumber;
         this.orderDate = orderDate;
         this.orderPrice = orderPrice;
+        this.orderStatus = orderStatus;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public long getSalesDocNumber() {

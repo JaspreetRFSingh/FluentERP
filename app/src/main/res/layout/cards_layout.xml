@@ -100,6 +100,26 @@
                        android:textSize="17dp"
                        android:textColor="@color/colorCardText"/>
                </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17dp"
+                    android:textColor="@color/colorCardText"
+                    android:text="Order Status: "/>
+                <TextView
+                    android:id="@+id/textViewOrderStatus"
+                    android:textColor="@color/colorCardText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17dp"/>
+            </LinearLayout>
+
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
