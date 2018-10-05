@@ -76,8 +76,30 @@
         <activity
             android:name=".sd.ActivitySalesOrderDisplay"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".misc.TCodeHelpActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".misc.TCodeHelpActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".misc.RequestAccountCredentialsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".mm.ActivityCurrentStock"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".mm.ActivityDisplayMaterialsList"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".sd.ActivityCreateQuotation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".sd.ActivityModifyQuotation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".sd.ActivityDisplayQuotation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".purchasing.ActivityPurchaseOrderCreate" />
+        <activity android:name=".purchasing.ActivityPurchaseOrderModify" />
+        <activity android:name=".purchasing.ActivityPurchaseOrderDisplay"></activity>
     </application>
 
 </manifest>

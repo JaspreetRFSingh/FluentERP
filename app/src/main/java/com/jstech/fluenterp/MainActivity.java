@@ -1,11 +1,13 @@
 package com.jstech.fluenterp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -18,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,12 +38,18 @@ import com.jstech.fluenterp.masterdata.ActivityEmployeeModify;
 import com.jstech.fluenterp.misc.AboutActivity;
 import com.jstech.fluenterp.misc.GraphicalAnalysisActivity;
 import com.jstech.fluenterp.misc.ReportsActivity;
+import com.jstech.fluenterp.misc.RequestAccountCredentialsActivity;
 import com.jstech.fluenterp.misc.ServerActivity;
 import com.jstech.fluenterp.misc.TCodeHelpActivity;
+import com.jstech.fluenterp.mm.ActivityCurrentStock;
+import com.jstech.fluenterp.mm.ActivityDisplayMaterialsList;
 import com.jstech.fluenterp.mm.ActivityMaterialCreate;
 import com.jstech.fluenterp.mm.ActivityMaterialDisplay;
 import com.jstech.fluenterp.mm.ActivityMaterialModify;
 import com.jstech.fluenterp.models.DataModel;
+import com.jstech.fluenterp.sd.ActivityCreateQuotation;
+import com.jstech.fluenterp.sd.ActivityDisplayQuotation;
+import com.jstech.fluenterp.sd.ActivityModifyQuotation;
 import com.jstech.fluenterp.sd.ActivitySalesOrderCreate;
 import com.jstech.fluenterp.sd.ActivitySalesOrderDisplay;
 import com.jstech.fluenterp.sd.ActivitySalesOrderList;
@@ -62,6 +72,11 @@ public class MainActivity extends AppCompatActivity
     HashMap<String, List<String>> listDataChild;
 
 
+    //
+    EditText eTxtTCode;
+    Button btnTCode;
+    String strTCode;
+    //
 
     //Main Activity Content
     RecyclerView recyclerView;
@@ -71,6 +86,8 @@ public class MainActivity extends AppCompatActivity
 
     void initMainContent(){
         imgLogo = findViewById(R.id.imgLogo);
+        eTxtTCode = findViewById(R.id.editTextEnterTCode);
+        btnTCode = findViewById(R.id.btnEnterTcode);
         txtVisitWebsite = findViewById(R.id.txtVisitWebsite);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         arrayList = new ArrayList();
@@ -112,6 +129,7 @@ public class MainActivity extends AppCompatActivity
         setupToolbar();
         //Activity
         initMainContent();
+        strTCode = "";
         GridLayoutManager manager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
         imgLogo.setOnClickListener(new View.OnClickListener() {
@@ -250,6 +268,128 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        //
+        btnTCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inspectTCode();
+            }
+        });
+        //
+    }
+
+    void inspectTCode(){
+        strTCode = eTxtTCode.getText().toString().trim();
+        if(strTCode.equals("va01") || strTCode.equals("VA01")){
+            Intent intent = new Intent(MainActivity.this, ActivitySalesOrderCreate.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("va02") || strTCode.equals("VA02")){
+            Intent intent = new Intent(MainActivity.this, ActivitySalesOrderModify.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("va03") || strTCode.equals("VA03")){
+            Intent intent = new Intent(MainActivity.this, ActivitySalesOrderDisplay.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("va05") || strTCode.equals("VA05")){
+            Intent intent = new Intent(MainActivity.this, ActivitySalesOrderList.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("va11") || strTCode.equals("VA11")){
+            Intent intent = new Intent(MainActivity.this, ActivityCreateQuotation.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("va12") || strTCode.equals("VA12")){
+            Intent intent = new Intent(MainActivity.this, ActivityModifyQuotation.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("va13") || strTCode.equals("VA13")){
+            Intent intent = new Intent(MainActivity.this, ActivityDisplayQuotation.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("mm01") || strTCode.equals("MM01")){
+            Intent intent = new Intent(MainActivity.this, ActivityMaterialCreate.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("mm02") || strTCode.equals("MM02")){
+            Intent intent = new Intent(MainActivity.this, ActivityMaterialModify.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("mm03") || strTCode.equals("MM03")){
+            Intent intent = new Intent(MainActivity.this, ActivityMaterialDisplay.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("mm04") || strTCode.equals("MM04")){
+            Intent intent = new Intent(MainActivity.this, ActivityDisplayMaterialsList.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("mm12") || strTCode.equals("MM12")){
+            Intent intent = new Intent(MainActivity.this, ActivityCurrentStock.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("mp21") || strTCode.equals("MP21")){
+
+        }
+        else if(strTCode.equals("mp12") || strTCode.equals("MP12")){
+
+        }
+        else if(strTCode.equals("pp01") || strTCode.equals("PP01")){
+
+        }
+        else if(strTCode.equals("pp02") || strTCode.equals("PP02")){
+
+        }
+        else if(strTCode.equals("pp03") || strTCode.equals("PP03")){
+
+        }
+        else if(strTCode.equals("hr10") || strTCode.equals("HR10")){
+            Intent intent = new Intent(MainActivity.this, ActivityDisplayEmployeeList.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("hr05") || strTCode.equals("HR05")){
+
+        }
+        else if(strTCode.equals("hr15") || strTCode.equals("HR15")){
+
+        }
+        else if(strTCode.equals("hr25") || strTCode.equals("HR25")){
+
+        }
+        else if(strTCode.equals("dd01") || strTCode.equals("DD01")){
+
+        }
+        else if(strTCode.equals("dd02") || strTCode.equals("DD02")){
+
+        }
+        else if(strTCode.equals("md01") || strTCode.equals("MD01")){
+            Intent intent = new Intent(MainActivity.this, ActivityCustomerCreate.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("md02") || strTCode.equals("MD02")){
+            Intent intent = new Intent(MainActivity.this, ActivityCustomerModify.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("md03") || strTCode.equals("MD03")){
+            Intent intent = new Intent(MainActivity.this, ActivityCustomerDisplay.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("md11") || strTCode.equals("MD11")){
+            Intent intent = new Intent(MainActivity.this, ActivityEmployeeCreate.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("md12") || strTCode.equals("MD12")){
+            Intent intent = new Intent(MainActivity.this, ActivityEmployeeModify.class);
+            startActivity(intent);
+        }
+        else if(strTCode.equals("md13") || strTCode.equals("MD13")){
+            Intent intent = new Intent(MainActivity.this, ActivityEmployeeDisplay.class);
+            startActivity(intent);
+        }
+        else{
+            Toast.makeText(this, "Invalid T-Code!", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     protected void setupToolbar() {
@@ -288,11 +428,11 @@ public class MainActivity extends AppCompatActivity
         headingSD.add("Change Quotation");
         headingSD.add("Display Quotation");
 
-        List<String> headingCO = new ArrayList<String>();
+        /*List<String> headingCO = new ArrayList<String>();
         headingCO.add("Create Material Cost Estimate");
         headingCO.add("Change Material Cost Estimate");
         headingCO.add("Display Material Cost Estimate");
-        headingCO.add("Price Change");
+        headingCO.add("Price Change");*/
 
         List<String> headingPO = new ArrayList<String>();
         headingPO.add("Display Products List");
@@ -329,13 +469,12 @@ public class MainActivity extends AppCompatActivity
         headingMD.add("Display Customer");
 
         listDataChild.put(listDataHeader.get(0), headingSD);
-        listDataChild.put(listDataHeader.get(1), headingCO);
-        listDataChild.put(listDataHeader.get(2), headingPO);
-        listDataChild.put(listDataHeader.get(3), headingMM);
-        listDataChild.put(listDataHeader.get(4), headingPUR);
-        listDataChild.put(listDataHeader.get(5), headingHR);
-        listDataChild.put(listDataHeader.get(6), headingDD);
-        listDataChild.put(listDataHeader.get(7), headingMD);
+        listDataChild.put(listDataHeader.get(1), headingPO);
+        listDataChild.put(listDataHeader.get(2), headingMM);
+        listDataChild.put(listDataHeader.get(3), headingPUR);
+        listDataChild.put(listDataHeader.get(4), headingHR);
+        listDataChild.put(listDataHeader.get(5), headingDD);
+        listDataChild.put(listDataHeader.get(6), headingMD);
 
     }
 
@@ -454,15 +593,34 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
         else if(itemName.equals("Request Account Credentials")){
-            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
-            startActivity(intent);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("CHOOSE\n\n");
+            builder.setMessage("Please choose an option!");
+            builder.setPositiveButton("Request New Account Credentials", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(MainActivity.this, RequestAccountCredentialsActivity.class);
+                    intent.putExtra("mode",1);
+                    startActivity(intent);
+                }
+            });
+            builder.setNegativeButton("Modify Existing Account", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(MainActivity.this, RequestAccountCredentialsActivity.class);
+                        intent.putExtra("mode", 2);
+                        startActivity(intent);
+                    }
+                });
+            AlertDialog dialog = builder.create();
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+            dialog.show();
         }
         else if(itemName.equals("T-Code Help")){
             Intent intent = new Intent(MainActivity.this, TCodeHelpActivity.class);
             startActivity(intent);
         }
         else{
-
         }
     }
 }

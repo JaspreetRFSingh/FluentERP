@@ -17,6 +17,34 @@
         android:layout_height="wrap_content"
         android:background="@drawable/hero_logo"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="240dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/editTextEnterTCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="Enter T-Code" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/roundedbutton"
+            android:drawableEnd="@drawable/arrow16"
+            android:id="@+id/btnEnterTcode"
+            />
+
+    </LinearLayout>
+
     <TextView
         android:layout_marginTop="14dp"
         android:layout_width="wrap_content"
