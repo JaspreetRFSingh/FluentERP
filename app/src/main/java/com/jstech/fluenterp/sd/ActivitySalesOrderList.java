@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -424,7 +425,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());;
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         data = new ArrayList<SalesOrder>();
     }
     //Custom end
@@ -461,6 +462,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                                 adapter = new CustomAdapterSalesOrdersList(data);
                                 recyclerView.setAdapter(adapter);
                                 progressBar.setVisibility(View.GONE);
+                                recyclerView.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce));
                             }else{
                                 Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);

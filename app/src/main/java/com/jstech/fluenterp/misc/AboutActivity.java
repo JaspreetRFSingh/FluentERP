@@ -5,7 +5,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-
 import com.jstech.fluenterp.R;
 public class AboutActivity extends AppCompatActivity {
 
@@ -21,12 +20,11 @@ public class AboutActivity extends AppCompatActivity {
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarAbout);
         setSupportActionBar(toolbar);
-        setTitle("About");
+        setTitle("About Activity");
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
-
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
             finish();

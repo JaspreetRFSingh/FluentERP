@@ -97,9 +97,17 @@
         <activity
             android:name=".sd.ActivityDisplayQuotation"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".purchasing.ActivityPurchaseOrderCreate" />
-        <activity android:name=".purchasing.ActivityPurchaseOrderModify" />
-        <activity android:name=".purchasing.ActivityPurchaseOrderDisplay"></activity>
+        <activity
+            android:name=".purchasing.ActivityPurchaseOrderCreate"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".purchasing.ActivityPurchaseOrderModify"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".purchasing.ActivityPurchaseOrderDisplay"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".dd.ActivityCheckOrderStatus"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

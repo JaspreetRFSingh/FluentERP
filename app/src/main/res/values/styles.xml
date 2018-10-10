@@ -19,5 +19,9 @@
         <item name="android:windowEnterAnimation">@anim/slide_left</item>
         <item name="android:windowExitAnimation">@anim/slide_right</item>
     </style>
+    <style name="DialogThemeModified">
+        <item name="android:windowEnterAnimation">@anim/bounce</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
 
 </resources>

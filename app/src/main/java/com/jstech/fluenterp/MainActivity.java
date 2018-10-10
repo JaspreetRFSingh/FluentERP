@@ -20,6 +20,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -28,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.jstech.fluenterp.adapters.ExpandableListAdapter;
 import com.jstech.fluenterp.adapters.MainActivityRecyclerViewAdapter;
+import com.jstech.fluenterp.dd.ActivityCheckOrderStatus;
 import com.jstech.fluenterp.hr.ActivityDisplayEmployeeList;
 import com.jstech.fluenterp.masterdata.ActivityCustomerCreate;
 import com.jstech.fluenterp.masterdata.ActivityCustomerDisplay;
@@ -47,6 +51,9 @@ import com.jstech.fluenterp.mm.ActivityMaterialCreate;
 import com.jstech.fluenterp.mm.ActivityMaterialDisplay;
 import com.jstech.fluenterp.mm.ActivityMaterialModify;
 import com.jstech.fluenterp.models.DataModel;
+import com.jstech.fluenterp.purchasing.ActivityPurchaseOrderCreate;
+import com.jstech.fluenterp.purchasing.ActivityPurchaseOrderDisplay;
+import com.jstech.fluenterp.purchasing.ActivityPurchaseOrderModify;
 import com.jstech.fluenterp.sd.ActivityCreateQuotation;
 import com.jstech.fluenterp.sd.ActivityDisplayQuotation;
 import com.jstech.fluenterp.sd.ActivityModifyQuotation;
@@ -71,7 +78,6 @@ public class MainActivity extends AppCompatActivity
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
 
-
     //
     EditText eTxtTCode;
     Button btnTCode;
@@ -83,11 +89,13 @@ public class MainActivity extends AppCompatActivity
     ArrayList arrayList;
     ImageView imgLogo;
     TextView txtVisitWebsite;
+    TextView txtExplore;
 
     void initMainContent(){
         imgLogo = findViewById(R.id.imgLogo);
         eTxtTCode = findViewById(R.id.editTextEnterTCode);
         btnTCode = findViewById(R.id.btnEnterTcode);
+        txtExplore = findViewById(R.id.txtExplore);
         txtVisitWebsite = findViewById(R.id.txtVisitWebsite);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         arrayList = new ArrayList();
@@ -132,6 +140,11 @@ public class MainActivity extends AppCompatActivity
         strTCode = "";
         GridLayoutManager manager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
+        recyclerView.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
+        imgLogo.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.bounce));
+        eTxtTCode.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_left));
+        btnTCode.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce));
+        txtExplore.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.blink));
         imgLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,9 +157,14 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://herocycles.com/")));
             }
         });
+        eTxtTCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eTxtTCode.setFocusable(true);
+            }
+        });
         //Activity
         expandableList = (ExpandableListView) findViewById(R.id.navigationmenu);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
@@ -156,7 +174,6 @@ public class MainActivity extends AppCompatActivity
         }
         prepareListData();
         mMenuAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
-
         // setting list adapter
         expandableList.setAdapter(mMenuAdapter);
         expandableList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -189,9 +206,13 @@ public class MainActivity extends AppCompatActivity
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Quotation"))
                 {
+                    Intent intent = new Intent(MainActivity.this, ActivityCreateQuotation.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Change Quotation"))
                 {
+                    Intent intent = new Intent(MainActivity.this, ActivityModifyQuotation.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Quotation"))
                 {
@@ -219,6 +240,15 @@ public class MainActivity extends AppCompatActivity
                 {
                     Intent intent = new Intent(MainActivity.this, ActivityMaterialDisplay.class);
                     startActivity(intent);
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Check Order Status"))
+                {
+                    Intent intent = new Intent(MainActivity.this, ActivityCheckOrderStatus.class);
+                    startActivity(intent);
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Dispatch Incoming Orders"))
+                {
+
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display List of Employees"))
                 {
@@ -335,13 +365,16 @@ public class MainActivity extends AppCompatActivity
 
         }
         else if(strTCode.equals("pp01") || strTCode.equals("PP01")){
-
+            Intent intent = new Intent(MainActivity.this, ActivityPurchaseOrderCreate.class);
+            startActivity(intent);
         }
         else if(strTCode.equals("pp02") || strTCode.equals("PP02")){
-
+            Intent intent = new Intent(MainActivity.this, ActivityPurchaseOrderModify.class);
+            startActivity(intent);
         }
         else if(strTCode.equals("pp03") || strTCode.equals("PP03")){
-
+            Intent intent = new Intent(MainActivity.this, ActivityPurchaseOrderDisplay.class);
+            startActivity(intent);
         }
         else if(strTCode.equals("hr10") || strTCode.equals("HR10")){
             Intent intent = new Intent(MainActivity.this, ActivityDisplayEmployeeList.class);
@@ -411,7 +444,6 @@ public class MainActivity extends AppCompatActivity
 
         // Adding data header
         listDataHeader.add("Sales & Distribution");
-        listDataHeader.add("Costing");
         listDataHeader.add("Manufacturing & Production");
         listDataHeader.add("Material Management");
         listDataHeader.add("Purchasing");
@@ -577,8 +609,28 @@ public class MainActivity extends AppCompatActivity
     public void onItemClick(DataModel item) {
         String itemName = item.text;
         if(itemName.equals("Graphical Analysis")){
-            Intent intent = new Intent(MainActivity.this, GraphicalAnalysisActivity.class);
-            startActivity(intent);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("CHOOSE\n\n");
+            builder.setMessage("Please choose an option for Sales Analysis");
+            builder.setPositiveButton("Region-wise", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(MainActivity.this, GraphicalAnalysisActivity.class);
+                    intent.putExtra("mode",1);
+                    startActivity(intent);
+                }
+            });
+            builder.setNegativeButton("Month-wise", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(MainActivity.this, GraphicalAnalysisActivity.class);
+                    intent.putExtra("mode", 2);
+                    startActivity(intent);
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+            dialog.show();
         }
         else if(itemName.equals("Reports")){
             Intent intent = new Intent(MainActivity.this, ReportsActivity.class);
@@ -613,7 +665,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
             AlertDialog dialog = builder.create();
-            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
             dialog.show();
         }
         else if(itemName.equals("T-Code Help")){

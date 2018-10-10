@@ -118,16 +118,18 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         spinnerCustomer = (Spinner)findViewById(R.id.spinnerCustomers);
         adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item);
-        adapter.add("-- Select a Customer --");
+        adapter.add("~~ Select a Customer ~~");
         retrieveCustomers();
         spinnerCustomer.setAdapter(adapter);
         spinnerCustomer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 cust_number = adapter.getItem(pos);
+                int ind = 8;
                 if(pos!=0){
                     eTxtCustomerName.setText(cust_number);
-                    Customer_id = eTxtCustomerName.getText().toString().substring(0,Math.min(eTxtCustomerName.getText().toString().length(),8));
+                    ind = cust_number.indexOf("-") - 1;
+                    Customer_id = eTxtCustomerName.getText().toString().substring(0,Math.min(eTxtCustomerName.getText().toString().length(),ind));
                     sales_doc_no = date.substring(0,12);
                 }
             }
@@ -466,81 +468,88 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
                             String message = jsonObject.getString("message");
-                            progressBar.setVisibility(View.GONE);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySalesOrderCreate.this);
-                            builder.setTitle(message);
-                            builder.setMessage("Please click on 'Generate' to generate the Sales Order Document!");
-                            builder.setPositiveButton("Generate", new DialogInterface.OnClickListener() {
+                            stringRequest1 = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/createSalesOrder.php", new Response.Listener<String>() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    stringRequest1 = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/createSalesOrder.php", new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            JSONObject jsonObject = null;
-                                            try {
-                                                jsonObject = new JSONObject(response);
-                                                int success1 = jsonObject.getInt("success");
-                                                String message1 = jsonObject.getString("message");
-                                                Toast.makeText(ActivitySalesOrderCreate.this,message1,Toast.LENGTH_LONG).show();
+                                public void onResponse(String response) {
+                                    JSONObject jsonObject = null;
+                                    try {
+                                        jsonObject = new JSONObject(response);
+                                        int success1 = jsonObject.getInt("success");
+                                        String message1 = jsonObject.getString("message");
+                                        //Toast.makeText(ActivitySalesOrderCreate.this,message1,Toast.LENGTH_LONG).show();
 
-                                                if(success1 == 1)
-                                                {
+                                        if(success1 == 1)
+                                        {
+                                            final AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySalesOrderCreate.this);
+                                            builder.setTitle("SUCCESS\n\n");
+                                            builder.setMessage(message1);
+                                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
                                                     clearFields();
                                                     finish();
                                                 }
-
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-
-                                        }
-                                    }, new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(ActivitySalesOrderCreate.this,"Some Error: "+error,Toast.LENGTH_LONG).show();
-                                            error.printStackTrace();
-                                        }
-                                    })
-                                    {
-                                        protected Map<String, String> getParams() throws AuthFailureError {
-
-                                            HashMap<String,String> map = new HashMap<String, String>();
-
-                                            map.put("sales_doc_no", sales_doc_no);
-                                            map.put("Customer_id",Customer_id);
-
-                                            if(!eTxtQuantity1.getText().toString().isEmpty()){
-                                            map.put("material_code0",material_code[0]);
-                                            map.put("quantity0", quantity[0]);
-                                            map.put("price0", price[0]);}
-
-                                            if(!eTxtQuantity2.getText().toString().isEmpty()){
-                                            map.put("material_code1",material_code[1]);
-                                            map.put("quantity1", quantity[1]);
-                                            map.put("price1", price[1]);}
-
-                                            if(!eTxtQuantity3.getText().toString().isEmpty()){
-                                            map.put("material_code2",material_code[2]);
-                                            map.put("quantity2", quantity[2]);
-                                            map.put("price2", price[2]);}
-
-                                            if(!eTxtQuantity4.getText().toString().isEmpty()){
-                                            map.put("material_code3",material_code[3]);
-                                            map.put("quantity3", quantity[3]);
-                                            map.put("price3", price[3]);}
-
-                                            return map;
+                                            });
+                                            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                                @Override
+                                                public void onDismiss(DialogInterface dialog) {
+                                                    clearFields();
+                                                    finish();
+                                                }
+                                            });
+                                            AlertDialog dialog = builder.create();
+                                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                                            dialog.show();
 
                                         }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                    ;
-                                    requestQueue.add(stringRequest1);
+
                                 }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
-                            dialog.show();
-                            Toast.makeText(ActivitySalesOrderCreate.this,message,Toast.LENGTH_LONG).show();
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(ActivitySalesOrderCreate.this,"Some Error: "+error,Toast.LENGTH_LONG).show();
+                                    error.printStackTrace();
+                                }
+                            })
+                            {
+                                protected Map<String, String> getParams() throws AuthFailureError {
+
+                                    HashMap<String,String> map = new HashMap<String, String>();
+
+                                    map.put("sales_doc_no", sales_doc_no);
+                                    map.put("Customer_id",Customer_id);
+
+                                    if(!eTxtQuantity1.getText().toString().isEmpty()){
+                                        map.put("material_code0",material_code[0]);
+                                        map.put("quantity0", quantity[0]);
+                                        map.put("price0", price[0]);}
+
+                                    if(!eTxtQuantity2.getText().toString().isEmpty()){
+                                        map.put("material_code1",material_code[1]);
+                                        map.put("quantity1", quantity[1]);
+                                        map.put("price1", price[1]);}
+
+                                    if(!eTxtQuantity3.getText().toString().isEmpty()){
+                                        map.put("material_code2",material_code[2]);
+                                        map.put("quantity2", quantity[2]);
+                                        map.put("price2", price[2]);}
+
+                                    if(!eTxtQuantity4.getText().toString().isEmpty()){
+                                        map.put("material_code3",material_code[3]);
+                                        map.put("quantity3", quantity[3]);
+                                        map.put("price3", price[3]);}
+
+                                    return map;
+
+                                }
+                            }
+                            ;
+                            requestQueue.add(stringRequest1);
+                            progressBar.setVisibility(View.GONE);
 
                         }catch (Exception e){
                             Toast.makeText(ActivitySalesOrderCreate.this,"Some Exception: "+e,Toast.LENGTH_LONG).show();
