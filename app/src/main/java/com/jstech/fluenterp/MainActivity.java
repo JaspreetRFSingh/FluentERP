@@ -90,12 +90,14 @@ public class MainActivity extends AppCompatActivity
     ImageView imgLogo;
     TextView txtVisitWebsite;
     TextView txtExplore;
+    TextView txtExpand;
 
     void initMainContent(){
         imgLogo = findViewById(R.id.imgLogo);
         eTxtTCode = findViewById(R.id.editTextEnterTCode);
         btnTCode = findViewById(R.id.btnEnterTcode);
         txtExplore = findViewById(R.id.txtExplore);
+        txtExpand = findViewById(R.id.txtCommandLine);
         txtVisitWebsite = findViewById(R.id.txtVisitWebsite);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         arrayList = new ArrayList();
@@ -157,10 +159,12 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://herocycles.com/")));
             }
         });
-        eTxtTCode.setOnClickListener(new View.OnClickListener() {
+        txtExpand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eTxtTCode.setFocusable(true);
+                btnTCode.setVisibility(View.VISIBLE);
+                eTxtTCode.setVisibility(View.VISIBLE);
+                txtExpand.setVisibility(View.GONE);
             }
         });
         //Activity
@@ -216,15 +220,8 @@ public class MainActivity extends AppCompatActivity
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Quotation"))
                 {
-                }
-                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Material Cost Estimate"))
-                {
-                }
-                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Change Material Cost Estimate"))
-                {
-                }
-                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Material Cost Estimate"))
-                {
+                    Intent intent = new Intent(MainActivity.this, ActivityDisplayQuotation.class);
+                    startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Material"))
                 {
@@ -241,18 +238,60 @@ public class MainActivity extends AppCompatActivity
                     Intent intent = new Intent(MainActivity.this, ActivityMaterialDisplay.class);
                     startActivity(intent);
                 }
-                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Check Order Status"))
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Materials List"))
                 {
-                    Intent intent = new Intent(MainActivity.this, ActivityCheckOrderStatus.class);
+                    Intent intent = new Intent(MainActivity.this, ActivityDisplayMaterialsList.class);
                     startActivity(intent);
                 }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Current Stock"))
+                {
+                    Intent intent = new Intent(MainActivity.this, ActivityCurrentStock.class);
+                    startActivity(intent);
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Purchase Order"))
+                {
+                    Intent intent = new Intent(MainActivity.this, ActivityCustomerCreate.class);
+                    startActivity(intent);
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Change Purchase Order"))
+                {
+                    Intent intent = new Intent(MainActivity.this, ActivityCustomerModify.class);
+                    startActivity(intent);
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Purchase Order"))
+                {
+                    Intent intent = new Intent(MainActivity.this, ActivityCustomerDisplay.class);
+                    startActivity(intent);
+                }
+
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display List of Employees"))
+                {
+                    Intent intent = new Intent(MainActivity.this, ActivityDisplayEmployeeList.class);
+                    startActivity(intent);
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Attendance Record"))
+                {
+                    Intent intent = new Intent(MainActivity.this, ActivityDisplayEmployeeList.class);
+                    startActivity(intent);
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display Employee Salary Schema"))
+                {
+                    Intent intent = new Intent(MainActivity.this, ActivityDisplayEmployeeList.class);
+                    startActivity(intent);
+                }
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Employee Bonuses and Incentives"))
+                {
+                    Intent intent = new Intent(MainActivity.this, ActivityDisplayEmployeeList.class);
+                    startActivity(intent);
+                }
+
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Dispatch Incoming Orders"))
                 {
 
                 }
-                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Display List of Employees"))
+                else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Check Order Status"))
                 {
-                    Intent intent = new Intent(MainActivity.this, ActivityDisplayEmployeeList.class);
+                    Intent intent = new Intent(MainActivity.this, ActivityCheckOrderStatus.class);
                     startActivity(intent);
                 }
                 else if(listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).equals("Create Employee"))
@@ -358,12 +397,6 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, ActivityCurrentStock.class);
             startActivity(intent);
         }
-        else if(strTCode.equals("mp21") || strTCode.equals("MP21")){
-
-        }
-        else if(strTCode.equals("mp12") || strTCode.equals("MP12")){
-
-        }
         else if(strTCode.equals("pp01") || strTCode.equals("PP01")){
             Intent intent = new Intent(MainActivity.this, ActivityPurchaseOrderCreate.class);
             startActivity(intent);
@@ -393,7 +426,8 @@ public class MainActivity extends AppCompatActivity
 
         }
         else if(strTCode.equals("dd02") || strTCode.equals("DD02")){
-
+            Intent intent = new Intent(MainActivity.this, ActivityCheckOrderStatus.class);
+            startActivity(intent);
         }
         else if(strTCode.equals("md01") || strTCode.equals("MD01")){
             Intent intent = new Intent(MainActivity.this, ActivityCustomerCreate.class);
@@ -428,8 +462,9 @@ public class MainActivity extends AppCompatActivity
     protected void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setTitle(" FLUENT ERP");
+        toolbar.setLogo(R.drawable.ic_applogo);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -444,7 +479,6 @@ public class MainActivity extends AppCompatActivity
 
         // Adding data header
         listDataHeader.add("Sales & Distribution");
-        listDataHeader.add("Manufacturing & Production");
         listDataHeader.add("Material Management");
         listDataHeader.add("Purchasing");
         listDataHeader.add("Human Resource Management");
@@ -466,9 +500,9 @@ public class MainActivity extends AppCompatActivity
         headingCO.add("Display Material Cost Estimate");
         headingCO.add("Price Change");*/
 
-        List<String> headingPO = new ArrayList<String>();
+        /*List<String> headingPO = new ArrayList<String>();
         headingPO.add("Display Products List");
-        headingPO.add("Display Purchase Orders' Production");
+        headingPO.add("Display Purchase Orders' Production");*/
 
         List<String> headingMM = new ArrayList<String>();
         headingMM.add("Create Material");
@@ -501,12 +535,11 @@ public class MainActivity extends AppCompatActivity
         headingMD.add("Display Customer");
 
         listDataChild.put(listDataHeader.get(0), headingSD);
-        listDataChild.put(listDataHeader.get(1), headingPO);
-        listDataChild.put(listDataHeader.get(2), headingMM);
-        listDataChild.put(listDataHeader.get(3), headingPUR);
-        listDataChild.put(listDataHeader.get(4), headingHR);
-        listDataChild.put(listDataHeader.get(5), headingDD);
-        listDataChild.put(listDataHeader.get(6), headingMD);
+        listDataChild.put(listDataHeader.get(1), headingMM);
+        listDataChild.put(listDataHeader.get(2), headingPUR);
+        listDataChild.put(listDataHeader.get(3), headingHR);
+        listDataChild.put(listDataHeader.get(4), headingDD);
+        listDataChild.put(listDataHeader.get(5), headingMD);
 
     }
 

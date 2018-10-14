@@ -23,7 +23,7 @@ public class ActivitySalesOrderDisplay extends AppCompatActivity {
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSOD);
         setSupportActionBar(toolbar);
-        setTitle("Server");
+        setTitle("Display Sales Order");
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }

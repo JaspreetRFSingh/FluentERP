@@ -7,12 +7,16 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -38,15 +42,19 @@ public class ActivityCheckOrderStatus extends AppCompatActivity {
     ProgressBar progressBar;
     RequestQueue requestQueue;
     StringRequest stringRequest;
-    private static RecyclerView.Adapter adapter;
+    private AdapterOrderStatus adapter;
     private RecyclerView.LayoutManager layoutManager;
     private static RecyclerView recyclerView;
     private static ArrayList<SalesOrder> data;
+    TextView txtSearchOrderStatus;
+    EditText eTxtSearchOrderStatus;
 
     void initViews(){
         requestQueue = Volley.newRequestQueue(this);
         progressBar = findViewById(R.id.progressBarCOS);
         progressBar.setVisibility(View.VISIBLE);
+        txtSearchOrderStatus = findViewById(R.id.txtSearchOrderStatus);
+        eTxtSearchOrderStatus = findViewById(R.id.editTextSearchSalesDocNo);
     }
 
     @Override
@@ -67,7 +75,28 @@ public class ActivityCheckOrderStatus extends AppCompatActivity {
         }
         initViews();
         initRecyclerView();
+        txtSearchOrderStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtSearchOrderStatus.setVisibility(View.GONE);
+                eTxtSearchOrderStatus.setVisibility(View.VISIBLE);
+            }
+        });
         retrieveRecords();
+        eTxtSearchOrderStatus.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.filter(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
 

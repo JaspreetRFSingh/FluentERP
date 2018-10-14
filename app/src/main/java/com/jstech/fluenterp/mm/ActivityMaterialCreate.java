@@ -1,9 +1,13 @@
 package com.jstech.fluenterp.mm;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -24,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
+import com.jstech.fluenterp.masterdata.ActivityEmployeeCreate;
 import com.jstech.fluenterp.models.Material;
 
 import org.json.JSONArray;
@@ -31,6 +37,8 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ActivityMaterialCreate extends AppCompatActivity {
     String date;
@@ -42,6 +50,7 @@ public class ActivityMaterialCreate extends AppCompatActivity {
     EditText eTxtDimensionalUnit;
     EditText costPerDimensionalUnit;
     RadioGroup rgMaterialType;
+    String rgMatTypeStr;
     Button btnCreateMaterial;
 
     void initViews(){
@@ -75,7 +84,163 @@ public class ActivityMaterialCreate extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         initViews();
+        rgMaterialType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId == R.id.rbfg){
+                    rgMatTypeStr = "FG";
+                }
+                else if(checkedId == R.id.rbug){
+                    rgMatTypeStr = "UG";
+                }
+            }
+        });
+        btnCreateMaterial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createMaterial();
+            }
+        });
     }
 
 
+    void clearFields(){
+        costPerDimensionalUnit.setText("");
+        eTxtDescription.setText("");
+        eTxtDimensionalUnit.setText("");
+        rgMaterialType.clearCheck();
+    }
+
+    boolean checkRecords(){
+        boolean ch = true;
+        if(TextUtils.isEmpty(eTxtDescription.getText().toString())){
+            eTxtDescription.setError("Description is required!");
+            ch = false;
+        }
+        if(TextUtils.isEmpty(eTxtDimensionalUnit.getText().toString())){
+            eTxtDimensionalUnit.setError("Dimensional unit is required!");
+            ch = false;
+        }
+        if(TextUtils.isEmpty(costPerDimensionalUnit.getText().toString())){
+            costPerDimensionalUnit.setError("Cost is required!");
+            ch = false;
+        }
+        return ch;
+    }
+
+    void createMaterial(){
+
+        if (checkRecords() == true){
+            progressBar.setVisibility(View.VISIBLE);
+            final String url = "https://jaspreettechnologies.000webhostapp.com/createMaterial.php";
+            stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try{
+                                JSONObject jsonObject = new JSONObject(response);
+                                progressBar.setVisibility(View.GONE);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityMaterialCreate.this);
+                                builder.setTitle(eTxtDescription.getText().toString());
+                                builder.setMessage("Successfully created "+eTxtDescription.getText().toString());
+                                clearFields();
+                                builder.setPositiveButton("Add Another Material", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        startActivity(new Intent(ActivityMaterialCreate.this, ActivityMaterialCreate.class));
+                                    }
+                                });
+                                builder.setNegativeButton("View Material", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        startActivity(new Intent(ActivityMaterialCreate.this, ActivityMaterialDisplay.class));
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                                dialog.show();
+                            }catch (Exception e){
+                                Toast.makeText(ActivityMaterialCreate.this,"Some Exception: "+e,Toast.LENGTH_LONG).show();
+                                progressBar.setVisibility(View.GONE);
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(ActivityMaterialCreate.this,"Some Error: "+error,Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
+                            error.printStackTrace();
+                        }}
+            )
+            {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    HashMap<String,String> map = new HashMap<String, String>();
+                    map.put("description", eTxtDescription.getText().toString());
+                    map.put("type", rgMatTypeStr);
+                    map.put("du", eTxtDimensionalUnit.getText().toString());
+                    map.put("costperdu", costPerDimensionalUnit.getText().toString());
+                    return map;
+                }
+            }
+            ;
+            requestQueue.add(stringRequest);
+        }
+        else{
+            return;
+        }
+    }
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home)
+        {
+            if(!eTxtDescription.getText().toString().trim().isEmpty() || !eTxtDimensionalUnit.getText().toString().trim().isEmpty() || !costPerDimensionalUnit.getText().toString().trim().isEmpty())
+            {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityMaterialCreate.this);
+                builder.setTitle("BACK!\n\n");
+                builder.setMessage("Your form is currently under progress. Are you sure you want to go back?");
+                builder.setPositiveButton("Yes, I'm sure!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                dialog.show();
+            }else
+            {
+                finish();
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(!eTxtDescription.getText().toString().trim().isEmpty() || !eTxtDimensionalUnit.getText().toString().trim().isEmpty() || !costPerDimensionalUnit.getText().toString().trim().isEmpty())
+        {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityMaterialCreate.this);
+            builder.setTitle("BACK!\n\n");
+            builder.setMessage("Your form is currently under progress. Are you sure you want to go back?");
+            builder.setPositiveButton("Yes, I'm sure!", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+            dialog.show();
+        }else
+        {
+            finish();
+        }
+    }
 }

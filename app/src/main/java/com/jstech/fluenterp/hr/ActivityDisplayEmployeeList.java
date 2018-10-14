@@ -6,13 +6,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,6 +30,7 @@ import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.MainActivity;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.Employee;
+import com.jstech.fluenterp.models.SalesOrder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,11 +40,15 @@ import java.util.ArrayList;
 public class ActivityDisplayEmployeeList extends AppCompatActivity {
 
     ListView listViewEmployees;
-    ArrayList<Employee> arrEmployees;
+    ArrayList<Employee> arrEmployees, tempList;
     ArrayAdapter<String> empNameAdapter;
     StringRequest stringRequest;
     RequestQueue requestQueue;
     ProgressBar progressBar;
+    Employee emp;
+    TextView txtSearchEmployee;
+    EditText eTxtSearchEmployee;
+    TextView txtViewListTitleDisplay;
 
     void initViews(){
         progressBar = findViewById(R.id.progressBarDEL);
@@ -45,7 +56,12 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
         listViewEmployees = findViewById(R.id.listViewEmployees);
         empNameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         arrEmployees = new ArrayList<>();
+        tempList = new ArrayList<>();
         listViewEmployees.setAdapter(empNameAdapter);
+        txtSearchEmployee = findViewById(R.id.txtSearchEmployee);
+        eTxtSearchEmployee = findViewById(R.id.editTextSearchEmployee);
+        txtViewListTitleDisplay = findViewById(R.id.txtViewListEmps);
+        emp = new Employee();
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +83,53 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
         }
         initViews();
         showEmployeeList();
+        txtViewListTitleDisplay.startAnimation(AnimationUtils.loadAnimation(this, R.anim.blink));
+        txtSearchEmployee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eTxtSearchEmployee.setVisibility(View.VISIBLE);
+                txtSearchEmployee.setVisibility(View.GONE);
+            }
+        });
+        eTxtSearchEmployee.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+               filter(String.valueOf(s));
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        listViewEmployees.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                emp = arrEmployees.get(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityDisplayEmployeeList.this);
+                builder.setTitle(emp.getEmpName()+"\n\n\n\n");
+                builder.setMessage(emp.toString());
+                AlertDialog dialog = builder.create();
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                dialog.show();
+            }
+        });
     }
+
+    void filter(String str){
+        arrEmployees.clear();
+        if(str.length()==0){
+            arrEmployees.addAll(tempList);
+        }else{
+            for(Employee employee : tempList){
+                if(employee.getEmpName().contains(str.toLowerCase())){
+                    arrEmployees.add(employee);
+                }
+            }
+        }
+    }
+
     void showEmployeeList(){
         progressBar.setVisibility(View.VISIBLE);
         stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveEmployees.php",
@@ -96,12 +158,13 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
                                     empPhone = jObj.getLong("emp_phone");
                                     dob = jObj.getString("dob");
                                     doj = jObj.getString("doj");
-
                                     Employee empTemp = new Employee(empId, empName, empAddress, empType, empPhone, dob, doj);
                                     arrEmployees.add(empTemp);
+                                    tempList.add(empTemp);
                                     empNameAdapter.add(empTemp.getEmpId()+": "+empTemp.getEmpName());
-                                    progressBar.setVisibility(View.GONE);
-                                }
+                                    }
+                                progressBar.setVisibility(View.GONE);
+
                             }else{
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(),"None Found",Toast.LENGTH_LONG).show();
@@ -117,6 +180,7 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(),"Volley Error: "+error,Toast.LENGTH_LONG).show();
                         error.printStackTrace();
                     }
@@ -124,9 +188,7 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
         );
         requestQueue.add(stringRequest);
     }
-
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if(item.getItemId() == android.R.id.home)
         {
             finish();
@@ -137,6 +199,5 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-
     }
 }

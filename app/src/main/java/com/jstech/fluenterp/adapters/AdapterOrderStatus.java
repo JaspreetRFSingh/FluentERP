@@ -35,10 +35,12 @@ public class AdapterOrderStatus extends RecyclerView.Adapter<AdapterOrderStatus.
 
 
 
-    ArrayList<SalesOrder> dataSet;
+    ArrayList<SalesOrder> dataSet, tempList;
 
     public AdapterOrderStatus(ArrayList<SalesOrder> data){
         this.dataSet = data;
+        tempList = new ArrayList<>();
+        tempList.addAll(data);
     }
 
 
@@ -157,4 +159,20 @@ public class AdapterOrderStatus extends RecyclerView.Adapter<AdapterOrderStatus.
     public int getItemCount() {
         return dataSet.size();
     }
+
+    public void filter(String str){
+
+        dataSet.clear();
+        if(str.length()==0){
+            dataSet.addAll(tempList);
+        }else{
+            for(SalesOrder salesOrder : tempList){
+                if(String.valueOf(salesOrder.getSalesDocNumber()).contains(str.toLowerCase())){
+                    dataSet.add(salesOrder);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 }

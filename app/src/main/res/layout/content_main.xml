@@ -20,29 +20,40 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/txtCommandLine"
+            android:textColor="@color/colorVisible"
+            android:textSize="16dp"
+            android:layout_marginLeft="12dp"
+            android:layout_height="wrap_content"
+            android:text="@string/command_line"/>
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="240dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_height="wrap_content">
+            android:layout_marginRight="10dp">
+
             <EditText
                 android:id="@+id/editTextEnterTCode"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:focusable="false"
-                android:hint="Enter T-Code" />
+                android:hint="Enter T-Code"
+                android:inputType="textPersonName" />
         </android.support.design.widget.TextInputLayout>
 
         <Button
+            android:id="@+id/btnEnterTcode"
             android:layout_width="wrap_content"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:background="@drawable/roundedbutton"
-            android:drawableEnd="@drawable/arrow16"
-            android:id="@+id/btnEnterTcode"
-            />
+            android:drawableEnd="@drawable/arrow16" />
 
     </LinearLayout>
 

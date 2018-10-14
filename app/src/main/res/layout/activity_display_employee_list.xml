@@ -30,16 +30,43 @@
         android:indeterminateDrawable="@drawable/custom_progressbar"
         android:visibility="gone" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/txtSearchEmployee"
+        android:textColor="@color/colorVisible"
+        android:textSize="16dp"
+        android:layout_marginTop="50dp"
+        android:layout_margin="12dp"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+        android:text="Click here to search Employee"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <EditText
-        android:layout_marginTop="20dp"
-        android:layout_margin="8dp"
+        android:layout_marginTop="50dp"
+        android:layout_margin="12dp"
+        android:textSize="16dp"
+        android:visibility="gone"
         android:id="@+id/editTextSearchEmployee"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Search Employee..."/>
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtViewListEmps"
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="12dp"
+        android:textSize="16dp"
+        android:text="@string/listEmployees"/>
 
     <ListView
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:padding="6dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

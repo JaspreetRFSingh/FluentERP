@@ -21,6 +21,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:id="@+id/dateShowCM"
+        android:textSize="18dp"
+        android:layout_marginRight="12dp"
+        android:textColor="@color/colorVisible"
+        android:layout_gravity="right"
+        android:gravity="center_vertical"/>
+
     <ProgressBar
         android:id="@+id/progressBarCM"
         style="?android:attr/progressBarStyle"
@@ -29,5 +40,97 @@
         android:layout_gravity="center"
         android:indeterminateDrawable="@drawable/custom_progressbar"
         android:visibility="gone" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_height="match_parent">
+
+            <Spinner
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:id="@+id/spinnerCustomerChoice"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="12dp"
+                android:layout_height="wrap_content"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/customerNameMC"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:hint="Enter Customer's Name"
+                    android:inputType="textAutoComplete"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/customerAddressMC"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:hint="Enter Customer's Address"
+                    android:inputType="textAutoComplete"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/customerCityMC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:hint="Enter Customer City" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/customerPhoneMC"
+                    android:layout_width="match_parent"
+                    android:inputType="phone"
+                    android:hint="Enter Customer's Phone"
+                    android:layout_marginTop="20dp"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/customerGSTMC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:hint="Enter Customer's GST Number" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <Button
+                android:id="@+id/btnModifyCustomer"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:layout_marginTop="35dp"
+                android:layout_width="match_parent"
+                android:background="@drawable/roundedbutton"
+                android:layout_height="wrap_content"
+                android:text="Modify Customer"/>
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

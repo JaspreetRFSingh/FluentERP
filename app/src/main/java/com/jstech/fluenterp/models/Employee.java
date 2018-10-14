@@ -78,4 +78,14 @@ public class Employee {
     public void setDoj(String doj) {
         this.doj = doj;
     }
+
+    @Override
+    public String toString() {
+        return getEmpId()+ " - " + getEmpName()+"\n"
+                +"\nType: "+getEmpType()+"\n"
+                +"\nPhone: "+getEmpPhone()+"\n"
+                +"\nAddress: "+getEmpAddress()+"\n"
+                +"\nDate of Birth: "+getDob()+"\n"
+                +"\nDate of Joining: " +getDoj();
+    }
 }

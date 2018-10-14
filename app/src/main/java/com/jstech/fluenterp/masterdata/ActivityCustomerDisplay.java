@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +61,8 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
     ListView listView;
     Context ctx;
 
+    ProgressBar progressBar;
+
     boolean checkInternetConnectivity(){
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -85,6 +89,7 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
             window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
         }
 
+        progressBar = findViewById(R.id.progressBarCD);
         ctx = this;
         txtViewCustomer = findViewById(R.id.txtCustomerSingle);
         cmr = new Customer();
@@ -96,6 +101,10 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCD);
         setSupportActionBar(toolbar);
+        setTitle("Display Customer Screen");
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         requestQueue = Volley.newRequestQueue(this);
         btnRetrieveAll.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +151,7 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
 
     void retrieveCustomersWithCondition()
     {
+        progressBar.setVisibility(View.VISIBLE);
         stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrieveUWC.php",
 
                 new Response.Listener<String>() {
@@ -181,13 +191,16 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
                                     txtViewCustomer.clearAnimation();
                                     //listView.setVisibility(View.INVISIBLE);
                                 }
+                                progressBar.setVisibility(View.GONE);
                             }else{
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(ActivityCustomerDisplay.this,"No records found!!!",Toast.LENGTH_LONG).show();
                             }
                             eTxtCustomer.setText("");
 
 
                         }catch (Exception e){
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(ActivityCustomerDisplay.this,"Some Exception: "+e,Toast.LENGTH_LONG).show();
                             e.printStackTrace();
                         }
@@ -197,6 +210,7 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(ActivityCustomerDisplay.this,"Some Error: "+error,Toast.LENGTH_LONG).show();
                         error.printStackTrace();
                     }
@@ -217,10 +231,9 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
         requestQueue.add(stringRequest);
 
     }
-
-
     void retrieveCustomers(){
 
+        progressBar.setVisibility(View.VISIBLE);
         txtViewCustomer.setText("");
         stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveU.php",
                 new Response.Listener<String>() {
@@ -259,11 +272,14 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
 
                                 adapter = new ArrayAdapter<String>(ActivityCustomerDisplay.this,android.R.layout.simple_list_item_1,customerNameList);
                                 listView.setAdapter(adapter);
+                                progressBar.setVisibility(View.GONE);
                             }else{
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(ActivityCustomerDisplay.this,"No Records Found",Toast.LENGTH_LONG).show();
                             }
 
                         }catch (Exception e){
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(ActivityCustomerDisplay.this,"Some Exception: "+e,Toast.LENGTH_LONG).show();
                             e.printStackTrace();
                         }
@@ -272,11 +288,27 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(ActivityCustomerDisplay.this,"Volley Error: "+error,Toast.LENGTH_LONG).show();
                         error.printStackTrace();
                     }
                 }
         );
         requestQueue.add(stringRequest);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home)
+        {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+
     }
 }
