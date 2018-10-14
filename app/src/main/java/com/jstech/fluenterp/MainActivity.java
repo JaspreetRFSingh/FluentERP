@@ -462,7 +462,7 @@ public class MainActivity extends AppCompatActivity
     protected void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(" FLUENT ERP");
+        setTitle(" FluentERP");
         toolbar.setLogo(R.drawable.ic_applogo);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
