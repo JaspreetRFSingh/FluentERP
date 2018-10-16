@@ -95,7 +95,7 @@ public class AdapterOrderStatus extends RecyclerView.Adapter<AdapterOrderStatus.
                     }
                 });
                 AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
                 dialog.show();
             }
         });

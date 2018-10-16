@@ -26,12 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.MainActivity;
 import com.jstech.fluenterp.R;
-import com.jstech.fluenterp.sd.ActivitySalesOrderCreate;
-
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -132,7 +127,7 @@ public class ActivityCustomerCreate extends AppCompatActivity {
 
     public void createCustomer(){
 
-        if (checkRecords() == true){
+        if (checkRecords()){
             progressBar.setVisibility(View.VISIBLE);
             final String url = "https://jaspreettechnologies.000webhostapp.com/createCustomer.php";
             stringRequest = new StringRequest(Request.Method.POST, url,
@@ -140,7 +135,6 @@ public class ActivityCustomerCreate extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             try{
-                                JSONObject jsonObject = new JSONObject(response);
                                 progressBar.setVisibility(View.GONE);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivityCustomerCreate.this);
                                 builder.setTitle(eTxtCustomerName.getText().toString());

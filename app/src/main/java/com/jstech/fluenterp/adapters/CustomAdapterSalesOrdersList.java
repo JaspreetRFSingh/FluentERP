@@ -1,15 +1,19 @@
 package com.jstech.fluenterp.adapters;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.SalesOrder;
-
 import java.util.ArrayList;
 
 public class CustomAdapterSalesOrdersList extends RecyclerView.Adapter<CustomAdapterSalesOrdersList.MyViewHolder> {
@@ -41,8 +45,42 @@ public class CustomAdapterSalesOrdersList extends RecyclerView.Adapter<CustomAda
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cards_layout, parent, false);
-        MyViewHolder myViewHolder = new MyViewHolder(view);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cards_layout, parent, false);
+        final MyViewHolder myViewHolder = new MyViewHolder(view);
+        final Context ctx = view.getContext();
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                final String sdn = myViewHolder.textViewSalesOrderNumber.getText().toString();
+                builder.setTitle("Sales Document");
+                builder.setMessage("Do you want to generate a PDF for the sales order "+myViewHolder.textViewSalesOrderNumber.getText()+"?\n");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String urlString="http://jaspreettechnologies.000webhostapp.com/createInvoice.php?sales_doc_no="+sdn;
+                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.setPackage("com.android.chrome");
+                        try {
+                            ctx.startActivity(intent);
+                        } catch (ActivityNotFoundException ex) {
+                            // Chrome browser presumably not installed so allow user to choose instead
+                            intent.setPackage(null);
+                            ctx.startActivity(intent);
+                        }
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                dialog.show();
+            }
+        });
         return myViewHolder;
     }
 
@@ -65,4 +103,8 @@ public class CustomAdapterSalesOrdersList extends RecyclerView.Adapter<CustomAda
     public int getItemCount() {
         return dataSet.size();
     }
+
+
+
+
 }

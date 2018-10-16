@@ -1,6 +1,7 @@
 package com.jstech.fluenterp.sd;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
@@ -77,7 +78,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
     String url = "";
     LinearLayout llChoice;
     LinearLayout llResults;
-    private static RecyclerView.Adapter adapter;
+    private static CustomAdapterSalesOrdersList adapter;
     private RecyclerView.LayoutManager layoutManager;
     private static RecyclerView recyclerView;
     private static ArrayList<SalesOrder> data;
@@ -92,6 +93,8 @@ public class ActivitySalesOrderList extends AppCompatActivity{
     String strProcessed = "";
     String strDispatched = "";
     String strDelivered = "";
+
+    Context ctx;
 
     void initViews(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSOL);
@@ -127,6 +130,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         adapterChoice.add("Display by order status");
         spinnerChoice.setAdapter(adapterChoice);
         choiceStr = "";
+        ctx = getApplicationContext();
 
     }
 
@@ -426,9 +430,14 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
         data = new ArrayList<SalesOrder>();
+        adapter = new CustomAdapterSalesOrdersList(data);
     }
     //Custom end
+
+
+
 
     void retrieveRecords(){
         progressBar.setVisibility(View.VISIBLE);
@@ -459,7 +468,6 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                                     SalesOrder so = new SalesOrder(sdn, c, d, p, os);
                                     data.add(so);
                                 }
-                                adapter = new CustomAdapterSalesOrdersList(data);
                                 recyclerView.setAdapter(adapter);
                                 progressBar.setVisibility(View.GONE);
                                 recyclerView.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce));
@@ -565,8 +573,6 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         );
         requestQueue.add(stringRequest);
     }
-
-
 
 
     //DatePicker
