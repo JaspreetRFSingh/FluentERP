@@ -18,7 +18,185 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/side_nav_bar"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
-
     </android.support.design.widget.AppBarLayout>
+
+
+    <ProgressBar
+        android:id="@+id/progressBarCPO"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/custom_progressbar"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Create Purchase Order Screen"
+        android:textSize="24dp"
+        android:textColor="@color/colorVisible"
+        android:gravity="center"
+        android:background="@color/text_background"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:id="@+id/dateShowCPO"
+        android:textSize="18dp"
+        android:layout_marginRight="12dp"
+        android:textColor="@color/colorVisible"
+        android:layout_gravity="right"
+        android:gravity="center_vertical"/>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:id="@+id/scrollViewSalesOrder"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|left"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <Spinner
+                android:layout_marginTop="16dp"
+                android:id="@+id/spinnerSellers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/editTextCustomerNameForSO"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:hint="Seller Name" />
+
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Order Particulars"
+                android:textSize="18dp"
+                android:background="@color/text_background"
+                android:gravity="center"
+                android:textColor="@color/colorVisible"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="10dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+                <Spinner
+                    android:id="@+id/spinnerMaterialsCPO1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:id="@+id/quantityCPO1"
+                            android:inputType="number"
+                            android:layout_width="140dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_height="wrap_content"
+                            android:hint="Enter Quantity"/>
+                    </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+                <Spinner
+                    android:id="@+id/spinnerMaterialsCPO2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/quantityCPO2"
+                        android:inputType="number"
+                        android:layout_width="140dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Quantity"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+                <Spinner
+                    android:id="@+id/spinnerMaterialsCPO3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/quantityCPO3"
+                        android:inputType="number"
+                        android:layout_width="140dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Quantity"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+                <Spinner
+                    android:id="@+id/spinnerMaterialsCPO4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/quantityCPO4"
+                        android:inputType="number"
+                        android:layout_width="140dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Quantity"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            
+            <Button
+                android:layout_marginTop="15dp"
+                android:id="@+id/btnCreatePurchaseOrder"
+                android:background="@drawable/roundedbutton"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:text="Create Purchase Order"
+                android:layout_marginRight="8dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>
