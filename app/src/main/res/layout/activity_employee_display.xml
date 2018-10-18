@@ -135,6 +135,38 @@
         android:visibility="gone"
         android:id="@+id/layoutResultEmployees"
         android:padding="8dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/txtSearchEmployee"
+            android:textColor="@color/colorVisible"
+            android:textSize="16dp"
+            android:layout_marginLeft="12dp"
+            android:visibility="visible"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"
+            android:text="Click here to search for an employee"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/editTextSearchEmpName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:ems="10"
+                android:drawableRight="@drawable/ic_menu_send"
+                android:layout_marginBottom="10dp"
+                android:textSize="16dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginLeft="12dp"
+                android:hint="Enter Employee Name" />
+        </android.support.design.widget.TextInputLayout>
+
+
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

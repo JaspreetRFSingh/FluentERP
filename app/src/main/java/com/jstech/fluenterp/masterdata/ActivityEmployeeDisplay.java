@@ -1,14 +1,15 @@
 package com.jstech.fluenterp.masterdata;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -21,26 +22,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.jstech.fluenterp.MainActivity;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.adapters.AdapterDisplayEmployees;
-import com.jstech.fluenterp.hr.ActivityDisplayEmployeeList;
 import com.jstech.fluenterp.models.Employee;
-import com.jstech.fluenterp.models.SalesOrder;
-import com.jstech.fluenterp.sd.ActivitySalesOrderList;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,11 +54,14 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
     EditText eTxtJoiningDate;
     EditText eTxtJoiningDate2;
     Button btnSearch;
+
+    TextView txtSearchEmployee;
+    EditText eTxtSearchEmployee;
     //adapter recycler
     RecyclerView recyclerViewEmployeeList;
-    private static RecyclerView.Adapter adapterEmployees;
-    private RecyclerView.LayoutManager layoutManager;
-    private static ArrayList<Employee> empData;
+    AdapterDisplayEmployees adapterEmployees;
+    RecyclerView.LayoutManager layoutManager;
+    ArrayList<Employee> empData;
     ArrayAdapter<String> adapterChoiceEmployee;
     ArrayAdapter<String> adapterEmployeeType;
     String choiceStr;
@@ -77,18 +74,13 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
     String strDate1;
     String strDate2;
     String empType;
-
     String urlCh = "";
-
-
     void initViews(){
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarED);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
+        Toolbar toolbar = findViewById(R.id.toolbarED);
         setSupportActionBar(toolbar);
         setTitle("Display Employee Screen");
         if (getSupportActionBar() != null){
@@ -97,6 +89,8 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
         progressBarEd = findViewById(R.id.progressBarED);
         llChoiceEmployee = findViewById(R.id.layoutChoiceEmployee);
         llResults = findViewById(R.id.layoutResultEmployees);
+        txtSearchEmployee = findViewById(R.id.txtSearchEmployee);
+        eTxtSearchEmployee = findViewById(R.id.editTextSearchEmpName);
         spChoiceEmployee = findViewById(R.id.spinnerChoiceEmployee);
         eTxtEmployeeNumber = findViewById(R.id.editTextEmployeeNumber);
         spEmpType = findViewById(R.id.spinnerEmployeeType);
@@ -107,8 +101,8 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
         btnSearch = findViewById(R.id.btnSearchEmployees);
         llResults.setVisibility(View.GONE);
         llChoiceEmployee.setVisibility(View.VISIBLE);
-        adapterChoiceEmployee = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item);
-        adapterEmployeeType = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
+        adapterChoiceEmployee = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item);
+        adapterEmployeeType = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
         initEmployeeTypeSpinner();
     }
     void initChoices(){
@@ -132,12 +126,12 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
         spEmpType.setAdapter(adapterEmployeeType);
     }
     void initRecyclerView(){
-        recyclerViewEmployeeList = (RecyclerView) findViewById(R.id.recyclerViewEmployeeList);
+        recyclerViewEmployeeList = findViewById(R.id.recyclerViewEmployeeList);
         recyclerViewEmployeeList.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerViewEmployeeList.setLayoutManager(layoutManager);
-        recyclerViewEmployeeList.setItemAnimator(new DefaultItemAnimator());;
-        empData = new ArrayList<Employee>();
+        recyclerViewEmployeeList.setItemAnimator(new DefaultItemAnimator());
+        empData = new ArrayList<>();
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,55 +144,57 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 choiceStr = adapterChoiceEmployee.getItem(position);
-                if(choiceStr.equals("No filters selected")){
-                    eTxtEmployeeNumber.setVisibility(View.GONE);
-                    spEmpType.setVisibility(View.GONE);
-                    eTxtEmpType.setVisibility(View.GONE);
-                    eTxtEmpType.setText("");
-                    eTxtJoiningDate.setVisibility(View.GONE);
-                    eTxtJoiningDate.setText("");
-                    eTxtJoiningDate2.setVisibility(View.GONE);
-                    eTxtJoiningDate2.setText("");
-                }
-                else if(choiceStr.equals("Display by employee number")){
-                    eTxtEmployeeNumber.setVisibility(View.VISIBLE);
-                    spEmpType.setVisibility(View.GONE);
-                    eTxtEmpType.setVisibility(View.GONE);
-                    eTxtEmpType.setText("");
-                    eTxtJoiningDate.setVisibility(View.GONE);
-                    eTxtJoiningDate.setText("");
-                    eTxtJoiningDate2.setVisibility(View.GONE);
-                    eTxtJoiningDate2.setText("");
-                }
-                else if(choiceStr.equals("Display by employee type")){
-                    eTxtEmployeeNumber.setVisibility(View.GONE);
-                    spEmpType.setVisibility(View.VISIBLE);
-                    eTxtEmpType.setVisibility(View.VISIBLE);
-                    //eTxtEmpType.setText("");
-                    eTxtJoiningDate.setVisibility(View.GONE);
-                    eTxtJoiningDate.setText("");
-                    eTxtJoiningDate2.setVisibility(View.GONE);
-                    eTxtJoiningDate2.setText("");
-                }
-                else if(choiceStr.equals("Display by date of joining")){
-                    eTxtEmployeeNumber.setVisibility(View.GONE);
-                    spEmpType.setVisibility(View.GONE);
-                    eTxtEmpType.setVisibility(View.GONE);
-                    eTxtEmpType.setText("");
-                    eTxtJoiningDate.setVisibility(View.VISIBLE);
-                    //eTxtJoiningDate.setText("");
-                    eTxtJoiningDate2.setVisibility(View.GONE);
-                    //eTxtJoiningDate2.setText("");
-                }
-                else if(choiceStr.equals("Display by range of date of joining")){
-                    eTxtEmployeeNumber.setVisibility(View.GONE);
-                    spEmpType.setVisibility(View.GONE);
-                    eTxtEmpType.setVisibility(View.GONE);
-                    eTxtEmpType.setText("");
-                    eTxtJoiningDate.setVisibility(View.VISIBLE);
-                    //eTxtJoiningDate.setText("");
-                    eTxtJoiningDate2.setVisibility(View.VISIBLE);
-                    //eTxtJoiningDate2.setText("");
+                switch (choiceStr) {
+                    case "No filters selected":
+                        eTxtEmployeeNumber.setVisibility(View.GONE);
+                        spEmpType.setVisibility(View.GONE);
+                        eTxtEmpType.setVisibility(View.GONE);
+                        eTxtEmpType.setText("");
+                        eTxtJoiningDate.setVisibility(View.GONE);
+                        eTxtJoiningDate.setText("");
+                        eTxtJoiningDate2.setVisibility(View.GONE);
+                        eTxtJoiningDate2.setText("");
+                        break;
+                    case "Display by employee number":
+                        eTxtEmployeeNumber.setVisibility(View.VISIBLE);
+                        spEmpType.setVisibility(View.GONE);
+                        eTxtEmpType.setVisibility(View.GONE);
+                        eTxtEmpType.setText("");
+                        eTxtJoiningDate.setVisibility(View.GONE);
+                        eTxtJoiningDate.setText("");
+                        eTxtJoiningDate2.setVisibility(View.GONE);
+                        eTxtJoiningDate2.setText("");
+                        break;
+                    case "Display by employee type":
+                        eTxtEmployeeNumber.setVisibility(View.GONE);
+                        spEmpType.setVisibility(View.VISIBLE);
+                        eTxtEmpType.setVisibility(View.VISIBLE);
+                        //eTxtEmpType.setText("");
+                        eTxtJoiningDate.setVisibility(View.GONE);
+                        eTxtJoiningDate.setText("");
+                        eTxtJoiningDate2.setVisibility(View.GONE);
+                        eTxtJoiningDate2.setText("");
+                        break;
+                    case "Display by date of joining":
+                        eTxtEmployeeNumber.setVisibility(View.GONE);
+                        spEmpType.setVisibility(View.GONE);
+                        eTxtEmpType.setVisibility(View.GONE);
+                        eTxtEmpType.setText("");
+                        eTxtJoiningDate.setVisibility(View.VISIBLE);
+                        //eTxtJoiningDate.setText("");
+                        eTxtJoiningDate2.setVisibility(View.GONE);
+                        //eTxtJoiningDate2.setText("");
+                        break;
+                    case "Display by range of date of joining":
+                        eTxtEmployeeNumber.setVisibility(View.GONE);
+                        spEmpType.setVisibility(View.GONE);
+                        eTxtEmpType.setVisibility(View.GONE);
+                        eTxtEmpType.setText("");
+                        eTxtJoiningDate.setVisibility(View.VISIBLE);
+                        //eTxtJoiningDate.setText("");
+                        eTxtJoiningDate2.setVisibility(View.VISIBLE);
+                        //eTxtJoiningDate2.setText("");
+                        break;
                 }
             }
 
@@ -240,57 +236,74 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(choiceStr.equals("No filters selected")){
-                    urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployees.php";
-                    retrieveEmployees();
-                }
-                else if(choiceStr.equals("Display by employee number")){
-                    if(TextUtils.isEmpty(eTxtEmployeeNumber.getText().toString())){
-                        eTxtEmployeeNumber.setError("Please enter an employee id!");
-                    }
-                    else{
-                        urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByNumber.php";
-                        empId = eTxtEmployeeNumber.getText().toString();
+                switch (choiceStr) {
+                    case "No filters selected":
+                        urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployees.php";
                         retrieveEmployees();
-                    }
+                        break;
+                    case "Display by employee number":
+                        if (TextUtils.isEmpty(eTxtEmployeeNumber.getText().toString())) {
+                            eTxtEmployeeNumber.setError("Please enter an employee id!");
+                        } else {
+                            urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByNumber.php";
+                            empId = eTxtEmployeeNumber.getText().toString();
+                            retrieveEmployees();
+                        }
+                        break;
+                    case "Display by employee type":
+                        if (TextUtils.isEmpty(eTxtEmpType.getText().toString())) {
+                            eTxtEmpType.setError("Please select an employee type!");
+                        } else {
+                            urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByType.php";
+                            empType = eTxtEmpType.getText().toString();
+                            retrieveEmployees();
+                        }
+                        break;
+                    case "Display by date of joining":
+                        if (TextUtils.isEmpty(eTxtJoiningDate.getText().toString())) {
+                            eTxtJoiningDate.setError("Please select a joining date!");
+                        } else {
+                            urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByDates.php";
+                            strDate1 = eTxtJoiningDate.getText().toString();
+                            retrieveEmployees();
+                        }
+                        break;
+                    case "Display by range of date of joining":
+                        if (TextUtils.isEmpty(eTxtJoiningDate.getText().toString())) {
+                            eTxtJoiningDate.setError("Please select a joining date!");
+                        } else {
+                            urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByDates.php";
+                            strDate1 = eTxtJoiningDate.getText().toString();
+                            retrieveEmployees();
+                        }
+                        if (TextUtils.isEmpty(eTxtJoiningDate2.getText().toString())) {
+                            eTxtJoiningDate2.setError("Please select a joining date!");
+                        } else {
+                            strDate2 = eTxtJoiningDate2.getText().toString();
+                            retrieveEmployees();
+                        }
+                        break;
                 }
-                else if(choiceStr.equals("Display by employee type")){
-                    if(TextUtils.isEmpty(eTxtEmpType.getText().toString())){
-                        eTxtEmpType.setError("Please select an employee type!");
-                    }
-                    else{
-                        urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByType.php";
-                        empType = eTxtEmpType.getText().toString();
-                        retrieveEmployees();
-                    }
-                }
-                else if(choiceStr.equals("Display by date of joining")){
-                    if(TextUtils.isEmpty(eTxtJoiningDate.getText().toString())){
-                        eTxtJoiningDate.setError("Please select a joining date!");
-                    }
-                    else{
-                        urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByDates.php";
-                        strDate1 = eTxtJoiningDate.getText().toString();
-                        retrieveEmployees();
-                    }
-                }
-                else if(choiceStr.equals("Display by range of date of joining")){
-                    if(TextUtils.isEmpty(eTxtJoiningDate.getText().toString())){
-                        eTxtJoiningDate.setError("Please select a joining date!");
-                    }
-                    else{
-                        urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByDates.php";
-                        strDate1 = eTxtJoiningDate.getText().toString();
-                        retrieveEmployees();
-                    }
-                    if(TextUtils.isEmpty(eTxtJoiningDate2.getText().toString())){
-                        eTxtJoiningDate2.setError("Please select a joining date!");
-                    }
-                    else{
-                        strDate2 = eTxtJoiningDate2.getText().toString();
-                        retrieveEmployees();
-                    }
-                }
+            }
+        });
+        txtSearchEmployee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtSearchEmployee.setVisibility(View.GONE);
+                eTxtSearchEmployee.setVisibility(View.VISIBLE);
+            }
+        });
+        eTxtSearchEmployee.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapterEmployees.filter(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
@@ -307,13 +320,13 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
                             String message = jsonObject.getString("message");
-                            int empId = 0;
-                            String empName ="";
-                            String empAddress = "";
-                            String empType = "";
-                            long empPhone = 0;
-                            String dob = "";
-                            String doj = "";
+                            int empId;
+                            String empName;
+                            String empAddress;
+                            String empType;
+                            long empPhone;
+                            String dob;
+                            String doj;
                             if(success == 1){
                                 JSONArray jsonArray = jsonObject.getJSONArray("employees");
                                 for(int i=0;i<jsonArray.length();i++){
@@ -353,8 +366,8 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
         )
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String, String>();
+            protected Map<String, String> getParams(){
+                HashMap<String,String> map = new HashMap<>();
                 if(!eTxtEmployeeNumber.getText().toString().isEmpty() && eTxtEmpType.getText().toString().isEmpty() && eTxtJoiningDate.getText().toString().isEmpty() && eTxtJoiningDate2.getText().toString().isEmpty()){
                     map.put("emp_id", empId);
                 }

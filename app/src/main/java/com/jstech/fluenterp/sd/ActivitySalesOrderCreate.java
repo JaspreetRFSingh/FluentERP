@@ -150,7 +150,7 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 cust_number = adapter.getItem(pos);
-                int ind = 8;
+                int ind;
                 if (pos != 0) {
                     eTxtCustomerName.setText(cust_number);
                     ind = cust_number.indexOf("-") - 1;
@@ -171,14 +171,14 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
         material2 = new Material();
         material3 = new Material();
         material4 = new Material();
-        spinnerMaterial1 = (Spinner) findViewById(R.id.spinnerMaterials10);
-        spinnerMaterial2 = (Spinner) findViewById(R.id.spinnerMaterials20);
-        spinnerMaterial3 = (Spinner) findViewById(R.id.spinnerMaterials30);
-        spinnerMaterial4 = (Spinner) findViewById(R.id.spinnerMaterials40);
-        adapterSpMat1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
-        adapterSpMat2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
-        adapterSpMat3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
-        adapterSpMat4 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
+        spinnerMaterial1 = findViewById(R.id.spinnerMaterials10);
+        spinnerMaterial2 = findViewById(R.id.spinnerMaterials20);
+        spinnerMaterial3 = findViewById(R.id.spinnerMaterials30);
+        spinnerMaterial4 = findViewById(R.id.spinnerMaterials40);
+        adapterSpMat1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
+        adapterSpMat2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
+        adapterSpMat3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
+        adapterSpMat4 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
         adapterSpMat1.add("-- Select an Item --");
         adapterSpMat2.add("-- Select an Item --");
         adapterSpMat3.add("-- Select an Item --");
@@ -283,11 +283,11 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
-                            int mc = 0;
-                            String mt = "";
-                            String md = "";
-                            String du = "";
-                            double cost = 0;
+                            int mc;
+                            String mt;
+                            String md;
+                            String du;
+                            double cost;
                             if (success == 1) {
 
                                 JSONArray jsonArray = jsonObject.getJSONArray("materials");
@@ -437,10 +437,12 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                                     });
                                 }
                             } else {
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(), "None Found", Toast.LENGTH_LONG).show();
                             }
 
                         } catch (Exception e) {
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(getApplicationContext(), "Some Exception: " + e, Toast.LENGTH_LONG).show();
                             e.printStackTrace();
                         }
@@ -449,6 +451,7 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(), "Volley Error: " + error, Toast.LENGTH_LONG).show();
                         error.printStackTrace();
                     }
@@ -469,7 +472,6 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
 
     void createSalesOrder() {
         progressBar.setVisibility(View.VISIBLE);
-
         final String url = "https://jaspreettechnologies.000webhostapp.com/createSalesDoc.php";
         stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {

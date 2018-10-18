@@ -97,7 +97,7 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-               filter(String.valueOf(s));
+
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -117,18 +117,6 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
         });
     }
 
-    void filter(String str){
-        arrEmployees.clear();
-        if(str.length()==0){
-            arrEmployees.addAll(tempList);
-        }else{
-            for(Employee employee : tempList){
-                if(employee.getEmpName().contains(str.toLowerCase())){
-                    arrEmployees.add(employee);
-                }
-            }
-        }
-    }
 
     void showEmployeeList(){
         progressBar.setVisibility(View.VISIBLE);

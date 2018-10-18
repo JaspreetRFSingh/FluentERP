@@ -58,7 +58,7 @@
             android:textSize="16dp"
             android:layout_marginRight="12dp"
             android:layout_marginLeft="12dp"
-            android:hint="Enter Seller Number" />
+            android:hint="Enter Seller Name" />
     </android.support.design.widget.TextInputLayout>
 
     <TextView
@@ -68,6 +68,8 @@
         android:text="@string/listSellers"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/card_parent_background"
         />
 
     <android.support.v7.widget.RecyclerView

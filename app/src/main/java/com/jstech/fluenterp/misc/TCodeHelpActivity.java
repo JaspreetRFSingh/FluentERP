@@ -47,9 +47,6 @@ public class TCodeHelpActivity extends AppCompatActivity {
         SAPTCodeList.add("VA02 - Modify Sales Order");
         SAPTCodeList.add("VA03 - Display Sales Order");
         SAPTCodeList.add("VA05 - Display Sales Orders List");
-        SAPTCodeList.add("VA11 - Create Quotation");
-        SAPTCodeList.add("VA12 - Modify Quotation");
-        SAPTCodeList.add("VA13 - Display Quotation");
         SAPTCodeList.add("MM01 - Create Material");
         SAPTCodeList.add("MM02 - Modify Material");
         SAPTCodeList.add("MM03 - Display Material");
@@ -58,12 +55,13 @@ public class TCodeHelpActivity extends AppCompatActivity {
         SAPTCodeList.add("PP01 - Create Purchase Order");
         SAPTCodeList.add("PP02 - Modify Purchase Order");
         SAPTCodeList.add("PP03 - Display Purchase Order");
+        SAPTCodeList.add("PP10 - Display List of Sellers");
         SAPTCodeList.add("HR10 - Display List of Employees");
         SAPTCodeList.add("HR05 - Attendance Record");
         SAPTCodeList.add("HR15 - Display Employee Salary Schema");
         SAPTCodeList.add("HR25 - Employee Bonuses and Incentives");
-        SAPTCodeList.add("DD01 - Create Sales Order");
-        SAPTCodeList.add("DD02 - Modify Sales Order");
+        SAPTCodeList.add("DD01 - Check Order Status");
+        SAPTCodeList.add("DD02 - Dispatch Incoming Orders");
         SAPTCodeList.add("MD01 - Create Customer");
         SAPTCodeList.add("MD02 - Modify Customer");
         SAPTCodeList.add("MD03 - Display Customer");

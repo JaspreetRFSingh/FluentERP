@@ -21,7 +21,7 @@ public class ActivityPurchaseOrderDisplay extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDPO);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPOD);
         setSupportActionBar(toolbar);
         setTitle("Display Purchase Order");
         if (getSupportActionBar() != null){
