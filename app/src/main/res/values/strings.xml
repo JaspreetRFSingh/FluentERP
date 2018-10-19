@@ -9,6 +9,8 @@
     <string name="explore"><i>Explore More >></i></string>
     <string name="listEmployees"><i>List of Employees</i></string>
     <string name="listSellers"><i>List of Sellers</i></string>
+    <string name="gen_please_wait">Please Wait</string>
+    <string name="gen_pdf_file">PDF File</string>
     <string name="visit"><u>Visit Website</u></string>
     <string name="choose"><i>Choose an Option >></i></string>
     <string name="command_line"><i>Click <u>here</u> to access command-line</i></string>

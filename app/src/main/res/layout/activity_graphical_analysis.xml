@@ -46,6 +46,12 @@
             android:layout_width="match_parent"
             android:visibility="gone"
             android:layout_height="match_parent"/>
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabBar"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 
@@ -59,16 +65,18 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
-
-
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/piechart"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabPie"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"/>
     </RelativeLayout>
-
-
-
 
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.jstech.fluenterp.misc;
 
 import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -60,6 +61,8 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
     double allahPrice;
     double totPrice;
     RelativeLayout rlBar;
+    FloatingActionButton fabBar;
+    FloatingActionButton fabPie;
     RelativeLayout rlPie;
 
     double pricem1;
@@ -75,13 +78,11 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphical_analysis);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarGraphical);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
+        Toolbar toolbar = findViewById(R.id.toolbarGraphical);
         setSupportActionBar(toolbar);
         setTitle("Graphical Analysis");
         if (getSupportActionBar() != null){
@@ -91,6 +92,8 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
         requestQueue = Volley.newRequestQueue(this);
         pieChart = (PieChart) findViewById(R.id.piechart);
         barChart = (BarChart) findViewById(R.id.barchart);
+        fabBar = findViewById(R.id.fabBar);
+        fabPie = findViewById(R.id.fabPie);
         rlBar = findViewById(R.id.rlBarChart);
         progressBar = findViewById(R.id.progressBarGraphicalAnalysis);
         rlPie = findViewById(R.id.rlPieChart);
@@ -111,6 +114,18 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
             retrieveSumsMonth();
         }
 
+        fabBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                barChart.saveToGallery("barImage.jpg", 85);
+            }
+        });
+        fabPie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pieChart.saveToGallery("pieImage.jpg", 85);
+            }
+        });
     }
 
     void retrieveSumTotal(){
@@ -360,6 +375,7 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.animateY(5000);
     }
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){

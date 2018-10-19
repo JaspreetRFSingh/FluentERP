@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".WebViewActivity">
+    tools:context=".mm.ActivityDisplayMaterialsList">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarWebView"
+            android:id="@+id/toolbarDML"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/side_nav_bar"
@@ -21,10 +21,22 @@
 
     </android.support.design.widget.AppBarLayout>
 
-<WebView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/webView"></WebView>
+    <ProgressBar
+        android:id="@+id/progressBarDML"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/custom_progressbar"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.RecyclerView
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:id="@+id/recyclerViewMaterialList"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
 
 
 </LinearLayout>

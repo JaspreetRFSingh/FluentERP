@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -41,6 +42,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.MainActivity;
 import com.jstech.fluenterp.R;
+import com.jstech.fluenterp.WebViewActivity;
 import com.jstech.fluenterp.models.Customer;
 import com.jstech.fluenterp.models.Material;
 import org.json.JSONArray;
@@ -651,17 +653,11 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
 
 
     void generatePDF(final String sdn) {
-        String urlString="http://jaspreettechnologies.000webhostapp.com/createInvoice.php?sales_doc_no="+sdn;
-        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setPackage("com.android.chrome");
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException ex) {
-            // Chrome browser presumably not installed so allow user to choose instead
-            intent.setPackage(null);
-            startActivity(intent);
-        }
+        String urlString="http://docs.google.com/gview?embedded=true&url=http://jaspreettechnologies.000webhostapp.com/createInvoice.php?sales_doc_no="+sdn;
+        Intent intent=new Intent(ActivitySalesOrderCreate.this, WebViewActivity.class);
+        intent.putExtra("url", urlString);
+        startActivity(intent);
+
     }
 
 

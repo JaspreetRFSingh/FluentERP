@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.jstech.fluenterp.R;
+import com.jstech.fluenterp.WebViewActivity;
 import com.jstech.fluenterp.models.SalesOrder;
 import java.util.ArrayList;
 
@@ -58,17 +59,10 @@ public class CustomAdapterSalesOrdersList extends RecyclerView.Adapter<CustomAda
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String urlString="http://jaspreettechnologies.000webhostapp.com/createInvoice.php?sales_doc_no="+sdn;
-                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.setPackage("com.android.chrome");
-                        try {
-                            ctx.startActivity(intent);
-                        } catch (ActivityNotFoundException ex) {
-                            // Chrome browser presumably not installed so allow user to choose instead
-                            intent.setPackage(null);
-                            ctx.startActivity(intent);
-                        }
+                        String urlString="http://docs.google.com/gview?embedded=true&url=http://jaspreettechnologies.000webhostapp.com/createInvoice.php?sales_doc_no="+sdn;
+                        Intent intent=new Intent(ctx, WebViewActivity.class);
+                        intent.putExtra("url", urlString);
+                        ctx.startActivity(intent);
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

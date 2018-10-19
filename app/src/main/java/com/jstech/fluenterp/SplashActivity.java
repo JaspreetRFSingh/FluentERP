@@ -15,7 +15,7 @@ public class SplashActivity extends AwesomeSplash {
     @Override
     public void initSplash(ConfigSplash configSplash) {
         //Customize Circular Reveal
-        configSplash.setBackgroundColor(R.color.colorVisible); //any color you want form colors.xml
+        configSplash.setBackgroundColor(R.color.card_parent_background); //any color you want form colors.xml
         configSplash.setAnimCircularRevealDuration(2000); //int ms
         configSplash.setRevealFlagX(Flags.REVEAL_LEFT);  //or Flags.REVEAL_LEFT
         configSplash.setRevealFlagY(Flags.REVEAL_TOP); //or Flags.REVEAL_TOP
@@ -41,7 +41,7 @@ public class SplashActivity extends AwesomeSplash {
 
         //Customize Title
         configSplash.setTitleSplash("FluentERP"); //change your app name here
-        configSplash.setTitleTextColor(R.color.white);
+        configSplash.setTitleTextColor(R.color.colorVisible);
         configSplash.setTitleTextSize(35f); //float value
         configSplash.setAnimTitleDuration(3000);
         configSplash.setAnimTitleTechnique(Techniques.FlipInX);
