@@ -6,13 +6,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -51,7 +48,7 @@ public class ActivityDisplayMaterialsList extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         rvMatList.setLayoutManager(layoutManager);
         rvMatList.setItemAnimator(new DefaultItemAnimator());
-        matData = new ArrayList<Material>();
+        matData = new ArrayList<>();
         loadMaterials();
     }
 
@@ -60,13 +57,12 @@ public class ActivityDisplayMaterialsList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_materials_list);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDML);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
+        Toolbar toolbar = findViewById(R.id.toolbarDML);
         setSupportActionBar(toolbar);
         setTitle("Display Materials List");
         if (getSupportActionBar() != null){
@@ -85,11 +81,11 @@ public class ActivityDisplayMaterialsList extends AppCompatActivity {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
-                            int mc = 0;
-                            String mt="";
-                            String md = "";
-                            String du = "";
-                            double cost = 0;
+                            int mc;
+                            String mt;
+                            String md;
+                            String du;
+                            double cost;
                             if(success == 1){
 
                                 JSONArray jsonArray = jsonObject.getJSONArray("materials");

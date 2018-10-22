@@ -58,4 +58,13 @@ public class SalesOrder {
     public void setOrderPrice(double orderPrice) {
         this.orderPrice = orderPrice;
     }
+
+    @Override
+    public String toString() {
+        return "Sales Document Number: "+salesDocNumber+"\n\n"+
+                "Customer: "+ customerNumber+"\n\n"+
+                "Date of Order: "+ orderDate +"\n\n"+
+                "Price: "+ orderPrice +"\n\n"+
+                "Order Status: "+ orderStatus +"\n\n";
+    }
 }

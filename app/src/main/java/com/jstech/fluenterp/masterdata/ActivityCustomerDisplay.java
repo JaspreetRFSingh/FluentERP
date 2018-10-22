@@ -21,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -33,6 +32,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.Customer;
@@ -48,7 +48,6 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
     RequestQueue requestQueue;
 
     Customer cmr;
-    String url = "https://jaspreettechnologies.000webhostapp.com/retrieveU.php";
 
     ArrayList<Customer> customerList;
     ArrayList<String> customerNameList;
@@ -60,7 +59,10 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
 
     boolean checkInternetConnectivity(){
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo networkInfo = null;
+        if (connectivityManager != null) {
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+        }
 
         return networkInfo!=null && networkInfo.isConnected();
     }
@@ -72,29 +74,25 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_display);/*
-        supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
+        setContentView(R.layout.activity_customer_display);
 
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
 
         progressBar = findViewById(R.id.progressBarCD);
         ctx = this;
         txtViewCustomer = findViewById(R.id.txtCustomerSingle);
         cmr = new Customer();
         requestQueue = Volley.newRequestQueue(this);
-        listView = (ListView)findViewById(R.id.listViewRetrieveCustomers);
+        listView = findViewById(R.id.listViewRetrieveCustomers);
         btnRetrieve = findViewById(R.id.btnRetrieveCustomers);
         btnRetrieveAll = findViewById(R.id.btnAllCustomers);
         eTxtCustomer = findViewById(R.id.editTextCustomerNumber);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCD);
+        Toolbar toolbar = findViewById(R.id.toolbarCD);
         setSupportActionBar(toolbar);
         setTitle("Display Customer Screen");
         if (getSupportActionBar() != null){
@@ -136,7 +134,7 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
                 builder.setTitle(cmr.getName()+"\n\n\n\n");
                 builder.setMessage(cmr.toString());
                 AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
                 dialog.show();
             }
         });
@@ -160,12 +158,12 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
                             String message = jsonObject.getString("message");
 
                             Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
-                            int c = 0;
-                            int p = 0;
-                            String n="";
-                            String a = "";
-                            String ci = "";
-                            String g="";
+                            int c;
+                            int p;
+                            String n;
+                            String a;
+                            String ci;
+                            String g;
                             Toast.makeText(ActivityCustomerDisplay.this,message,Toast.LENGTH_LONG).show();
                             if(success == 1){
 
@@ -184,7 +182,6 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
                                     txtViewCustomer.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.slide_right));
                                     txtViewCustomer.setText(customer.toString());
                                     txtViewCustomer.clearAnimation();
-                                    //listView.setVisibility(View.INVISIBLE);
                                 }
                                 progressBar.setVisibility(View.GONE);
                             }else{
@@ -213,9 +210,9 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
         )
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
-                HashMap<String,String> map = new HashMap<String, String>();
+                HashMap<String,String> map = new HashMap<>();
 
                 map.put("Customer_id",String.valueOf(customerO));
 
@@ -239,12 +236,12 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
 
-                            int c = 0;
-                            int p = 0;
-                            String n="";
-                            String a = "";
-                            String ci = "";
-                            String g="";
+                            int c;
+                            int p;
+                            String n;
+                            String a;
+                            String ci;
+                            String g;
                             if(success == 1){
                                 customerList = new ArrayList<>();
                                 customerNameList = new ArrayList<>();
@@ -265,7 +262,7 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
                                     customerNameList.add(n);
                                 }
 
-                                adapter = new ArrayAdapter<String>(ActivityCustomerDisplay.this,android.R.layout.simple_list_item_1,customerNameList);
+                                adapter = new ArrayAdapter<>(ActivityCustomerDisplay.this, android.R.layout.simple_list_item_1, customerNameList);
                                 listView.setAdapter(adapter);
                                 progressBar.setVisibility(View.GONE);
                             }else{

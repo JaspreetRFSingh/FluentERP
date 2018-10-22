@@ -54,6 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:inputType="number"
                 style="@style/Widget.AppCompat.Light.AutoCompleteTextView"
                 android:hint= "Enter Sales Order Number"/>
         </android.support.design.widget.TextInputLayout>
@@ -82,13 +83,27 @@
                 android:text="All Sales Order"/>
 
         </LinearLayout>
+
         <TextView
             android:padding="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/result"
+            android:visibility="gone"
+            android:id="@+id/txtResultDetailView"/>
+
+        <TextView
+            android:padding="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:visibility="gone"
             android:id="@+id/txtSalesOrderDetail"/>
         <ListView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/listViewRetrieveSalesOrders"/>

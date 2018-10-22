@@ -54,6 +54,7 @@ import com.jstech.fluenterp.purchasing.ActivityDisplaySellers;
 import com.jstech.fluenterp.purchasing.ActivityPurchaseOrderCreate;
 import com.jstech.fluenterp.purchasing.ActivityPurchaseOrderDisplay;
 import com.jstech.fluenterp.purchasing.ActivityPurchaseOrderModify;
+import com.jstech.fluenterp.purchasing.ChangePurchaseOrderStatus;
 import com.jstech.fluenterp.sd.ActivitySalesOrderCreate;
 import com.jstech.fluenterp.sd.ActivitySalesOrderDisplay;
 import com.jstech.fluenterp.sd.ActivitySalesOrderList;
@@ -244,6 +245,11 @@ public class MainActivity extends AppCompatActivity
                         startActivity(intent);
                         break;
                     }
+                    case "Change Purchase Order Status":{
+                        Intent intent = new Intent(MainActivity.this, ChangePurchaseOrderStatus.class);
+                        startActivity(intent);
+                        break;
+                    }
                     case "Display List of Employees": {
                         Intent intent = new Intent(MainActivity.this, ActivityDisplayEmployeeList.class);
                         startActivity(intent);
@@ -394,6 +400,11 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             }
+            case "pp05": {
+                Intent intent = new Intent(MainActivity.this, ChangePurchaseOrderStatus.class);
+                startActivity(intent);
+                break;
+            }
             case "hr10": {
                 Intent intent = new Intent(MainActivity.this, ActivityDisplayEmployeeList.class);
                 startActivity(intent);
@@ -516,6 +527,7 @@ public class MainActivity extends AppCompatActivity
         headingPUR.add("Change Purchase Order");
         headingPUR.add("Display Purchase Order");
         headingPUR.add("Display List of Sellers");
+        headingPUR.add("Change Purchase Order Status");
 
         List<String> headingHR = new ArrayList<>();
         headingHR.add("Display List of Employees");

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".purchasing.ChangePurchaseOrderStatus">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarCPOS"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/side_nav_bar"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarCPOS"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/custom_progressbar"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:id="@+id/linearLayoutResults">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/txtSearchOrderStatus"
+            android:textColor="@color/colorVisible"
+            android:textSize="16dp"
+            android:layout_marginLeft="12dp"
+            android:visibility="visible"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"
+            android:text="Click here to search for order number"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/editTextSearchPurchaseDocNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:ems="10"
+                android:drawableRight="@drawable/ic_menu_send"
+                android:layout_marginBottom="10dp"
+                android:textSize="16dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginLeft="12dp"
+                android:hint="Enter Order Number" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerViewSalesOrderStatus">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+</LinearLayout>

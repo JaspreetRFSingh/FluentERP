@@ -8,6 +8,7 @@
     <string name="action_settings">Settings</string>
     <string name="explore"><i>Explore More >></i></string>
     <string name="listEmployees"><i>List of Employees</i></string>
+    <string name="result"><i>Results</i></string>
     <string name="listSellers"><i>List of Sellers</i></string>
     <string name="gen_please_wait">Please Wait</string>
     <string name="gen_pdf_file">PDF File</string>

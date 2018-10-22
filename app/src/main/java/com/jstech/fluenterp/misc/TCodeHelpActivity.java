@@ -25,14 +25,12 @@ public class TCodeHelpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tcode_help);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
         listView = findViewById(R.id.listViewTCodes);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarTCH);
+        Toolbar toolbar = findViewById(R.id.toolbarTCH);
         setSupportActionBar(toolbar);
         setTitle("T-Codes");
         if (getSupportActionBar() != null){
@@ -55,6 +53,7 @@ public class TCodeHelpActivity extends AppCompatActivity {
         SAPTCodeList.add("PP01 - Create Purchase Order");
         SAPTCodeList.add("PP02 - Modify Purchase Order");
         SAPTCodeList.add("PP03 - Display Purchase Order");
+        SAPTCodeList.add("PP05 - Change Purchase Order Status");
         SAPTCodeList.add("PP10 - Display List of Sellers");
         SAPTCodeList.add("HR10 - Display List of Employees");
         SAPTCodeList.add("HR05 - Attendance Record");
