@@ -1,7 +1,5 @@
 package com.jstech.fluenterp.hr;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,15 +25,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.jstech.fluenterp.MainActivity;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.Employee;
-import com.jstech.fluenterp.models.SalesOrder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ActivityDisplayEmployeeList extends AppCompatActivity {
 
@@ -54,7 +51,7 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBarDEL);
         progressBar.setVisibility(View.GONE);
         listViewEmployees = findViewById(R.id.listViewEmployees);
-        empNameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        empNameAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         arrEmployees = new ArrayList<>();
         tempList = new ArrayList<>();
         listViewEmployees.setAdapter(empNameAdapter);
@@ -67,15 +64,14 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_employee_list);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
         requestQueue = Volley.newRequestQueue(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDEL);
+        Toolbar toolbar = findViewById(R.id.toolbarDEL);
         setSupportActionBar(toolbar);
         setTitle("Display Employees List");
         if (getSupportActionBar() != null){
@@ -111,7 +107,7 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
                 builder.setTitle(emp.getEmpName()+"\n\n\n\n");
                 builder.setMessage(emp.toString());
                 AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                 dialog.show();
             }
         });
@@ -127,13 +123,13 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
-                            int empId = 0;
-                            String empName ="";
-                            String empAddress = "";
-                            String empType = "";
-                            long empPhone = 0;
-                            String dob = "";
-                            String doj = "";
+                            int empId;
+                            String empName;
+                            String empAddress;
+                            String empType;
+                            long empPhone;
+                            String dob;
+                            String doj;
                             if(success == 1){
                                 JSONArray jsonArray = jsonObject.getJSONArray("employees");
                                 for(int i=0; i<jsonArray.length(); i++){

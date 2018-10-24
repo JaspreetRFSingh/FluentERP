@@ -21,10 +21,19 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBarWeb"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/custom_progressbar"
+        android:visibility="gone" />
+
 <WebView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/webView"></WebView>
+    android:id="@+id/webView"/>
 
 
 </LinearLayout>

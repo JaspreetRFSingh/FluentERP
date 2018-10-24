@@ -1,5 +1,6 @@
 package com.jstech.fluenterp.masterdata;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -19,8 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,9 +27,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
-import com.jstech.fluenterp.models.Customer;
-import com.jstech.fluenterp.models.Employee;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -38,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ActivityCustomerModify extends AppCompatActivity {
 
@@ -57,6 +54,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
     StringRequest stringRequest;
 
 
+    @SuppressLint("SetTextI18n")
     void initViews(){
         eTxtCustomerName = findViewById(R.id.customerNameMC);
         eTxtCustomerAddress = findViewById(R.id.customerAddressMC);
@@ -68,10 +66,10 @@ public class ActivityCustomerModify extends AppCompatActivity {
         btnModifyCustomer = findViewById(R.id.btnModifyCustomer);
         txtViewDate = findViewById(R.id.dateShowCM);
         progressBar = findViewById(R.id.progressBarCM);
-        adapterChoice = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
+        adapterChoice = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
         adapterChoice.add("Choose a Customer");
         requestQueue = Volley.newRequestQueue(this);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
         txtViewDate.setText(date.substring(6,8)+"/"+date.substring(4,6)+"/"+date.substring(0,4));
         fillCustomerSpinner();
@@ -87,12 +85,8 @@ public class ActivityCustomerModify extends AppCompatActivity {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
-                            int c = 0;
-                            int p = 0;
-                            String n="";
-                            String a = "";
-                            String ci = "";
-                            String g="";
+                            int c;
+                            String n;
                             if(success == 1){
 
                                 JSONArray jsonArray = jsonObject.getJSONArray("customers");
@@ -101,10 +95,6 @@ public class ActivityCustomerModify extends AppCompatActivity {
 
                                     c = jObj.getInt("Customer_id");
                                     n = jObj.getString("Name");
-                                    a = jObj.getString("Address");
-                                    ci = jObj.getString("City");
-                                    p = jObj.getInt("Contact");
-                                    g = jObj.getString("GST_Number");
                                     adapterChoice.add(Integer.toString(c) +" - "+ n);
                                 }
                                 progressBar.setVisibility(View.GONE);
@@ -138,13 +128,12 @@ public class ActivityCustomerModify extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_modify);
 
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCM);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
+        Toolbar toolbar = findViewById(R.id.toolbarCM);
         setSupportActionBar(toolbar);
         setTitle("Modify Customer Screen");
         if (getSupportActionBar() != null){
@@ -157,7 +146,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 choiceStr = adapterChoice.getItem(position);
                 if(position !=0){
-                int ind = choiceStr.indexOf("-") - 1;
+                int ind = Objects.requireNonNull(choiceStr).indexOf("-") - 1;
                 fillOutFields(choiceStr.substring(0,ind));}
             }
 
@@ -202,7 +191,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
 
     void updateCustomer(){
 
-        if (checkRecords() == true){
+        if (checkRecords()){
             progressBar.setVisibility(View.VISIBLE);
             final String url = "https://jaspreettechnologies.000webhostapp.com/modifyCustomer.php";
             stringRequest = new StringRequest(Request.Method.POST, url,
@@ -210,7 +199,6 @@ public class ActivityCustomerModify extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             try{
-                                JSONObject jsonObject = new JSONObject(response);
                                 progressBar.setVisibility(View.GONE);
                                 clearFields();
                                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivityCustomerModify.this);
@@ -242,7 +230,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
                                     }
                                 });
                                 AlertDialog dialog = builder.create();
-                                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                                 dialog.show();
 
                             }catch (Exception e){
@@ -263,8 +251,8 @@ public class ActivityCustomerModify extends AppCompatActivity {
             )
             {
                 @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String,String> map = new HashMap<String, String>();
+                protected Map<String, String> getParams() {
+                    HashMap<String,String> map = new HashMap<>();
                     int in = choiceStr.indexOf("-") - 1;
                     map.put("Customer_id", choiceStr.substring(0,in));
                     map.put("Name", eTxtCustomerName.getText().toString());
@@ -277,9 +265,6 @@ public class ActivityCustomerModify extends AppCompatActivity {
             }
             ;
             requestQueue.add(stringRequest);
-        }
-        else{
-            return;
         }
 
     }
@@ -301,18 +286,15 @@ public class ActivityCustomerModify extends AppCompatActivity {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
-                            String message = jsonObject.getString("message");
-                            int cusId = 0;
-                            String cName ="";
-                            String cAddress = "";
-                            String cCity = "";
-                            long cPhone = 0;
-                            String cGST = "";
+                            String cName;
+                            String cAddress;
+                            String cCity;
+                            long cPhone;
+                            String cGST;
                             if(success == 1){
                                 JSONArray jsonArray = jsonObject.getJSONArray("customers");
                                 for(int i=0;i<jsonArray.length();i++){
                                     JSONObject jObj = jsonArray.getJSONObject(i);
-                                    cusId = jObj.getInt("Customer_id");
                                     cName = jObj.getString("Name");
                                     cAddress = jObj.getString("Address");
                                     cCity = jObj.getString("City");
@@ -348,8 +330,8 @@ public class ActivityCustomerModify extends AppCompatActivity {
         )
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String, String>();
+            protected Map<String, String> getParams() {
+                HashMap<String,String> map = new HashMap<>();
                 map.put("cust_id", strCustId);
                 return map;
             }
@@ -378,7 +360,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
                     }
                 });
                 AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                 dialog.show();
             }else
             {
@@ -403,7 +385,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
                 }
             });
             AlertDialog dialog = builder.create();
-            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+            Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
             dialog.show();
         }else
         {

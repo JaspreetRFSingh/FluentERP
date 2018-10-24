@@ -1,12 +1,12 @@
 package com.jstech.fluenterp.masterdata;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -22,28 +22,22 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.jstech.fluenterp.MainActivity;
 import com.jstech.fluenterp.R;
-import com.jstech.fluenterp.models.Employee;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class ActivityEmployeeModify extends AppCompatActivity {
 
@@ -78,9 +72,9 @@ public class ActivityEmployeeModify extends AppCompatActivity {
         btnModifyEmployee = findViewById(R.id.btnModifyEmployee);
         txtViewDate = findViewById(R.id.dateShowME);
         progressBar = findViewById(R.id.progressBarME);
-        adapterChoice = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
+        adapterChoice = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
         adapterChoice.add("Choose an Employee");
-        adapterType = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item);
+        adapterType = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item);
         adapterType.add("RE-1");
         adapterType.add("RE-2");
         adapterType.add("RE-3");
@@ -101,13 +95,8 @@ public class ActivityEmployeeModify extends AppCompatActivity {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
-                            int empId = 0;
-                            String empName ="";
-                            String empAddress = "";
-                            String empType = "";
-                            long empPhone = 0;
-                            String dob = "";
-                            String doj = "";
+                            int empId;
+                            String empName;
                             if(success == 1){
                                 JSONArray jsonArray = jsonObject.getJSONArray("employees");
                                 for(int i=0; i<jsonArray.length(); i++){
@@ -115,13 +104,6 @@ public class ActivityEmployeeModify extends AppCompatActivity {
 
                                     empId = jObj.getInt("emp_id");
                                     empName = jObj.getString("emp_name");
-                                    empAddress = jObj.getString("emp_address");
-                                    empType = jObj.getString("emp_type");
-                                    empPhone = jObj.getLong("emp_phone");
-                                    dob = jObj.getString("dob");
-                                    doj = jObj.getString("doj");
-
-                                    Employee empTemp = new Employee(empId, empName, empAddress, empType, empPhone, dob, doj);
                                     adapterChoice.add(Integer.toString(empId) +" - "+ empName);
                                 }
                             }else{
@@ -147,46 +129,49 @@ public class ActivityEmployeeModify extends AppCompatActivity {
         );
         requestQueue.add(stringRequest);
     }
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_modify);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
         requestQueue = Volley.newRequestQueue(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarEM);
+        Toolbar toolbar = findViewById(R.id.toolbarEM);
         setSupportActionBar(toolbar);
         setTitle("Modify Employee Screen");
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
         initViews();
         txtViewDate.setText(date.substring(6,8)+"/"+date.substring(4,6)+"/"+date.substring(0,4));
         progressBar.setVisibility(View.GONE);
         spEmployeeType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 typeStr = adapterType.getItem(position);
-                if(typeStr.equals("RE-1")){
-                    eTxtEmployeeType.setText("RE-1");
-                }
-                else if(typeStr.equals("RE-2")){
-                    eTxtEmployeeType.setText("RE-2");
-                }
-                else if(typeStr.equals("RE-3")){
-                    eTxtEmployeeType.setText("RE-3");
-                }
-                else if(typeStr.equals("EE-2")){
-                    eTxtEmployeeType.setText("EE-2");
-                }
-                else if(typeStr.equals("EE-1")){
-                    eTxtEmployeeType.setText("EE-1");
+                switch (Objects.requireNonNull(typeStr)) {
+                    case "RE-1":
+                        eTxtEmployeeType.setText("RE-1");
+                        break;
+                    case "RE-2":
+                        eTxtEmployeeType.setText("RE-2");
+                        break;
+                    case "RE-3":
+                        eTxtEmployeeType.setText("RE-3");
+                        break;
+                    case "EE-2":
+                        eTxtEmployeeType.setText("EE-2");
+                        break;
+                    case "EE-1":
+                        eTxtEmployeeType.setText("EE-1");
+                        break;
                 }
             }
 
@@ -198,7 +183,7 @@ public class ActivityEmployeeModify extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 choiceStr = adapterChoice.getItem(position);
-                fillOutFields(choiceStr.substring(0,5));
+                fillOutFields(Objects.requireNonNull(choiceStr).substring(0,5));
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -279,26 +264,22 @@ public class ActivityEmployeeModify extends AppCompatActivity {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
-                            String message = jsonObject.getString("message");
-                            int empId = 0;
-                            String empName ="";
-                            String empAddress = "";
-                            String empType = "";
-                            long empPhone = 0;
-                            String dob = "";
-                            String doj = "";
+                            String empName;
+                            String empAddress;
+                            String empType ;
+                            long empPhone;
+                            String dob;
+                            String doj;
                             if(success == 1){
                                 JSONArray jsonArray = jsonObject.getJSONArray("employees");
                                 for(int i=0;i<jsonArray.length();i++){
                                     JSONObject jObj = jsonArray.getJSONObject(i);
-                                    empId = jObj.getInt("emp_id");
                                     empName = jObj.getString("emp_name");
                                     empAddress = jObj.getString("emp_address");
                                     empType = jObj.getString("emp_type");
                                     empPhone = jObj.getLong("emp_phone");
                                     dob = jObj.getString("dob");
                                     doj = jObj.getString("doj");
-                                    Employee emp = new Employee(empId,empName, empAddress, empType, empPhone, dob, doj);
                                     eTxtEmployeeName.setText(empName);
                                     eTxtEmployeeAddress.setText(empAddress);
                                     eTxtEmployeeDob.setText(dob);
@@ -330,8 +311,8 @@ public class ActivityEmployeeModify extends AppCompatActivity {
         )
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String, String>();
+            protected Map<String, String> getParams(){
+                HashMap<String,String> map = new HashMap<>();
                 map.put("emp_id", empIdPar);
                 return map;
             }
@@ -340,7 +321,7 @@ public class ActivityEmployeeModify extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
     protected void updateEmployee(){
-        if (checkRecords() == true){
+        if (checkRecords()){
             progressBar.setVisibility(View.VISIBLE);
             final String url = "https://jaspreettechnologies.000webhostapp.com/modifyEmployee.php";
             stringRequest = new StringRequest(Request.Method.POST, url,
@@ -348,7 +329,6 @@ public class ActivityEmployeeModify extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             try{
-                                JSONObject jsonObject = new JSONObject(response);
                                 progressBar.setVisibility(View.GONE);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivityEmployeeModify.this);
                                 builder.setTitle(eTxtEmployeeName.getText().toString());
@@ -366,7 +346,7 @@ public class ActivityEmployeeModify extends AppCompatActivity {
                                     }
                                 });
                                 AlertDialog dialog = builder.create();
-                                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+                                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
                                 dialog.show();
                                 clearFields();
 
@@ -388,8 +368,8 @@ public class ActivityEmployeeModify extends AppCompatActivity {
             )
             {
                 @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String,String> map = new HashMap<String, String>();
+                protected Map<String, String> getParams() {
+                    HashMap<String,String> map = new HashMap<>();
                     map.put("id", choiceStr.substring(0,5));
                     map.put("name", eTxtEmployeeName.getText().toString());
                     map.put("address", eTxtEmployeeAddress.getText().toString());
@@ -402,9 +382,6 @@ public class ActivityEmployeeModify extends AppCompatActivity {
             }
             ;
             requestQueue.add(stringRequest);
-        }
-        else{
-            return;
         }
     }
 
@@ -462,7 +439,7 @@ public class ActivityEmployeeModify extends AppCompatActivity {
                     }
                 });
                 AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
                 dialog.show();
             }else
             {
@@ -487,7 +464,7 @@ public class ActivityEmployeeModify extends AppCompatActivity {
                 }
             });
             AlertDialog dialog = builder.create();
-            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+            Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
             dialog.show();
         }else
         {

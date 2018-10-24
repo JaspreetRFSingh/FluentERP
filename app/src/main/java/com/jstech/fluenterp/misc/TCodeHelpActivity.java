@@ -8,9 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.jstech.fluenterp.R;
 
@@ -28,6 +26,7 @@ public class TCodeHelpActivity extends AppCompatActivity {
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
         window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
         listView = findViewById(R.id.listViewTCodes);
         Toolbar toolbar = findViewById(R.id.toolbarTCH);

@@ -41,6 +41,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class ActivityEmployeeDisplay extends AppCompatActivity {
 
@@ -79,6 +80,7 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
         window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
         Toolbar toolbar = findViewById(R.id.toolbarED);
         setSupportActionBar(toolbar);
@@ -144,7 +146,7 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 choiceStr = adapterChoiceEmployee.getItem(position);
-                switch (choiceStr) {
+                switch (Objects.requireNonNull(choiceStr)) {
                     case "No filters selected":
                         eTxtEmployeeNumber.setVisibility(View.GONE);
                         spEmpType.setVisibility(View.GONE);

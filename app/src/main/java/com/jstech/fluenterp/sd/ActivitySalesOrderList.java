@@ -1,10 +1,10 @@
 package com.jstech.fluenterp.sd;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -47,6 +46,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class ActivitySalesOrderList extends AppCompatActivity{
 
@@ -78,9 +78,9 @@ public class ActivitySalesOrderList extends AppCompatActivity{
     String url = "";
     LinearLayout llChoice;
     LinearLayout llResults;
-    private static CustomAdapterSalesOrdersList adapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private static RecyclerView recyclerView;
+     static CustomAdapterSalesOrdersList adapter;
+     RecyclerView.LayoutManager layoutManager;
+     RecyclerView recyclerView;
     private static ArrayList<SalesOrder> data;
     String customer;
     String salesDocNo;
@@ -97,7 +97,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
     Context ctx;
 
     void initViews(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSOL);
+        Toolbar toolbar = findViewById(R.id.toolbarSOL);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -121,7 +121,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         llChoice = findViewById(R.id.layoutChoice);
         llResults = findViewById(R.id.layoutResult);
         llResults.setVisibility(View.GONE);
-        adapterChoice = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item);
+        adapterChoice = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item);
         adapterChoice.add("No filters selected");
         adapterChoice.add("Display by customer");
         adapterChoice.add("Display by sales document number");
@@ -136,7 +136,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
 
     void initCustomer(){
         //progressBar.setVisibility(View.VISIBLE);
-        adapterCustomer = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item);
+        adapterCustomer = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item);
         adapterCustomer.add("~~ Select a Customer ~~");
         retrieveCustomers();
         //progressBar.setVisibility(View.GONE);
@@ -145,16 +145,14 @@ public class ActivitySalesOrderList extends AppCompatActivity{
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = adapterCustomer.getItem(position);
-                int eind = item.indexOf("-");
+                int eind = Objects.requireNonNull(item).indexOf("-");
                 if(eind != -1){
                     eTxtCustomerNumber.setText(item.substring(0,eind-1));
-                }
-                else
-                {
                 }
 
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 eTxtCustomerNumber.setText("Please select a valid customer number");
@@ -165,12 +163,11 @@ public class ActivitySalesOrderList extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_order_list);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
         requestQueue = Volley.newRequestQueue(this);
         initViews();
         spinnerChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -178,141 +175,139 @@ public class ActivitySalesOrderList extends AppCompatActivity{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 choiceStr = adapterChoice.getItem(position);
-                if (choiceStr.equals("No filters selected"))
-                {
-                    eTxtCustomerNumber.setVisibility(View.GONE);
-                    eTxtSalesDocumentNumber.setVisibility(View.GONE);
-                    editTextDate1.setVisibility(View.GONE);
-                    datePicker1.setVisibility(View.GONE);
-                    editTextDate2.setVisibility(View.GONE);
-                    datePicker2.setVisibility(View.GONE);
-                    spinnerCustomer.setVisibility(View.GONE);
-                    cbCreated.setVisibility(View.GONE);
-                    cbProcessing.setVisibility(View.GONE);
-                    cbProcessed.setVisibility(View.GONE);
-                    cbDispatched.setVisibility(View.GONE);
-                    cbDelivered.setVisibility(View.GONE);
-                    eTxtCustomerNumber.setText("");
-                    eTxtSalesDocumentNumber.setText("");
-                    editTextDate1.setText("");
-                    editTextDate2.setText("");
-                    cbCreated.setChecked(false);
-                    cbProcessing.setChecked(false);
-                    cbProcessed.setChecked(false);
-                    cbDispatched.setChecked(false);
-                    cbDelivered.setChecked(false);
+                switch (Objects.requireNonNull(choiceStr)) {
+                    case "No filters selected":
+                        eTxtCustomerNumber.setVisibility(View.GONE);
+                        eTxtSalesDocumentNumber.setVisibility(View.GONE);
+                        editTextDate1.setVisibility(View.GONE);
+                        datePicker1.setVisibility(View.GONE);
+                        editTextDate2.setVisibility(View.GONE);
+                        datePicker2.setVisibility(View.GONE);
+                        spinnerCustomer.setVisibility(View.GONE);
+                        cbCreated.setVisibility(View.GONE);
+                        cbProcessing.setVisibility(View.GONE);
+                        cbProcessed.setVisibility(View.GONE);
+                        cbDispatched.setVisibility(View.GONE);
+                        cbDelivered.setVisibility(View.GONE);
+                        eTxtCustomerNumber.setText("");
+                        eTxtSalesDocumentNumber.setText("");
+                        editTextDate1.setText("");
+                        editTextDate2.setText("");
+                        cbCreated.setChecked(false);
+                        cbProcessing.setChecked(false);
+                        cbProcessed.setChecked(false);
+                        cbDispatched.setChecked(false);
+                        cbDelivered.setChecked(false);
 
-                }
-                else if (choiceStr.equals("Display by customer"))
-                {
-                    spinnerCustomer.setVisibility(View.VISIBLE);
-                    eTxtCustomerNumber.setVisibility(View.VISIBLE);
-                    eTxtSalesDocumentNumber.setVisibility(View.GONE);
-                    editTextDate1.setVisibility(View.GONE);
-                    datePicker1.setVisibility(View.GONE);
-                    editTextDate2.setVisibility(View.GONE);
-                    datePicker2.setVisibility(View.GONE);
-                    cbCreated.setVisibility(View.GONE);
-                    cbProcessing.setVisibility(View.GONE);
-                    cbProcessed.setVisibility(View.GONE);
-                    cbDispatched.setVisibility(View.GONE);
-                    cbDelivered.setVisibility(View.GONE);
-                    eTxtSalesDocumentNumber.setText("");
-                    editTextDate1.setText("");
-                    editTextDate2.setText("");
-                    cbCreated.setChecked(false);
-                    cbProcessing.setChecked(false);
-                    cbProcessed.setChecked(false);
-                    cbDispatched.setChecked(false);
-                    cbDelivered.setChecked(false);
-                    initCustomer();
+                        break;
+                    case "Display by customer":
+                        spinnerCustomer.setVisibility(View.VISIBLE);
+                        eTxtCustomerNumber.setVisibility(View.VISIBLE);
+                        eTxtSalesDocumentNumber.setVisibility(View.GONE);
+                        editTextDate1.setVisibility(View.GONE);
+                        datePicker1.setVisibility(View.GONE);
+                        editTextDate2.setVisibility(View.GONE);
+                        datePicker2.setVisibility(View.GONE);
+                        cbCreated.setVisibility(View.GONE);
+                        cbProcessing.setVisibility(View.GONE);
+                        cbProcessed.setVisibility(View.GONE);
+                        cbDispatched.setVisibility(View.GONE);
+                        cbDelivered.setVisibility(View.GONE);
+                        eTxtSalesDocumentNumber.setText("");
+                        editTextDate1.setText("");
+                        editTextDate2.setText("");
+                        cbCreated.setChecked(false);
+                        cbProcessing.setChecked(false);
+                        cbProcessed.setChecked(false);
+                        cbDispatched.setChecked(false);
+                        cbDelivered.setChecked(false);
+                        initCustomer();
 
-                }
-                else if (choiceStr.equals("Display by sales document number"))
-                {
-                    eTxtSalesDocumentNumber.setVisibility(View.VISIBLE);
-                    eTxtCustomerNumber.setVisibility(View.GONE);
-                    editTextDate1.setVisibility(View.GONE);
-                    spinnerCustomer.setVisibility(View.GONE);
-                    datePicker1.setVisibility(View.GONE);
-                    editTextDate2.setVisibility(View.GONE);
-                    datePicker2.setVisibility(View.GONE);
-                    cbCreated.setVisibility(View.GONE);
-                    cbProcessing.setVisibility(View.GONE);
-                    cbProcessed.setVisibility(View.GONE);
-                    cbDispatched.setVisibility(View.GONE);
-                    cbDelivered.setVisibility(View.GONE);
-                    eTxtCustomerNumber.setText("");
-                    editTextDate1.setText("");
-                    editTextDate2.setText("");
-                    cbCreated.setChecked(false);
-                    cbProcessing.setChecked(false);
-                    cbProcessed.setChecked(false);
-                    cbDispatched.setChecked(false);
-                    cbDelivered.setChecked(false);
+                        break;
+                    case "Display by sales document number":
+                        eTxtSalesDocumentNumber.setVisibility(View.VISIBLE);
+                        eTxtCustomerNumber.setVisibility(View.GONE);
+                        editTextDate1.setVisibility(View.GONE);
+                        spinnerCustomer.setVisibility(View.GONE);
+                        datePicker1.setVisibility(View.GONE);
+                        editTextDate2.setVisibility(View.GONE);
+                        datePicker2.setVisibility(View.GONE);
+                        cbCreated.setVisibility(View.GONE);
+                        cbProcessing.setVisibility(View.GONE);
+                        cbProcessed.setVisibility(View.GONE);
+                        cbDispatched.setVisibility(View.GONE);
+                        cbDelivered.setVisibility(View.GONE);
+                        eTxtCustomerNumber.setText("");
+                        editTextDate1.setText("");
+                        editTextDate2.setText("");
+                        cbCreated.setChecked(false);
+                        cbProcessing.setChecked(false);
+                        cbProcessed.setChecked(false);
+                        cbDispatched.setChecked(false);
+                        cbDelivered.setChecked(false);
 
-                }
-                else if (choiceStr.equals("Display by date"))
-                {
-                    editTextDate1.setVisibility(View.VISIBLE);
-                    datePicker1.setVisibility(View.VISIBLE);
-                    spinnerCustomer.setVisibility(View.GONE);
-                    eTxtSalesDocumentNumber.setVisibility(View.GONE);
-                    eTxtCustomerNumber.setVisibility(View.GONE);
-                    editTextDate2.setVisibility(View.GONE);
-                    datePicker2.setVisibility(View.GONE);
-                    cbCreated.setVisibility(View.GONE);
-                    cbProcessing.setVisibility(View.GONE);
-                    cbProcessed.setVisibility(View.GONE);
-                    cbDispatched.setVisibility(View.GONE);
-                    cbDelivered.setVisibility(View.GONE);
-                    eTxtCustomerNumber.setText("");
-                    eTxtSalesDocumentNumber.setText("");
-                    editTextDate2.setText("");
-                    cbCreated.setChecked(false);
-                    cbProcessing.setChecked(false);
-                    cbProcessed.setChecked(false);
-                    cbDispatched.setChecked(false);
-                    cbDelivered.setChecked(false);
-                }
-                else if (choiceStr.equals("Display by range of dates")){
-                    editTextDate1.setVisibility(View.VISIBLE);
-                    datePicker1.setVisibility(View.VISIBLE);
-                    eTxtSalesDocumentNumber.setVisibility(View.GONE);
-                    eTxtCustomerNumber.setVisibility(View.GONE);
-                    editTextDate2.setVisibility(View.VISIBLE);
-                    datePicker2.setVisibility(View.VISIBLE);
-                    spinnerCustomer.setVisibility(View.GONE);
-                    cbCreated.setVisibility(View.GONE);
-                    cbProcessing.setVisibility(View.GONE);
-                    cbProcessed.setVisibility(View.GONE);
-                    cbDispatched.setVisibility(View.GONE);
-                    cbDelivered.setVisibility(View.GONE);
-                    eTxtCustomerNumber.setText("");
-                    eTxtSalesDocumentNumber.setText("");
-                    cbCreated.setChecked(false);
-                    cbProcessing.setChecked(false);
-                    cbProcessed.setChecked(false);
-                    cbDispatched.setChecked(false);
-                    cbDelivered.setChecked(false);
+                        break;
+                    case "Display by date":
+                        editTextDate1.setVisibility(View.VISIBLE);
+                        datePicker1.setVisibility(View.VISIBLE);
+                        spinnerCustomer.setVisibility(View.GONE);
+                        eTxtSalesDocumentNumber.setVisibility(View.GONE);
+                        eTxtCustomerNumber.setVisibility(View.GONE);
+                        editTextDate2.setVisibility(View.GONE);
+                        datePicker2.setVisibility(View.GONE);
+                        cbCreated.setVisibility(View.GONE);
+                        cbProcessing.setVisibility(View.GONE);
+                        cbProcessed.setVisibility(View.GONE);
+                        cbDispatched.setVisibility(View.GONE);
+                        cbDelivered.setVisibility(View.GONE);
+                        eTxtCustomerNumber.setText("");
+                        eTxtSalesDocumentNumber.setText("");
+                        editTextDate2.setText("");
+                        cbCreated.setChecked(false);
+                        cbProcessing.setChecked(false);
+                        cbProcessed.setChecked(false);
+                        cbDispatched.setChecked(false);
+                        cbDelivered.setChecked(false);
+                        break;
+                    case "Display by range of dates":
+                        editTextDate1.setVisibility(View.VISIBLE);
+                        datePicker1.setVisibility(View.VISIBLE);
+                        eTxtSalesDocumentNumber.setVisibility(View.GONE);
+                        eTxtCustomerNumber.setVisibility(View.GONE);
+                        editTextDate2.setVisibility(View.VISIBLE);
+                        datePicker2.setVisibility(View.VISIBLE);
+                        spinnerCustomer.setVisibility(View.GONE);
+                        cbCreated.setVisibility(View.GONE);
+                        cbProcessing.setVisibility(View.GONE);
+                        cbProcessed.setVisibility(View.GONE);
+                        cbDispatched.setVisibility(View.GONE);
+                        cbDelivered.setVisibility(View.GONE);
+                        eTxtCustomerNumber.setText("");
+                        eTxtSalesDocumentNumber.setText("");
+                        cbCreated.setChecked(false);
+                        cbProcessing.setChecked(false);
+                        cbProcessed.setChecked(false);
+                        cbDispatched.setChecked(false);
+                        cbDelivered.setChecked(false);
 
-                }
-                else if (choiceStr.equals("Display by order status")){
-                    cbCreated.setVisibility(View.VISIBLE);
-                    cbProcessing.setVisibility(View.VISIBLE);
-                    cbProcessed.setVisibility(View.VISIBLE);
-                    cbDispatched.setVisibility(View.VISIBLE);
-                    cbDelivered.setVisibility(View.VISIBLE);
-                    editTextDate1.setVisibility(View.GONE);
-                    datePicker1.setVisibility(View.GONE);
-                    eTxtSalesDocumentNumber.setVisibility(View.GONE);
-                    eTxtCustomerNumber.setVisibility(View.GONE);
-                    editTextDate2.setVisibility(View.GONE);
-                    datePicker2.setVisibility(View.GONE);
-                    spinnerCustomer.setVisibility(View.GONE);
-                    eTxtCustomerNumber.setText("");
-                    eTxtSalesDocumentNumber.setText("");
+                        break;
+                    case "Display by order status":
+                        cbCreated.setVisibility(View.VISIBLE);
+                        cbProcessing.setVisibility(View.VISIBLE);
+                        cbProcessed.setVisibility(View.VISIBLE);
+                        cbDispatched.setVisibility(View.VISIBLE);
+                        cbDelivered.setVisibility(View.VISIBLE);
+                        editTextDate1.setVisibility(View.GONE);
+                        datePicker1.setVisibility(View.GONE);
+                        eTxtSalesDocumentNumber.setVisibility(View.GONE);
+                        eTxtCustomerNumber.setVisibility(View.GONE);
+                        editTextDate2.setVisibility(View.GONE);
+                        datePicker2.setVisibility(View.GONE);
+                        spinnerCustomer.setVisibility(View.GONE);
+                        eTxtCustomerNumber.setText("");
+                        eTxtSalesDocumentNumber.setText("");
 
+                        break;
                 }
             }
             @Override
@@ -345,74 +340,68 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         retrieve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (choiceStr.equals("No filters selected"))
-                {
-                    url = "https://jaspreettechnologies.000webhostapp.com/filterRetrieveSalesOrder.php";
-                }
-                else if (choiceStr.equals("Display by customer"))
-                {
-                    if(TextUtils.isEmpty(eTxtCustomerNumber.getText().toString()))
-                    {
-                        eTxtCustomerNumber.setError("Please Select the Customer");
-                        return;
-                    }
-                    else{
-                    customer = eTxtCustomerNumber.getText().toString();}
-                    url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithCustomer.php";
-                }
-                else if (choiceStr.equals("Display by sales document number"))
-                {
-                    if(TextUtils.isEmpty(eTxtSalesDocumentNumber.getText().toString()))
-                    {
-                        eTxtSalesDocumentNumber.setError("Enter Valid Bill Number");
-                        return;
-                    }
-                    else{
-                        salesDocNo = eTxtSalesDocumentNumber.getText().toString();}
-                    url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithSalesDocument.php";
+                switch (choiceStr) {
+                    case "No filters selected":
+                        url = "https://jaspreettechnologies.000webhostapp.com/filterRetrieveSalesOrder.php";
+                        break;
+                    case "Display by customer":
+                        if (TextUtils.isEmpty(eTxtCustomerNumber.getText().toString())) {
+                            eTxtCustomerNumber.setError("Please Select the Customer");
+                            return;
+                        } else {
+                            customer = eTxtCustomerNumber.getText().toString();
+                        }
+                        url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithCustomer.php";
+                        break;
+                    case "Display by sales document number":
+                        if (TextUtils.isEmpty(eTxtSalesDocumentNumber.getText().toString())) {
+                            eTxtSalesDocumentNumber.setError("Enter Valid Bill Number");
+                            return;
+                        } else {
+                            salesDocNo = eTxtSalesDocumentNumber.getText().toString();
+                        }
+                        url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithSalesDocument.php";
 
-                }
-                else if (choiceStr.equals("Display by date"))
-                {
-                    if(TextUtils.isEmpty(editTextDate1.getText().toString()))
-                    {
-                        editTextDate1.setError("Select Date");
-                        return;
-                    }
-                    else{
-                        dateStr = editTextDate1.getText().toString();}
-                    url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithOneDate.php";
-                }
-                else if (choiceStr.equals("Display by range of dates")){
+                        break;
+                    case "Display by date":
+                        if (TextUtils.isEmpty(editTextDate1.getText().toString())) {
+                            editTextDate1.setError("Select Date");
+                            return;
+                        } else {
+                            dateStr = editTextDate1.getText().toString();
+                        }
+                        url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithOneDate.php";
+                        break;
+                    case "Display by range of dates":
 
-                    if(TextUtils.isEmpty(editTextDate1.getText().toString()))
-                    {
-                        editTextDate1.setError("Select Date");
-                        return;
-                    }
-                    else{
-                        dateStr = editTextDate1.getText().toString();}
-                    if(TextUtils.isEmpty(editTextDate2.getText().toString()))
-                    {
-                        editTextDate2.setError("Select Date");
-                        return;
-                    }
-                    else{
-                        dateStr2 = editTextDate2.getText().toString();}
-                   url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithTwoDates.php";
+                        if (TextUtils.isEmpty(editTextDate1.getText().toString())) {
+                            editTextDate1.setError("Select Date");
+                            return;
+                        } else {
+                            dateStr = editTextDate1.getText().toString();
+                        }
+                        if (TextUtils.isEmpty(editTextDate2.getText().toString())) {
+                            editTextDate2.setError("Select Date");
+                            return;
+                        } else {
+                            dateStr2 = editTextDate2.getText().toString();
+                        }
+                        url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithTwoDates.php";
 
-                }
-                else if (choiceStr.equals("Display by order status")){
+                        break;
+                    case "Display by order status":
 
-                    if(!cbCreated.isChecked()&&!cbProcessing.isChecked()&&!cbProcessed.isChecked()&&!cbDispatched.isChecked()&&!cbDelivered.isChecked()){
-                        Toast.makeText(ActivitySalesOrderList.this, "You must checkmark atleast one status!", Toast.LENGTH_LONG).show();
-                    return;}
+                        if (!cbCreated.isChecked() && !cbProcessing.isChecked() && !cbProcessed.isChecked() && !cbDispatched.isChecked() && !cbDelivered.isChecked()) {
+                            Toast.makeText(ActivitySalesOrderList.this, "You must checkmark atleast one status!", Toast.LENGTH_LONG).show();
+                            return;
+                        }
                     /*else
                     {
 
                     }*/
-                    url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithOrderStatus.php";
+                        url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithOrderStatus.php";
 
+                        break;
                 }
                 retrieveRecords();
                 //clearFields();
@@ -425,13 +414,13 @@ public class ActivitySalesOrderList extends AppCompatActivity{
     //custom
     void initRecyclerView(){
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewSalesOrdersList);
+        recyclerView =  findViewById(R.id.recyclerViewSalesOrdersList);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        data = new ArrayList<SalesOrder>();
+        data = new ArrayList<>();
         adapter = new CustomAdapterSalesOrdersList(data);
     }
     //Custom end
@@ -451,11 +440,11 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
                             String message = jsonObject.getString("message");
-                            int c = 0;
-                            long sdn = 0;
-                            String d="";
-                            double p = 0;
-                            String os = "";
+                            int c;
+                            long sdn;
+                            String d;
+                            double p;
+                            String os;
                             if(success == 1){
                                 JSONArray jsonArray = jsonObject.getJSONArray("sales_orders_list");
                                 for(int i=0;i<jsonArray.length();i++){
@@ -493,8 +482,8 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         )
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-            HashMap<String,String> map = new HashMap<String, String>();
+            protected Map<String, String> getParams() {
+            HashMap<String,String> map = new HashMap<>();
             if(!eTxtCustomerNumber.getText().toString().isEmpty() && eTxtSalesDocumentNumber.getText().toString().isEmpty() && editTextDate1.getText().toString().isEmpty() && editTextDate2.getText().toString().isEmpty()){
                 map.put("customer", customer);
             }
@@ -531,22 +520,14 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
-                            int c = 0;
-                            int p = 0;
-                            String n="";
-                            String a = "";
-                            String ci = "";
-                            String g="";
+                            int c;
+                            String n;
                             if(success == 1){
                                 JSONArray jsonArray = jsonObject.getJSONArray("customers");
                                 for(int i=0;i<jsonArray.length();i++){
                                     JSONObject jObj = jsonArray.getJSONObject(i);
                                     c = jObj.getInt("Customer_id");
                                     n = jObj.getString("Name");
-                                    a = jObj.getString("Address");
-                                    ci = jObj.getString("City");
-                                    p = jObj.getInt("Contact");
-                                    g = jObj.getString("GST_Number");
                                     adapterCustomer.add(Integer.toString(c) +" - "+ n);
                                 }
                                 progressBar.setVisibility(View.GONE);
@@ -631,7 +612,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                     }
                 });
                 AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
                 dialog.show();
             return true;
         }
@@ -657,15 +638,16 @@ public class ActivitySalesOrderList extends AppCompatActivity{
             }
         });
         AlertDialog dialog = builder1.create();
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+        Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
         dialog.show();
     }
-    void clearFields(){
+
+   /* void clearFields(){
         eTxtSalesDocumentNumber.setText("");
         eTxtCustomerNumber.setText("");
         editTextDate1.setText("");
         editTextDate2.setText("");
-    }
+    }*/
 
 
     public void onCheckboxClicked(View view) {

@@ -1,5 +1,6 @@
 package com.jstech.fluenterp.mm;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -18,8 +19,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -27,16 +26,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
-import com.jstech.fluenterp.models.Material;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ActivityMaterialModify extends AppCompatActivity {
     String date;
@@ -64,7 +61,7 @@ public class ActivityMaterialModify extends AppCompatActivity {
         rgMaterialType = findViewById(R.id.ModifyMaterialType);
         btnModifyMaterial = findViewById(R.id.btnModifyMaterial);
         spinnerMaterial = findViewById(R.id.spinnerMaterialList);
-        adapterSpinnerMaterial = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
+        adapterSpinnerMaterial = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
         adapterSpinnerMaterial.add("Choose a Material");
         chStr = "";
         spinnerMaterial.setAdapter(adapterSpinnerMaterial);
@@ -75,10 +72,10 @@ public class ActivityMaterialModify extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_modify);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
         requestQueue = Volley.newRequestQueue(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarMM);
+        Toolbar toolbar = findViewById(R.id.toolbarMM);
         setSupportActionBar(toolbar);
         setTitle("Modify Material Screen");
         if (getSupportActionBar() != null){
@@ -90,7 +87,7 @@ public class ActivityMaterialModify extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 chStr = adapterSpinnerMaterial.getItem(position);
                 if(position != 0){
-                    int in = chStr.indexOf("-") - 1;
+                    int in = Objects.requireNonNull(chStr).indexOf("-") - 1;
                     fillOutFields(chStr.substring(2,in));
                 }
             }
@@ -128,20 +125,15 @@ public class ActivityMaterialModify extends AppCompatActivity {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
-                            String message = jsonObject.getString("message");
-                            int matId = 0;
-                            String mType ="";
-                            String mDesc = "";
-                            String mDu = "";
-                            double mCost = 0;
+                            String mDesc;
+                            String mDu;
+                            double mCost;
                             if(success == 1){
                                 JSONArray jsonArray = jsonObject.getJSONArray("materials");
                                 for(int i=0;i<jsonArray.length();i++){
                                     JSONObject jObj = jsonArray.getJSONObject(i);
-                                    matId = jObj.getInt("material_code");
                                     mDesc = jObj.getString("material_description");
                                     mDu = jObj.getString("dimensional_unit");
-                                    mType = jObj.getString("material_type");
                                     mCost = jObj.getDouble("cost_per_du");
                                     eTxtDescription.setText(mDesc);
                                     eTxtDimensionalUnit.setText(mDu);
@@ -171,8 +163,8 @@ public class ActivityMaterialModify extends AppCompatActivity {
         )
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String, String>();
+            protected Map<String, String> getParams() {
+                HashMap<String,String> map = new HashMap<>();
                 map.put("mat_id", strMatId);
                 return map;
             }
@@ -189,23 +181,18 @@ public class ActivityMaterialModify extends AppCompatActivity {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
-                            int mc = 0;
-                            String mt="";
-                            String md = "";
-                            String du = "";
-                            double cost = 0;
+                            int mc;
+                            String mt;
+                            String md;
                             if(success == 1){
 
                                 JSONArray jsonArray = jsonObject.getJSONArray("materials");
-                                final Material[] matArray = new Material[jsonArray.length()];
                                 for(int i=0;i<jsonArray.length();i++){
                                     JSONObject jObj = jsonArray.getJSONObject(i);
 
                                     mc = jObj.getInt("material_code");
                                     mt = jObj.getString("material_type");
                                     md = jObj.getString("material_description");
-                                    du = jObj.getString("dimensional_unit");
-                                    cost = jObj.getDouble("cost_per_du");
                                     adapterSpinnerMaterial.add(mt+Integer.toString(mc) +" - "+md);
                                     progressBar.setVisibility(View.GONE);
                                 }
@@ -232,7 +219,7 @@ public class ActivityMaterialModify extends AppCompatActivity {
     }
     void updateMaterial(){
 
-        if (checkRecords() == true){
+        if (checkRecords()){
             progressBar.setVisibility(View.VISIBLE);
             final String url = "https://jaspreettechnologies.000webhostapp.com/modifyMaterial.php";
             stringRequest = new StringRequest(Request.Method.POST, url,
@@ -240,7 +227,6 @@ public class ActivityMaterialModify extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             try{
-                                JSONObject jsonObject = new JSONObject(response);
                                 progressBar.setVisibility(View.GONE);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivityMaterialModify.this);
                                 builder.setTitle(eTxtDescription.getText().toString());
@@ -272,7 +258,7 @@ public class ActivityMaterialModify extends AppCompatActivity {
                                     }
                                 });
                                 AlertDialog dialog = builder.create();
-                                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                                 dialog.show();
 
                             }catch (Exception e){
@@ -293,8 +279,8 @@ public class ActivityMaterialModify extends AppCompatActivity {
             )
             {
                 @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String,String> map = new HashMap<String, String>();
+                protected Map<String, String> getParams() {
+                    HashMap<String,String> map = new HashMap<>();
                     int in = chStr.indexOf("-") - 1;
                     map.put("material_id", chStr.substring(2,in));
                     map.put("description", eTxtDescription.getText().toString());
@@ -306,9 +292,6 @@ public class ActivityMaterialModify extends AppCompatActivity {
             }
             ;
             requestQueue.add(stringRequest);
-        }
-        else{
-            return;
         }
 
     }
@@ -350,7 +333,7 @@ public class ActivityMaterialModify extends AppCompatActivity {
                     }
                 });
                 AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                 dialog.show();
             }else
             {
@@ -376,7 +359,7 @@ public class ActivityMaterialModify extends AppCompatActivity {
                 }
             });
             AlertDialog dialog = builder.create();
-            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+            Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
             dialog.show();
         }else
         {

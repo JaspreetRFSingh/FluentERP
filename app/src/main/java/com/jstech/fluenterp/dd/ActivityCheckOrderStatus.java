@@ -1,6 +1,5 @@
 package com.jstech.fluenterp.dd;
 
-import android.app.DownloadManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,13 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -34,17 +30,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ActivityCheckOrderStatus extends AppCompatActivity {
 
     ProgressBar progressBar;
     RequestQueue requestQueue;
     StringRequest stringRequest;
-    private AdapterOrderStatus adapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private static RecyclerView recyclerView;
+    AdapterOrderStatus adapter;
+    RecyclerView.LayoutManager layoutManager;
+    RecyclerView recyclerView;
     private static ArrayList<SalesOrder> data;
     TextView txtSearchOrderStatus;
     EditText eTxtSearchOrderStatus;
@@ -61,13 +55,12 @@ public class ActivityCheckOrderStatus extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_order_status);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCOS);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
+        Toolbar toolbar = findViewById(R.id.toolbarCOS);
         setSupportActionBar(toolbar);
         setTitle("Check Order Status");
         if (getSupportActionBar() != null){
@@ -102,12 +95,12 @@ public class ActivityCheckOrderStatus extends AppCompatActivity {
 
     void initRecyclerView(){
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewSalesOrderStatus);
+        recyclerView =  findViewById(R.id.recyclerViewSalesOrderStatus);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        data = new ArrayList<SalesOrder>();
+        data = new ArrayList<>();
     }
 
     void retrieveRecords(){
@@ -120,9 +113,9 @@ public class ActivityCheckOrderStatus extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
                             String message = jsonObject.getString("message");
-                            long sdn = 0;
-                            double p = 0;
-                            String os = "";
+                            long sdn;
+                            double p;
+                            String os;
                             if(success == 1){
                                 JSONArray jsonArray = jsonObject.getJSONArray("sales_orders_list");
                                 for(int i=0;i<jsonArray.length();i++){

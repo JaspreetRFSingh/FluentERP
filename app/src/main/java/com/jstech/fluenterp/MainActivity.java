@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +41,6 @@ import com.jstech.fluenterp.masterdata.ActivityEmployeeDisplay;
 import com.jstech.fluenterp.masterdata.ActivityEmployeeModify;
 import com.jstech.fluenterp.misc.AboutActivity;
 import com.jstech.fluenterp.misc.GraphicalAnalysisActivity;
-import com.jstech.fluenterp.misc.ReportsActivity;
 import com.jstech.fluenterp.misc.RequestAccountCredentialsActivity;
 import com.jstech.fluenterp.misc.ServerActivity;
 import com.jstech.fluenterp.misc.TCodeHelpActivity;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity
 
     //Main Activity Content
     RecyclerView recyclerView;
-    ArrayList arrayList;
+    ArrayList<DataModel> arrayList;
     ImageView imgLogo;
     TextView txtVisitWebsite;
     TextView txtExplore;
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity
         txtExpand = findViewById(R.id.txtCommandLine);
         txtVisitWebsite = findViewById(R.id.txtVisitWebsite);
         recyclerView = findViewById(R.id.recyclerView);
-        arrayList = new ArrayList();
+        arrayList = new ArrayList<>();
         arrayList.add(new DataModel("Graphical Analysis", R.drawable.graph64, "#ffffff"));
         arrayList.add(new DataModel("Reports", R.drawable.report64, "#ffffff"));
         arrayList.add(new DataModel("Account Credentials", R.drawable.account64, "#ffffff"));
@@ -639,7 +639,8 @@ public class MainActivity extends AppCompatActivity
             }
             else {
                 doubleBackToExitPressed++;
-                Toast.makeText(this, "Press back again to exit!", Toast.LENGTH_SHORT).show();
+                Snackbar.make( findViewById(R.id.content), "Press Back again to exit!", Snackbar.LENGTH_LONG).show();
+                //Toast.makeText(this, "Press back again to exit!", Toast.LENGTH_SHORT).show();
             }
 
             new Handler().postDelayed(new Runnable() {
@@ -688,18 +689,18 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(which == 0){
-                            Intent intent = new Intent(MainActivity.this, ReportsActivity.class);
-                            intent.putExtra("mode", 1);
+                            Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                            intent.putExtra("url", "http://docs.google.com/gview?embedded=true&url=https://jaspreettechnologies.000webhostapp.com/createCustomerReport.php");
                             startActivity(intent);
                         }
                         else if(which == 1){
-                            Intent intent = new Intent(MainActivity.this, ReportsActivity.class);
-                            intent.putExtra("mode", 2);
+                            Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                            intent.putExtra("url", "http://docs.google.com/gview?embedded=true&url=https://jaspreettechnologies.000webhostapp.com/createMaterialReport.php");
                             startActivity(intent);
                         }
                         else if(which == 2){
-                            Intent intent = new Intent(MainActivity.this, ReportsActivity.class);
-                            intent.putExtra("mode", 3);
+                            Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                            intent.putExtra("url", "http://docs.google.com/gview?embedded=true&url=https://jaspreettechnologies.000webhostapp.com/createPriceReport.php");
                             startActivity(intent);
                         }
                     }

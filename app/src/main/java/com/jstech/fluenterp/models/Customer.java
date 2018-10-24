@@ -1,12 +1,12 @@
 package com.jstech.fluenterp.models;
 
 public class Customer {
-    public int customerId;
+    private int customerId;
     public String name;
     public String address;
-    public String city;
+    private String city;
     public int phone;
-    public String gstNumber;
+    private String gstNumber;
 
     public Customer()
     {

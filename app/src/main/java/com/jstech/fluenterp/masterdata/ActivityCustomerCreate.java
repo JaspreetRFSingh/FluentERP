@@ -1,5 +1,6 @@
 package com.jstech.fluenterp.masterdata;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -16,8 +17,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,11 +25,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.MainActivity;
 import com.jstech.fluenterp.R;
-import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ActivityCustomerCreate extends AppCompatActivity {
 
@@ -59,21 +58,21 @@ public class ActivityCustomerCreate extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         custNumber = "";
     }
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_create);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
         tc = Integer.parseInt(date.substring(8,10))+Integer.parseInt(date.substring(10,12));
         requestQueue = Volley.newRequestQueue(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCC);
+        Toolbar toolbar = findViewById(R.id.toolbarCC);
         setSupportActionBar(toolbar);
         setTitle("Create Customer Screen");
         if (getSupportActionBar() != null){
@@ -152,7 +151,7 @@ public class ActivityCustomerCreate extends AppCompatActivity {
                                     }
                                 });
                                 AlertDialog dialog = builder.create();
-                                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+                                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
                                 dialog.show();
                                 clearFields();
                                 //Toast.makeText(ActivityCustomerCreate.this,message,Toast.LENGTH_LONG).show();
@@ -177,8 +176,8 @@ public class ActivityCustomerCreate extends AppCompatActivity {
 
             {
                 @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String,String> map = new HashMap<String, String>();
+                protected Map<String, String> getParams() {
+                    HashMap<String,String> map = new HashMap<>();
                     map.put("Customer_id", custNumber);
                     map.put("Name", eTxtCustomerName.getText().toString());
                     map.put("Address", eTxtCustomerAddress.getText().toString());
@@ -192,9 +191,6 @@ public class ActivityCustomerCreate extends AppCompatActivity {
             requestQueue.add(stringRequest);
         }
 
-        else{
-            return;
-        }
     }
 
 
@@ -220,7 +216,7 @@ public class ActivityCustomerCreate extends AppCompatActivity {
                     }
                 });*/
                 AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
                 dialog.show();
             }else
             {

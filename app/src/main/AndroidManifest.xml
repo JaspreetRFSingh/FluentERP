@@ -64,9 +64,6 @@
             android:name=".misc.ServerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".misc.ReportsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".sd.ActivitySalesOrderModify"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

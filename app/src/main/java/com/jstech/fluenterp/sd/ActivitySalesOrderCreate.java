@@ -1,12 +1,8 @@
 package com.jstech.fluenterp.sd;
 
-import android.content.ActivityNotFoundException;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.pdf.PdfDocument;
-import android.graphics.pdf.PdfDocument.PageInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,15 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.graphics.Bitmap;
-import android.graphics.pdf.PdfDocument;
-import android.graphics.pdf.PdfDocument.Page;
-import android.graphics.pdf.PdfDocument.PageInfo;
-import android.graphics.pdf.PdfRenderer;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -48,24 +34,11 @@ import com.jstech.fluenterp.models.Material;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ActivitySalesOrderCreate extends AppCompatActivity {
 
@@ -143,8 +116,8 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
         btnCreateSalesOrder = findViewById(R.id.btnCreateSalesOrder);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
-        spinnerCustomer = (Spinner) findViewById(R.id.spinnerCustomers);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
+        spinnerCustomer = findViewById(R.id.spinnerCustomers);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
         adapter.add("~~ Select a Customer ~~");
         retrieveCustomers();
         spinnerCustomer.setAdapter(adapter);
@@ -188,26 +161,26 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
         loadMaterials();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_order_create);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
 
         requestQueue = Volley.newRequestQueue(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCSO);
+        Toolbar toolbar = findViewById(R.id.toolbarCSO);
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         dateShow = findViewById(R.id.dateShow);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
         dateShow.setText(date.substring(6, 8) + "/" + date.substring(4, 6) + "/" + date.substring(0, 4));
         init();
@@ -229,30 +202,16 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
-                            int c = 0;
-                            int p = 0;
-                            String n = "";
-                            String a = "";
-                            String ci = "";
-                            String g = "";
+                            int c;
+                            String n;
                             if (success == 1) {
-                                //                              customerList = new ArrayList<>();
-//                                customerNumberList = new ArrayList<>();
-
                                 JSONArray jsonArray = jsonObject.getJSONArray("customers");
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jObj = jsonArray.getJSONObject(i);
 
                                     c = jObj.getInt("Customer_id");
                                     n = jObj.getString("Name");
-                                    a = jObj.getString("Address");
-                                    ci = jObj.getString("City");
-                                    p = jObj.getInt("Contact");
-                                    g = jObj.getString("GST_Number");
 
-                                    Customer customer1 = new Customer(c, n, a, ci, p, g);
-                                    //customerList.add(customer);
-                                    // customerNameList.add(n);
                                     adapter.add(Integer.toString(c) + " - " + n);
                                 }
                             } else {
@@ -321,8 +280,8 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
 
                                             if (pos != 0) {
                                                 material1 = matArray[pos - 1];
-                                                material_code[0] = adapterSpMat1.getItem(pos).substring(2, 6);
-                                            } else if (pos == 0) {
+                                                material_code[0] = Objects.requireNonNull(adapterSpMat1.getItem(pos)).substring(2, 6);
+                                            } else {
                                                 material_code[0] = "None";
                                             }
                                         }
@@ -332,6 +291,7 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                                         }
                                     });
                                     btnItem1.setOnClickListener(new View.OnClickListener() {
+                                        @SuppressLint("SetTextI18n")
                                         @Override
                                         public void onClick(View v) {
                                             if (TextUtils.isEmpty(eTxtQuantity1.getText().toString())) {
@@ -351,8 +311,8 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
 
                                             if (pos != 0) {
                                                 material2 = matArray[pos - 1];
-                                                material_code[1] = adapterSpMat2.getItem(pos).substring(2, 6);
-                                            } else if (pos == 0) {
+                                                material_code[1] = Objects.requireNonNull(adapterSpMat2.getItem(pos)).substring(2, 6);
+                                            } else {
                                                 material_code[1] = "None";
                                             }
 
@@ -363,12 +323,13 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                                         }
                                     });
                                     btnItem2.setOnClickListener(new View.OnClickListener() {
+                                        @SuppressLint("SetTextI18n")
                                         @Override
                                         public void onClick(View v) {
                                             if (TextUtils.isEmpty(eTxtQuantity2.getText().toString())) {
                                                 eTxtQuantity2.setError("Enter Quantity!");
                                             } else {
-                                                txtViewCost2.setText(String.valueOf(truncateTo(material2.getCostPerDu() * Integer.parseInt(eTxtQuantity2.getText().toString()), 2)));
+                                                txtViewCost2.setText(String.valueOf(truncateTo(material2.getCostPerDu() * Integer.parseInt(eTxtQuantity2.getText().toString()))));
                                                 price[1] = txtViewCost2.getText().toString().trim();
                                                 quantity[1] = eTxtQuantity2.getText().toString().trim();
                                                 txtViewTotalCost.setText("Rs. " + String.valueOf(calculateCost()) + "/-");
@@ -382,8 +343,8 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
 
                                             if (pos != 0) {
                                                 material3 = matArray[pos - 1];
-                                                material_code[2] = adapterSpMat3.getItem(pos).substring(2, 6);
-                                            } else if (pos == 0) {
+                                                material_code[2] = Objects.requireNonNull(adapterSpMat3.getItem(pos)).substring(2, 6);
+                                            } else{
                                                 material_code[2] = "None";
                                             }
 
@@ -394,12 +355,13 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                                         }
                                     });
                                     btnItem3.setOnClickListener(new View.OnClickListener() {
+                                        @SuppressLint("SetTextI18n")
                                         @Override
                                         public void onClick(View v) {
                                             if (TextUtils.isEmpty(eTxtQuantity3.getText().toString())) {
                                                 eTxtQuantity3.setError("Enter Quantity!");
                                             } else {
-                                                txtViewCost3.setText(String.valueOf(truncateTo(material3.getCostPerDu() * Integer.parseInt(eTxtQuantity3.getText().toString()), 2)));
+                                                txtViewCost3.setText(String.valueOf(truncateTo(material3.getCostPerDu() * Integer.parseInt(eTxtQuantity3.getText().toString()))));
                                                 price[2] = txtViewCost3.getText().toString().trim();
                                                 quantity[2] = eTxtQuantity3.getText().toString().trim();
                                                 txtViewTotalCost.setText("Rs. " + String.valueOf(calculateCost()) + "/-");
@@ -412,8 +374,8 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                                         public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                                             if (pos != 0) {
                                                 material4 = matArray[pos - 1];
-                                                material_code[3] = adapterSpMat4.getItem(pos).substring(2, 6);
-                                            } else if (pos == 0) {
+                                                material_code[3] = Objects.requireNonNull(adapterSpMat4.getItem(pos)).substring(2, 6);
+                                            } else {
                                                 material_code[3] = "None";
                                             }
 
@@ -424,12 +386,13 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                                         }
                                     });
                                     btnItem4.setOnClickListener(new View.OnClickListener() {
+                                        @SuppressLint("SetTextI18n")
                                         @Override
                                         public void onClick(View v) {
                                             if (TextUtils.isEmpty(eTxtQuantity4.getText().toString())) {
                                                 eTxtQuantity4.setError("Enter Quantity!");
                                             } else {
-                                                txtViewCost4.setText(String.valueOf(truncateTo(material4.getCostPerDu() * Integer.parseInt(eTxtQuantity4.getText().toString()), 2)));
+                                                txtViewCost4.setText(String.valueOf(truncateTo(material4.getCostPerDu() * Integer.parseInt(eTxtQuantity4.getText().toString()))));
                                                 price[3] = txtViewCost4.getText().toString().trim();
                                                 quantity[3] = eTxtQuantity4.getText().toString().trim();
                                                 txtViewTotalCost.setText("Rs. " + String.valueOf(calculateCost()) + "/-");
@@ -463,13 +426,12 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
     }
 
     double calculateCost() {
-        return truncateTo(Double.parseDouble(txtViewCost1.getText().toString()) + Double.parseDouble(txtViewCost2.getText().toString()) + Double.parseDouble(txtViewCost3.getText().toString()) + Double.parseDouble(txtViewCost4.getText().toString()), 2);
+        return truncateTo(Double.parseDouble(txtViewCost1.getText().toString()) + Double.parseDouble(txtViewCost2.getText().toString()) + Double.parseDouble(txtViewCost3.getText().toString()) + Double.parseDouble(txtViewCost4.getText().toString()));
     }
 
-    double truncateTo(double unroundedNumber, int decimalPlaces) {
-        int truncatedNumberInt = (int) (unroundedNumber * Math.pow(10, decimalPlaces));
-        double truncatedNumber = (double) (truncatedNumberInt / Math.pow(10, decimalPlaces));
-        return truncatedNumber;
+    double truncateTo(double unroundedNumber) {
+        int truncatedNumberInt = (int) (unroundedNumber * Math.pow(10, 2));
+        return (truncatedNumberInt / Math.pow(10, 2));
     }
 
     void createSalesOrder() {
@@ -480,18 +442,14 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            int success = jsonObject.getInt("success");
-                            String message = jsonObject.getString("message");
                             stringRequest1 = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/createSalesOrder.php", new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-                                    JSONObject jsonObject = null;
+                                    JSONObject jsonObject;
                                     try {
                                         jsonObject = new JSONObject(response);
                                         int success1 = jsonObject.getInt("success");
                                         String message1 = jsonObject.getString("message");
-                                        //Toast.makeText(ActivitySalesOrderCreate.this,message1,Toast.LENGTH_LONG).show();
 
                                         if (success1 == 1) {
                                             final AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySalesOrderCreate.this);
@@ -520,7 +478,7 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                                                 }
                                             });
                                             AlertDialog dialog = builder.create();
-                                            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                                            Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                                             dialog.show();
 
                                         }
@@ -537,9 +495,9 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                                     error.printStackTrace();
                                 }
                             }) {
-                                protected Map<String, String> getParams() throws AuthFailureError {
+                                protected Map<String, String> getParams() {
 
-                                    HashMap<String, String> map = new HashMap<String, String>();
+                                    HashMap<String, String> map = new HashMap<>();
 
                                     map.put("sales_doc_no", sales_doc_no);
                                     map.put("Customer_id", Customer_id);
@@ -594,9 +552,9 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
 
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
-                HashMap<String, String> map1 = new HashMap<String, String>();
+                HashMap<String, String> map1 = new HashMap<>();
                 map1.put("sales_doc_no", sales_doc_no);
                 map1.put("Customer", Customer_id);
                 map1.put("date_of_order", date.substring(0, 4) + "-" + date.substring(4, 6) + "-" + date.substring(6, 8));
@@ -620,6 +578,13 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
         txtViewCost4.setText("");
         eTxtCustomerName.setText("");
     }
+    void generatePDF(final String sdn) {
+        String urlString="http://docs.google.com/gview?embedded=true&url=http://jaspreettechnologies.000webhostapp.com/createInvoice.php?sales_doc_no="+sdn;
+        Intent intent=new Intent(ActivitySalesOrderCreate.this, WebViewActivity.class);
+        intent.putExtra("url", urlString);
+        startActivity(intent);
+
+    }
 
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -640,7 +605,7 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                     }
                 });*/
                 AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
                 dialog.show();
             } else {
                 startActivity(new Intent(ActivitySalesOrderCreate.this, MainActivity.class));
@@ -652,13 +617,7 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
     }
 
 
-    void generatePDF(final String sdn) {
-        String urlString="http://docs.google.com/gview?embedded=true&url=http://jaspreettechnologies.000webhostapp.com/createInvoice.php?sales_doc_no="+sdn;
-        Intent intent=new Intent(ActivitySalesOrderCreate.this, WebViewActivity.class);
-        intent.putExtra("url", urlString);
-        startActivity(intent);
 
-    }
 
 
     @Override
@@ -680,7 +639,7 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                     }
                 });*/
             AlertDialog dialog = builder.create();
-            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+            Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
             dialog.show();
         } else {
             startActivity(new Intent(ActivitySalesOrderCreate.this, MainActivity.class));

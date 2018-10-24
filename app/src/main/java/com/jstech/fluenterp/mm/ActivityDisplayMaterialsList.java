@@ -33,9 +33,9 @@ public class ActivityDisplayMaterialsList extends AppCompatActivity {
 
     RecyclerView rvMatList;
     ProgressBar progressBar;
-    private static RecyclerView.Adapter adapterMaterials;
-    private RecyclerView.LayoutManager layoutManager;
-    private static ArrayList<Material> matData;
+    static RecyclerView.Adapter adapterMaterials;
+    RecyclerView.LayoutManager layoutManager;
+    static ArrayList<Material> matData;
     StringRequest stringRequest;
     RequestQueue requestQueue;
 

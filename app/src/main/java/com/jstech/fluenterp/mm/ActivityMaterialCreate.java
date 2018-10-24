@@ -1,5 +1,6 @@
 package com.jstech.fluenterp.mm;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -11,17 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,16 +25,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
-import com.jstech.fluenterp.masterdata.ActivityEmployeeCreate;
-import com.jstech.fluenterp.models.Material;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ActivityMaterialCreate extends AppCompatActivity {
     String date;
@@ -68,16 +61,15 @@ public class ActivityMaterialCreate extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_create);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
         requestQueue = Volley.newRequestQueue(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarMC);
+        Toolbar toolbar = findViewById(R.id.toolbarMC);
         setSupportActionBar(toolbar);
         setTitle("Create Material Screen");
         if (getSupportActionBar() != null){
@@ -130,7 +122,7 @@ public class ActivityMaterialCreate extends AppCompatActivity {
 
     void createMaterial(){
 
-        if (checkRecords() == true){
+        if (checkRecords()){
             progressBar.setVisibility(View.VISIBLE);
             final String url = "https://jaspreettechnologies.000webhostapp.com/createMaterial.php";
             stringRequest = new StringRequest(Request.Method.POST, url,
@@ -138,7 +130,6 @@ public class ActivityMaterialCreate extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             try{
-                                JSONObject jsonObject = new JSONObject(response);
                                 progressBar.setVisibility(View.GONE);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivityMaterialCreate.this);
                                 builder.setTitle(eTxtDescription.getText().toString());
@@ -157,7 +148,7 @@ public class ActivityMaterialCreate extends AppCompatActivity {
                                     }
                                 });
                                 AlertDialog dialog = builder.create();
-                                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                                 dialog.show();
                             }catch (Exception e){
                                 Toast.makeText(ActivityMaterialCreate.this,"Some Exception: "+e,Toast.LENGTH_LONG).show();
@@ -176,8 +167,8 @@ public class ActivityMaterialCreate extends AppCompatActivity {
             )
             {
                 @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String,String> map = new HashMap<String, String>();
+                protected Map<String, String> getParams() {
+                    HashMap<String,String> map = new HashMap<>();
                     map.put("description", eTxtDescription.getText().toString());
                     map.put("type", rgMatTypeStr);
                     map.put("du", eTxtDimensionalUnit.getText().toString());
@@ -187,9 +178,6 @@ public class ActivityMaterialCreate extends AppCompatActivity {
             }
             ;
             requestQueue.add(stringRequest);
-        }
-        else{
-            return;
         }
     }
 
@@ -210,7 +198,7 @@ public class ActivityMaterialCreate extends AppCompatActivity {
                     }
                 });
                 AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                 dialog.show();
             }else
             {
@@ -236,7 +224,7 @@ public class ActivityMaterialCreate extends AppCompatActivity {
                 }
             });
             AlertDialog dialog = builder.create();
-            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
+            Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
             dialog.show();
         }else
         {

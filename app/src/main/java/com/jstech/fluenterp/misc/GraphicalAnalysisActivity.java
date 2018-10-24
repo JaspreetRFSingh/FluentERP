@@ -1,11 +1,10 @@
 package com.jstech.fluenterp.misc;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -81,6 +81,7 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
         window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
         Toolbar toolbar = findViewById(R.id.toolbarGraphical);
         setSupportActionBar(toolbar);
@@ -88,17 +89,17 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        int mode = getIntent().getExtras().getInt("mode");
+        int mode = Objects.requireNonNull(getIntent().getExtras()).getInt("mode");
         requestQueue = Volley.newRequestQueue(this);
-        pieChart = (PieChart) findViewById(R.id.piechart);
-        barChart = (BarChart) findViewById(R.id.barchart);
+        pieChart =  findViewById(R.id.piechart);
+        barChart =  findViewById(R.id.barchart);
         fabBar = findViewById(R.id.fabBar);
         fabPie = findViewById(R.id.fabPie);
         rlBar = findViewById(R.id.rlBarChart);
         progressBar = findViewById(R.id.progressBarGraphicalAnalysis);
         rlPie = findViewById(R.id.rlPieChart);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         dateCurr = sdf.format(new Date());
 
         if(mode == 1){
@@ -193,7 +194,7 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
         barChart.setVisibility(View.GONE);
         pieChart.setVisibility(View.VISIBLE);
         pieChart.setUsePercentValues(true);
-        ArrayList<Entry> yvalues = new ArrayList<Entry>();
+        ArrayList<Entry> yvalues = new ArrayList<>();
         yvalues.add(new Entry( sl, 0));
         yvalues.add(new Entry( sj, 1));
         yvalues.add(new Entry( sa, 2));
@@ -201,7 +202,7 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
 
         PieDataSet dataSet = new PieDataSet(yvalues, "Cities");
 
-        ArrayList<String> xVals = new ArrayList<String>();
+        ArrayList<String> xVals = new ArrayList<>();
         xVals.add("Ludhiana");
         xVals.add("Jalandhar");
         xVals.add("Allahabad");
@@ -337,9 +338,9 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
         )
 
         {
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
 
-                HashMap<String,String> map = new HashMap<String, String>();
+                HashMap<String,String> map = new HashMap<>();
                 map.put("current_date", dateCurr);
                 return map;
 
@@ -362,7 +363,7 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
         entries.add(new BarEntry(s6, 5));
 
         BarDataSet bardataset = new BarDataSet(entries, "Cells");
-        ArrayList<String> labels = new ArrayList<String>();
+        ArrayList<String> labels = new ArrayList<>();
         labels.add("Oct");
         labels.add("Sep");
         labels.add("Aug");

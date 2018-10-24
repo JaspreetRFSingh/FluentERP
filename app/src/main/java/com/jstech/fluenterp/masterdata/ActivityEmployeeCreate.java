@@ -1,5 +1,6 @@
 package com.jstech.fluenterp.masterdata;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,26 +22,20 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.jstech.fluenterp.MainActivity;
 import com.jstech.fluenterp.R;
-import com.jstech.fluenterp.sd.ActivitySalesOrderList;
-
-import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class ActivityEmployeeCreate extends AppCompatActivity {
 
@@ -71,7 +66,7 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
         btnCreateEmployee = findViewById(R.id.btnCreateEmployee);
         txtViewDate = findViewById(R.id.dateShowCE);
         progressBar = findViewById(R.id.progressBarCE);
-        adapterType = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item);
+        adapterType = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item);
         adapterType.add("RE-1");
         adapterType.add("RE-2");
         adapterType.add("RE-3");
@@ -114,20 +109,20 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
         eTxtEmployeeDoj.setText(sdf.format(myCalendar.getTime()));
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_create);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
         requestQueue = Volley.newRequestQueue(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCE);
+        Toolbar toolbar = findViewById(R.id.toolbarCE);
         setSupportActionBar(toolbar);
         setTitle("Create Employee Screen");
         if (getSupportActionBar() != null){
@@ -141,20 +136,22 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 typeStr = adapterType.getItem(position);
-                if(typeStr.equals("RE-1")){
-                    eTxtEmployeeType.setText("RE-1");
-                }
-                else if(typeStr.equals("RE-2")){
-                    eTxtEmployeeType.setText("RE-2");
-                }
-                else if(typeStr.equals("RE-3")){
-                    eTxtEmployeeType.setText("RE-3");
-                }
-                else if(typeStr.equals("EE-2")){
-                    eTxtEmployeeType.setText("EE-2");
-                }
-                else if(typeStr.equals("EE-1")){
-                    eTxtEmployeeType.setText("EE-1");
+                switch (Objects.requireNonNull(typeStr)) {
+                    case "RE-1":
+                        eTxtEmployeeType.setText("RE-1");
+                        break;
+                    case "RE-2":
+                        eTxtEmployeeType.setText("RE-2");
+                        break;
+                    case "RE-3":
+                        eTxtEmployeeType.setText("RE-3");
+                        break;
+                    case "EE-2":
+                        eTxtEmployeeType.setText("EE-2");
+                        break;
+                    case "EE-1":
+                        eTxtEmployeeType.setText("EE-1");
+                        break;
                 }
             }
 
@@ -195,7 +192,7 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
 
 
     void createEmployee(){
-        if (checkRecords() == true){
+        if (checkRecords()){
             progressBar.setVisibility(View.VISIBLE);
             final String url = "https://jaspreettechnologies.000webhostapp.com/createEmployee.php";
             stringRequest = new StringRequest(Request.Method.POST, url,
@@ -203,7 +200,6 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             try{
-                                JSONObject jsonObject = new JSONObject(response);
                                 progressBar.setVisibility(View.GONE);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivityEmployeeCreate.this);
                                 builder.setTitle(eTxtEmployeeName.getText().toString());
@@ -221,7 +217,7 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
                                     }
                                 });
                                 AlertDialog dialog = builder.create();
-                                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+                                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
                                 dialog.show();
                                 clearFields();
                             }catch (Exception e){
@@ -242,8 +238,8 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
             )
             {
                 @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String,String> map = new HashMap<String, String>();
+                protected Map<String, String> getParams() {
+                    HashMap<String,String> map = new HashMap<>();
                     map.put("name", eTxtEmployeeName.getText().toString());
                     map.put("address", eTxtEmployeeAddress.getText().toString());
                     map.put("type", eTxtEmployeeType.getText().toString());
@@ -255,9 +251,6 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
             }
             ;
             requestQueue.add(stringRequest);
-        }
-        else{
-            return;
         }
     }
 
@@ -314,7 +307,7 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
                     }
                 });
                 AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
                 dialog.show();
             }else
             {
@@ -340,7 +333,7 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
                 }
             });
             AlertDialog dialog = builder.create();
-            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+            Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
             dialog.show();
         }else
         {

@@ -1,5 +1,6 @@
 package com.jstech.fluenterp.misc;
 
+import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import com.jstech.fluenterp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class RequestAccountCredentialsActivity extends AppCompatActivity {
 
@@ -44,25 +46,25 @@ public class RequestAccountCredentialsActivity extends AppCompatActivity {
         date = "";
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_account_credentials);
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarRAC);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
+        Toolbar toolbar =  findViewById(R.id.toolbarRAC);
         setSupportActionBar(toolbar);
-        mode = getIntent().getExtras().getInt("mode");
+        mode = Objects.requireNonNull(getIntent().getExtras()).getInt("mode");
         setTitle("Account Credentials");
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         initViews();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
         txtDateShow.setText(date.substring(6,8)+"/"+date.substring(4,6)+"/"+date.substring(0,4));
         if (mode == 1) {
