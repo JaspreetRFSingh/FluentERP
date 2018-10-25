@@ -61,7 +61,6 @@ import com.jstech.fluenterp.sd.ActivitySalesOrderList;
 import com.jstech.fluenterp.sd.ActivitySalesOrderModify;
 import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
 import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

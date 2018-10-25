@@ -204,7 +204,7 @@ public class ActivityEmployeeCreate extends AppCompatActivity {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivityEmployeeCreate.this);
                                 builder.setTitle(eTxtEmployeeName.getText().toString());
                                 builder.setMessage("Successfully created "+eTxtEmployeeName.getText().toString());
-                                builder.setPositiveButton("Add Another Customer", new DialogInterface.OnClickListener() {
+                                builder.setPositiveButton("Add Another Employee", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         startActivity(new Intent(ActivityEmployeeCreate.this, ActivityEmployeeCreate.class));
