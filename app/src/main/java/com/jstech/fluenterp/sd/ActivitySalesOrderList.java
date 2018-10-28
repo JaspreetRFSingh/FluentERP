@@ -640,15 +640,11 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         AlertDialog dialog = builder1.create();
         Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
         dialog.show();
+        Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        bNeg.setTextColor(getResources().getColor(R.color.splashback));
+        Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        bPos.setTextColor(getResources().getColor(R.color.splashback));
     }
-
-   /* void clearFields(){
-        eTxtSalesDocumentNumber.setText("");
-        eTxtCustomerNumber.setText("");
-        editTextDate1.setText("");
-        editTextDate2.setText("");
-    }*/
-
 
     public void onCheckboxClicked(View view) {
         boolean checked = ((CheckBox) view).isChecked();

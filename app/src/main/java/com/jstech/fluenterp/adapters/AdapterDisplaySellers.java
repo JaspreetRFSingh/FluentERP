@@ -52,7 +52,7 @@ public class AdapterDisplaySellers extends RecyclerView.Adapter<AdapterDisplaySe
             dataSet.addAll(tempList);
         }else{
             for(Seller seller : tempList){
-                if(String.valueOf(seller.getsName()).contains(str.toLowerCase())){
+                if(String.valueOf(seller.getsName().toLowerCase()).contains(str.toLowerCase())){
                     dataSet.add(seller);
                 }
             }

@@ -43,6 +43,7 @@ import com.jstech.fluenterp.misc.AboutActivity;
 import com.jstech.fluenterp.misc.GraphicalAnalysisActivity;
 import com.jstech.fluenterp.misc.RequestAccountCredentialsActivity;
 import com.jstech.fluenterp.misc.ServerActivity;
+import com.jstech.fluenterp.misc.SettingsActivity;
 import com.jstech.fluenterp.misc.TCodeHelpActivity;
 import com.jstech.fluenterp.mm.ActivityCurrentStock;
 import com.jstech.fluenterp.mm.ActivityDisplayMaterialsList;
@@ -593,6 +594,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -678,6 +681,10 @@ public class MainActivity extends AppCompatActivity
                 AlertDialog dialog = builder.create();
                 Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                 dialog.show();
+                Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                bNeg.setTextColor(getResources().getColor(R.color.splashback));
+                Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                bPos.setTextColor(getResources().getColor(R.color.splashback));
                 break;
             }
             case "Reports": {
@@ -742,6 +749,10 @@ public class MainActivity extends AppCompatActivity
                 AlertDialog dialog = builder.create();
                 Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                 dialog.show();
+                Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                bNeg.setTextColor(getResources().getColor(R.color.splashback));
+                Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                bPos.setTextColor(getResources().getColor(R.color.splashback));
                 break;
             }
             case "T-Code Help": {

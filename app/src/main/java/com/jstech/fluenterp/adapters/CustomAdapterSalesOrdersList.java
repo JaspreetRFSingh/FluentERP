@@ -1,5 +1,6 @@
 package com.jstech.fluenterp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.WebViewActivity;
@@ -50,6 +52,7 @@ public class CustomAdapterSalesOrdersList extends RecyclerView.Adapter<CustomAda
         final MyViewHolder myViewHolder = new MyViewHolder(view);
         final Context ctx = view.getContext();
         view.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
@@ -73,6 +76,10 @@ public class CustomAdapterSalesOrdersList extends RecyclerView.Adapter<CustomAda
                 AlertDialog dialog = builder.create();
                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
                 dialog.show();
+                Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                bNeg.setTextColor(view.getResources().getColor(R.color.splashback));
+                Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                bPos.setTextColor(view.getResources().getColor(R.color.splashback));
             }
         });
         return myViewHolder;

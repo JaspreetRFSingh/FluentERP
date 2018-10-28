@@ -115,16 +115,20 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
             retrieveSumsMonth();
         }
 
+        fabBar.setImageResource(R.drawable.ic_menu_share);
+        fabPie.setImageResource(R.drawable.ic_menu_share);
         fabBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 barChart.saveToGallery("barImage.jpg", 85);
+                Toast.makeText(getApplicationContext(), "Chart saved to gallery", Toast.LENGTH_SHORT).show();
             }
         });
         fabPie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pieChart.saveToGallery("pieImage.jpg", 85);
+                Toast.makeText(getApplicationContext(), "Chart saved to gallery", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -364,15 +368,109 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
 
         BarDataSet bardataset = new BarDataSet(entries, "Cells");
         ArrayList<String> labels = new ArrayList<>();
-        labels.add("Oct");
-        labels.add("Sep");
-        labels.add("Aug");
-        labels.add("Jul");
-        labels.add("Jun");
-        labels.add("May");
+        switch (dateCurr.substring(4, 6)) {
+            case "12":
+                labels.add("Dec" + "\n" + "/" + dateCurr.substring(2, 4));
+                labels.add("Nov" +"\n" + "/" + dateCurr.substring(2, 4));
+                labels.add("Oct" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Sep" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Aug" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jul" + "\n" +"/" + dateCurr.substring(2, 4));
+                break;
+            case "11":
+                labels.add("Nov" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Oct" +"\n" + "/" + dateCurr.substring(2, 4));
+                labels.add("Sep" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Aug" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jul" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jun" + "\n" +"/" + dateCurr.substring(2, 4));
+                break;
+            case "10":
+                labels.add("Oct" +"\n" + "/" + dateCurr.substring(2, 4));
+                labels.add("Sep" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Aug" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jul" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jun" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("May" + "\n" +"/" + dateCurr.substring(2, 4));
+                break;
+            case "09":
+                labels.add("Sep" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Aug" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jul" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jun" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("May" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Apr" + "\n" +"/" + dateCurr.substring(2, 4));
+                break;
+            case "08":
+                labels.add("Aug" +"\n" + "/" + dateCurr.substring(2, 4));
+                labels.add("Jul" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jun" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("May" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Apr" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Mar" + "\n" +"/" + dateCurr.substring(2, 4));
+                break;
+            case "07":
+                labels.add("Jul" +"\n" + "/" + dateCurr.substring(2, 4));
+                labels.add("Jun" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("May" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Apr" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Mar" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Feb" + "\n" +"/" + dateCurr.substring(2, 4));
+                break;
+            case "06":
+                labels.add("Jun" +"\n" + "/" + dateCurr.substring(2, 4));
+                labels.add("May" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Apr" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Mar" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Feb" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jan" + "\n" +"/" + dateCurr.substring(2, 4));
+                break;
+            case "05":
+                labels.add("May" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Apr" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Mar" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Feb" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jan" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Dec" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+
+                break;
+            case "04":
+                labels.add("Apr" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Mar" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Feb" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jan" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Dec" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                labels.add("Nov" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                break;
+            case "03":
+                labels.add("Mar" +"\n" + "/" + dateCurr.substring(2, 4));
+                labels.add("Feb" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Jan" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Dec" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                labels.add("Nov" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                labels.add("Oct" +"\n" + "/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+
+                break;
+            case "02":
+                labels.add("Feb" +"\n" + "/" + dateCurr.substring(2, 4));
+                labels.add("Jan" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Dec" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                labels.add("Nov" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                labels.add("Oct" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                labels.add("Sep" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                break;
+            case "01":
+                labels.add("Jan" + "\n" +"/" + dateCurr.substring(2, 4));
+                labels.add("Dec" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                labels.add("Nov" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                labels.add("Oct" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                labels.add("Sep" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                labels.add("Aug" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
+                break;
+        }
         BarData data = new BarData(labels, bardataset);
         barChart.setData(data);
-        barChart.setDescription("Sales for the year 2018 in ₹");  // set the description
+        barChart.setDescription("Monthwise sales for the year "+ dateCurr.substring(0,4)+" in ₹");  // set the description
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.animateY(5000);
     }

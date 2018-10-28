@@ -481,6 +481,11 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                                             Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                                             dialog.show();
 
+                                            Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                                            bNeg.setTextColor(getResources().getColor(R.color.splashback));
+                                            Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                                            bPos.setTextColor(getResources().getColor(R.color.splashback));
+
                                         }
 
                                     } catch (JSONException e) {
@@ -599,14 +604,18 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                         startActivity(new Intent(ActivitySalesOrderCreate.this, MainActivity.class));
                     }
                 });
-                /*builder.setNegativeButton("No!", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("No!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
-                });*/
+                });
                 AlertDialog dialog = builder.create();
                 Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
                 dialog.show();
+                Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                bNeg.setTextColor(getResources().getColor(R.color.splashback));
+                Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                bPos.setTextColor(getResources().getColor(R.color.splashback));
             } else {
                 startActivity(new Intent(ActivitySalesOrderCreate.this, MainActivity.class));
             }
@@ -633,14 +642,18 @@ public class ActivitySalesOrderCreate extends AppCompatActivity {
                     startActivity(new Intent(ActivitySalesOrderCreate.this, MainActivity.class));
                 }
             });
-                /*builder.setNegativeButton("No!", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("No!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
-                });*/
+                });
             AlertDialog dialog = builder.create();
             Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
             dialog.show();
+            Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+            bNeg.setTextColor(getResources().getColor(R.color.splashback));
+            Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            bPos.setTextColor(getResources().getColor(R.color.splashback));
         } else {
             startActivity(new Intent(ActivitySalesOrderCreate.this, MainActivity.class));
         }

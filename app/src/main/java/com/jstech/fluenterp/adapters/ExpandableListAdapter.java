@@ -107,7 +107,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.list_submenu, null);
         }
 
-        TextView txtListChild = (TextView) convertView
+        TextView txtListChild = convertView
                 .findViewById(R.id.submenu);
 
         txtListChild.setText(childText);

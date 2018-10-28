@@ -38,9 +38,9 @@ public class MainActivityRecyclerViewAdapter extends RecyclerView.Adapter<MainAc
         public ViewHolder(View v) {
             super(v);
             v.setOnClickListener(this);
-            textView = (TextView) v.findViewById(R.id.textView);
-            imageView = (ImageView) v.findViewById(R.id.imageView);
-            relativeLayout = (RelativeLayout) v.findViewById(R.id.relativeLayout);
+            textView =  v.findViewById(R.id.textView);
+            imageView =  v.findViewById(R.id.imageView);
+            relativeLayout = v.findViewById(R.id.relativeLayout);
         }
 
         public void setData(DataModel item) {

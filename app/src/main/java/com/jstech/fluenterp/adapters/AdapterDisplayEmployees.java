@@ -77,7 +77,7 @@ public class AdapterDisplayEmployees extends RecyclerView.Adapter<AdapterDisplay
             dataSet.addAll(tempList);
         }else{
             for(Employee employee : tempList){
-                if(String.valueOf(employee.getEmpName()).contains(str.toLowerCase())){
+                if(String.valueOf(employee.getEmpName().toLowerCase()).contains(str.toLowerCase())){
                     dataSet.add(employee);
                 }
             }

@@ -59,4 +59,13 @@ public class Material {
     public void setCostPerDu(double costPerDu) {
         this.costPerDu = costPerDu;
     }
+
+    @Override
+    public String toString() {
+        return "Code: " + materialCode+"\n"+
+                "Type: "+materialType+"\n"+
+                "Description: "+materialDescription+"\n"+
+                "Unit: "+dimensionalUnit+"\n"+
+                "Cost per DU: "+costPerDu+"\n";
+    }
 }

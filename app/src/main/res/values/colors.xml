@@ -3,16 +3,17 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="status_bar_colour">#4DB6AC</color>
+    <color name="status_bar_colour">#4d77b6</color>
     <color name="text_background">#e9e9e9</color>
-    <color name="colorVisible">#00695C</color>
+    <color name="colorVisible">#004969</color>
     <color name="colorCardText">#004139</color>
-    <color name="card_background">#ecffe3</color>
-    <color name="card_parent_background">#edfff4</color>
+    <color name="card_background">#e3feff</color>
+    <color name="card_parent_background">#edf5ff</color>
     <color name="white">#ffffff</color>
     <color name="gaajri">#ff1a00</color>
     <color name="Wheat">#5dff40</color>
     <color name="back">#c10f97</color>
     <color name="Wheat2">#ffcc40</color>
-    <color name="back2">#075056</color>
+    <color name="back2">#73cdf5</color>
+    <color name="splashback">#0083bf</color>
 </resources>
