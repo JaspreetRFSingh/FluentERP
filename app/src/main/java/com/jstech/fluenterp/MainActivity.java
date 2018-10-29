@@ -1,7 +1,12 @@
 package com.jstech.fluenterp;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +14,8 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -117,6 +124,19 @@ public class MainActivity extends AppCompatActivity
         expandableList.setIndicatorBoundsRelative(expandableList.getRight()- 80, expandableList.getWidth());
     }
 
+    boolean isConnection(){
+        boolean connected;
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            connected = true;
+        }
+        else {
+            connected = false;
+        }
+        return connected;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +151,53 @@ public class MainActivity extends AppCompatActivity
         mDrawer = findViewById(R.id.drawer_layout);
         mDrawer.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL);
         setupToolbar();
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                android.Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.ACCESS_NETWORK_STATE)) {
+
+                        // No explanation needed; request the permission
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.ACCESS_NETWORK_STATE},
+                                101);
+                    }
+        }
+
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                        // No explanation needed; request the permission
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                101);
+                    }
+        }
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                        // No explanation needed; request the permission
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                101);
+                    }
+        }
+
         //Activity
         initMainContent();
         strTCode = "";
@@ -171,6 +238,10 @@ public class MainActivity extends AppCompatActivity
         mMenuAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         // setting list adapter
         expandableList.setAdapter(mMenuAdapter);
+        if(!isConnection()){
+            Snackbar.make( findViewById(R.id.content), "It seems you are not connected to the network!", Snackbar.LENGTH_LONG).show();
+
+        }
         expandableList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView,
@@ -682,8 +753,10 @@ public class MainActivity extends AppCompatActivity
                 Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                 dialog.show();
                 Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                //noinspection deprecation
                 bNeg.setTextColor(getResources().getColor(R.color.splashback));
                 Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                //noinspection deprecation
                 bPos.setTextColor(getResources().getColor(R.color.splashback));
                 break;
             }

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.viksaa.sssplash.lib.activity.AwesomeSplash;
@@ -14,6 +16,13 @@ public class SplashActivity extends AwesomeSplash {
 
     @Override
     public void initSplash(ConfigSplash configSplash) {
+
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //noinspection deprecation
+        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
+
         //Customize Circular Reveal
         configSplash.setBackgroundColor(R.color.splashback); //any color you want form colors.xml
         configSplash.setAnimCircularRevealDuration(1500); //int ms

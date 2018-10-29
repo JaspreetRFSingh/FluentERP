@@ -357,6 +357,10 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
                                                 AlertDialog dialog = builder.create();
                                                 Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                                                 dialog.show();
+                                                Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                                                bNeg.setTextColor(getResources().getColor(R.color.splashback));
+                                                Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                                                bPos.setTextColor(getResources().getColor(R.color.splashback));
 
                                             }
                                             else{
