@@ -1,10 +1,10 @@
-
+#FluentERP
 This is an Android application which covers the most basic modules of Enterprise Resource Planning viz. Sales&Distribution, Manufacturing, Material Management, Human Resource and Master Data.
 The vision is to make a scalable yet optimal application.
 minSDKVersion : 23
 targetSDKVersion: 27
 
-Backend - PHP and MySQL (10 gb cloud space)
+Backend - PHP and MySQL (2 gb web hosting space)
 PHP: Database Coonectivity, Crude Database Operations
 MySQL: RDBMS schema
 JSON: JSON Parsing used for retrieving and controlling data
