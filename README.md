@@ -5,9 +5,9 @@ The vision is to make a scalable yet optimal application.</br>
 *targetSDKVersion* : 27
 
 ## Backend
-PHP: Database Coonectivity, Crude Database Operations
-MySQL: RDBMS schema
-JSON: JSON Parsing used for retrieving and controlling data
+PHP: Database Coonectivity, Crude Database Operations</br>
+MySQL: RDBMS schema</br>
+JSON: JSON Parsing used for retrieving and controlling data</br>
 
 ## FrontEnd
 Android(Java and XML)
@@ -16,7 +16,7 @@ Android(Java and XML)
 Netscape, Adobe Photoshop
 
 ## 3rd party libraries used 
-1. https://github.com/PhilJay/MPAndroidChart :- *Chart Analysis(Month wise and Region wise)*
+1. https://github.com/PhilJay/MPAndroidChart :- *Chart Analysis(Month wise and Region wise)* </br>
 2. https://github.com/mxn21/FlowingDrawer :- *Flowing Navigation Drawer*
 
 ### Inspiration
