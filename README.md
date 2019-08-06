@@ -1,8 +1,8 @@
 # FluentERP
 This is an Android application which covers the most basic modules of Enterprise Resource Planning viz. Sales&Distribution, Manufacturing, Material Management, Human Resource and Master Data.</br>
-The vision is to make a scalable yet optimal application.
-minSDKVersion : 23
-targetSDKVersion: 27
+The vision is to make a scalable yet optimal application.</br>
+*minSDKVersion* : 23 </br>
+*targetSDKVersion* : 27
 
 ## Backend
 PHP: Database Coonectivity, Crude Database Operations
