@@ -1,19 +1,28 @@
-#FluentERP
-This is an Android application which covers the most basic modules of Enterprise Resource Planning viz. Sales&Distribution, Manufacturing, Material Management, Human Resource and Master Data.
+# FluentERP
+This is an Android application which covers the most basic modules of Enterprise Resource Planning viz. Sales&Distribution, Manufacturing, Material Management, Human Resource and Master Data.</br>
 The vision is to make a scalable yet optimal application.
 minSDKVersion : 23
 targetSDKVersion: 27
 
-Backend - PHP and MySQL (2 gb web hosting space)
+## Backend
 PHP: Database Coonectivity, Crude Database Operations
 MySQL: RDBMS schema
 JSON: JSON Parsing used for retrieving and controlling data
 
-FrontEnd - Android(Java and XML)
+## FrontEnd
+Android(Java and XML)
 
-3rd party libraries used - 
-1. https://github.com/PhilJay/MPAndroidChart :- Chart Analysis(Month wise and Region wise)
-2. https://github.com/mxn21/FlowingDrawer :- Flowing Navigation Drawer
+## Application Logo
+Netscape, Adobe Photoshop
 
-Feel free to contribute to the project!
+## 3rd party libraries used 
+1. https://github.com/PhilJay/MPAndroidChart :- *Chart Analysis(Month wise and Region wise)*
+2. https://github.com/mxn21/FlowingDrawer :- *Flowing Navigation Drawer*
+
+### Inspiration
+While interning as an SAP-SD Intern, we decided to create an interface similar to that of SAP small-to-medium scale industries in cities like Ludhiana, Jalandhar. This project certainly has a lot of scope since it can be provided as a cheaper solution to the **Enterprise Resource Planning**.
+
+### Reach-out!
+Feel free to contribute to the project! </br>
+**Pull requests are always welcome!**</br>
 For any suggestions or help about the source code of the project, leave an email at: jaspreetsinghtuli@gmail.com
