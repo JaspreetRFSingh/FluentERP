@@ -20,7 +20,7 @@ Netscape, Adobe Photoshop
 2. https://github.com/mxn21/FlowingDrawer :- *Flowing Navigation Drawer*
 
 ### Inspiration
-While interning as an SAP-SD Intern, we decided to create an interface similar to that of SAP small-to-medium scale industries in cities like Ludhiana, Jalandhar. This project certainly has a lot of scope since it can be provided as a cheaper solution to the **Enterprise Resource Planning**.
+While interning as an SAP-SD Intern, we decided to create an interface similar to that of SAP primarily for small-to-medium scale industries in cities like Ludhiana, Jalandhar, Allahabad etc. This project certainly has a lot of scope since it can be provided as a cheaper solution to the **Enterprise Resource Planning**.
 
 ### Reach-out!
 Feel free to contribute to the project! </br>
