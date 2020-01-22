@@ -1,10 +1,51 @@
+# Built artifacts
 *.iml
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# Gradle
 .gradle
-/local.properties
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-.DS_Store
 /build
+**/build/
+gradle-wrapper.jar
+
+# Local configuration (machine-specific)
+local.properties
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+.idea/caches
+.idea/modules.xml
+.idea/*.iml
+.idea/misc.xml
+.idea/runConfigurations.xml
+.idea/AndroidProjectSystem.xml
+.idea/markdown.xml
+*.iml
+
+# OS generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Android Studio navigation files
 /captures
 .externalNativeBuild
+.cxx
+
+# Keystore files (never commit these)
+*.jks
+*.keystore
+
+# ProGuard
+proguard/
