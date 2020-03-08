@@ -2,10 +2,10 @@ package com.jstech.fluenterp.models;
 
 public class Customer {
     private int customerId;
-    public String name;
-    public String address;
+    private String name;
+    private String address;
     private String city;
-    public int phone;
+    private int phone;
     private String gstNumber;
 
     public Customer()

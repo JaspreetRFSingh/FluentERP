@@ -1,11 +1,11 @@
 package com.jstech.fluenterp.models;
 
 public class SalesOrder {
-    long salesDocNumber;
-    int customerNumber;
-    String orderDate;
-    double orderPrice;
-    String orderStatus;
+    private long salesDocNumber;
+    private int customerNumber;
+    private String orderDate;
+    private double orderPrice;
+    private String orderStatus;
 
     public SalesOrder(){
 

@@ -2,11 +2,11 @@ package com.jstech.fluenterp.models;
 
 public class Material {
 
-    int materialCode;
-    String materialType;
-    String materialDescription;
-    String dimensionalUnit;
-    double costPerDu;
+    private int materialCode;
+    private String materialType;
+    private String materialDescription;
+    private String dimensionalUnit;
+    private double costPerDu;
 
     public Material(int materialCode, String materialType, String materialDescription, String dimensionalUnit, double costPerDu) {
         this.materialCode = materialCode;

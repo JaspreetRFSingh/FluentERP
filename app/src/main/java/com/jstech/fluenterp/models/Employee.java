@@ -1,13 +1,13 @@
 package com.jstech.fluenterp.models;
 
 public class Employee {
-    int empId;
-    String empName;
-    String empAddress;
-    String empType;
-    long empPhone;
-    String dob;
-    String doj;
+    private int empId;
+    private String empName;
+    private String empAddress;
+    private String empType;
+    private long empPhone;
+    private String dob;
+    private String doj;
 
     public Employee(){
 
