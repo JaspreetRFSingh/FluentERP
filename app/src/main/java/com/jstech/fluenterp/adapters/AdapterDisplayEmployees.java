@@ -1,7 +1,7 @@
 package com.jstech.fluenterp.adapters;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,21 +50,14 @@ public class AdapterDisplayEmployees extends RecyclerView.Adapter<AdapterDisplay
     }
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
-        TextView textViewEmployeeName = holder.textViewEmployeeName;
-        TextView textViewEmployeeType = holder.textViewEmployeeType;
-        TextView textViewEmployeePhone = holder.textViewEmployeePhone;
-        TextView textViewEmployeeAddress = holder.textViewEmployeeAddress;
-        TextView textViewEmployeeDob = holder.textViewEmployeeDob;
-        TextView textViewEmployeeDoj = holder.textViewEmployeeDoj;
-        TextView textViewEmployeeId = holder.textViewEmployeeId;
-        textViewEmployeeName.setText(String.valueOf(dataSet.get(position).getEmpName()));
-        textViewEmployeeType.setText(String.valueOf(dataSet.get(position).getEmpType()));
-        textViewEmployeePhone.setText(String.valueOf(dataSet.get(position).getEmpPhone()));
-        textViewEmployeeAddress.setText(String.valueOf(dataSet.get(position).getEmpAddress()));
-        textViewEmployeeDob.setText(String.valueOf(dataSet.get(position).getDob()));
-        textViewEmployeeDoj.setText(String.valueOf(dataSet.get(position).getDoj()));
-        textViewEmployeeId.setText(String.valueOf(dataSet.get(position).getEmpId()));
+        Employee emp = dataSet.get(position);
+        holder.textViewEmployeeName.setText(emp.getEmpName());
+        holder.textViewEmployeeType.setText(emp.getEmpType());
+        holder.textViewEmployeePhone.setText(String.valueOf(emp.getEmpPhone()));
+        holder.textViewEmployeeAddress.setText(emp.getEmpAddress());
+        holder.textViewEmployeeDob.setText(emp.getDob());
+        holder.textViewEmployeeDoj.setText(emp.getDoj());
+        holder.textViewEmployeeId.setText(String.valueOf(emp.getEmpId()));
     }
     @Override
     public int getItemCount() {

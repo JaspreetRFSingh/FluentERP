@@ -2,8 +2,8 @@ package com.jstech.fluenterp.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,45 +11,46 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.DataModel;
 
-import java.util.ArrayList;
-import com.jstech.fluenterp.R;
+import java.util.List;
 
-public class MainActivityRecyclerViewAdapter extends RecyclerView.Adapter<MainActivityRecyclerViewAdapter.ViewHolder> {
+public class MainActivityRecyclerViewAdapter
+        extends RecyclerView.Adapter<MainActivityRecyclerViewAdapter.ViewHolder> {
 
-    ArrayList mValues;
-    Context mContext;
-    protected ItemListener mListener;
+    private final List<DataModel> mValues;
+    private final Context mContext;
+    private final ItemListener mListener;
 
-    public MainActivityRecyclerViewAdapter(Context context, ArrayList values, ItemListener itemListener) {
+    public MainActivityRecyclerViewAdapter(Context context, List<DataModel> values,
+                                           ItemListener itemListener) {
         mValues = values;
         mContext = context;
-        mListener=itemListener;
+        mListener = itemListener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView textView;
-        public ImageView imageView;
-        public RelativeLayout relativeLayout;
+        final TextView textView;
+        final ImageView imageView;
+        final RelativeLayout relativeLayout;
         DataModel item;
 
         public ViewHolder(View v) {
             super(v);
             v.setOnClickListener(this);
-            textView =  v.findViewById(R.id.textView);
-            imageView =  v.findViewById(R.id.imageView);
+            textView = v.findViewById(R.id.textView);
+            imageView = v.findViewById(R.id.imageView);
             relativeLayout = v.findViewById(R.id.relativeLayout);
         }
 
         public void setData(DataModel item) {
             this.item = item;
-            textView.setText(item.text);
-            imageView.setImageResource(item.drawable);
-            relativeLayout.setBackgroundColor(Color.parseColor(item.color));
+            textView.setText(item.getText());
+            imageView.setImageResource(item.getDrawable());
+            relativeLayout.setBackgroundColor(Color.parseColor(item.getColor()));
         }
-
 
         @Override
         public void onClick(View view) {
@@ -59,21 +60,17 @@ public class MainActivityRecyclerViewAdapter extends RecyclerView.Adapter<MainAc
         }
     }
 
+    @NonNull
     @Override
-    public MainActivityRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.recycler_view_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setData((DataModel) mValues.get(position));
+        holder.setData(mValues.get(position));
     }
-
-   /*@Override
-    public void onBindViewHolder(ViewHolder Vholder, int position) {
-        Vholder.setData(mValues.get(position));
-    }*/
 
     @Override
     public int getItemCount() {

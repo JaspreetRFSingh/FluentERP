@@ -1,7 +1,7 @@
 package com.jstech.fluenterp.adapters;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,19 +30,12 @@ public class AdapterDisplaySellers extends RecyclerView.Adapter<AdapterDisplaySe
 
     @Override
     public void onBindViewHolder(@NonNull SellerViewHolder holder, int position) {
-
-        TextView textViewSellerName = holder.textViewSellerName;
-        TextView textViewSellerCity = holder.textViewSellerCity;
-        TextView textViewSellerPhone = holder.textViewSellerPhone;
-        TextView textViewSellerAddress = holder.textViewSellerAddress;
-        TextView textViewSellerId = holder.textViewSellerId;
-        TextView textViewSellerGST = holder.textViewSellerGST;
-        textViewSellerName.setText(String.valueOf(dataSet.get(position).getsName()));
-        textViewSellerCity.setText(String.valueOf(dataSet.get(position).getsCity()));
-        textViewSellerPhone.setText(String.valueOf(dataSet.get(position).getsPhone()));
-        textViewSellerAddress.setText(String.valueOf(dataSet.get(position).getsAddress()));
-        textViewSellerId.setText(String.valueOf(dataSet.get(position).getsId()));
-        textViewSellerGST.setText(String.valueOf(dataSet.get(position).getsGST()));
+        holder.textViewSellerName.setText(String.valueOf(dataSet.get(position).getsName()));
+        holder.textViewSellerCity.setText(String.valueOf(dataSet.get(position).getsCity()));
+        holder.textViewSellerPhone.setText(String.valueOf(dataSet.get(position).getsPhone()));
+        holder.textViewSellerAddress.setText(String.valueOf(dataSet.get(position).getsAddress()));
+        holder.textViewSellerId.setText(String.valueOf(dataSet.get(position).getsId()));
+        holder.textViewSellerGST.setText(String.valueOf(dataSet.get(position).getsGST()));
     }
 
     public void filter(String str){

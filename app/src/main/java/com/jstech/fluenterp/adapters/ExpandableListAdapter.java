@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.jstech.fluenterp.R;
@@ -14,35 +13,21 @@ import com.jstech.fluenterp.R;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by Administrator on 9/1/16.
- */
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
-    private Context mContext;
-    private List<String> mListDataHeader; // header titles
+    private final Context mContext;
+    private final List<String> mListDataHeader;
+    private final HashMap<String, List<String>> mListDataChild;
 
-    // child data in format of header title, child title
-    private HashMap<String, List<String>> mListDataChild;
-    ExpandableListView expandList;
-
-    public ExpandableListAdapter(Context context,
-                                 List<String> listDataHeader,
-                                 HashMap<String,
-                                         List<String>> listChildData
-                                 //        ,ExpandableListView mView
-    )
-    {
+    public ExpandableListAdapter(Context context, List<String> listDataHeader,
+                                 HashMap<String, List<String>> listChildData) {
         this.mContext = context;
         this.mListDataHeader = listDataHeader;
         this.mListDataChild = listChildData;
-        //this.expandList = mView;
     }
 
     @Override
     public int getGroupCount() {
-        int i = mListDataHeader.size();
-        //Log.d("GROUPCOUNT", String.valueOf(i));
-        return i;
+        return mListDataHeader.size();
     }
 
     @Override
@@ -85,33 +70,27 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this.mContext
+            LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.listheader, null);
+            convertView = inflater.inflate(R.layout.listheader, null);
         }
-        TextView lblListHeader = (TextView) convertView
-                .findViewById(R.id.submenu);
+        TextView lblListHeader = convertView.findViewById(R.id.submenu);
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
-        //lblListHeader.setText(headerTitle.getIconName());
         return convertView;
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
+                             View convertView, ViewGroup parent) {
         final String childText = (String) getChild(groupPosition, childPosition);
-
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this.mContext
+            LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_submenu, null);
+            convertView = inflater.inflate(R.layout.list_submenu, null);
         }
-
-        TextView txtListChild = convertView
-                .findViewById(R.id.submenu);
-
+        TextView txtListChild = convertView.findViewById(R.id.submenu);
         txtListChild.setText(childText);
-
         return convertView;
     }
 

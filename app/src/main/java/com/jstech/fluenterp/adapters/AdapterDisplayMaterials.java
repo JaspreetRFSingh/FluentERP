@@ -1,6 +1,6 @@
 package com.jstech.fluenterp.adapters;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,17 +27,11 @@ public class AdapterDisplayMaterials extends RecyclerView.Adapter<AdapterDisplay
 
     @Override
     public void onBindViewHolder(@NonNull MaterialViewHolder holder, int position) {
-
-        TextView textViewMaterialId = holder.textViewMatId;
-        TextView textViewMaterialType = holder.textViewMatType;
-        TextView textViewMaterialDescription = holder.textViewMatDesc;
-        TextView textViewMaterialDU = holder.textViewMatDu;
-        TextView textViewMaterialCost = holder.textViewMatCost;
-        textViewMaterialId.setText(String.valueOf(dataSet.get(position).getMaterialCode()));
-        textViewMaterialType.setText(String.valueOf(dataSet.get(position).getMaterialType()));
-        textViewMaterialDescription.setText(String.valueOf(dataSet.get(position).getMaterialDescription()));
-        textViewMaterialDU.setText(String.valueOf(dataSet.get(position).getDimensionalUnit()));
-        textViewMaterialCost.setText(String.valueOf(dataSet.get(position).getCostPerDu()));
+        holder.textViewMatId.setText(String.valueOf(dataSet.get(position).getMaterialCode()));
+        holder.textViewMatType.setText(String.valueOf(dataSet.get(position).getMaterialType()));
+        holder.textViewMatDesc.setText(String.valueOf(dataSet.get(position).getMaterialDescription()));
+        holder.textViewMatDu.setText(String.valueOf(dataSet.get(position).getDimensionalUnit()));
+        holder.textViewMatCost.setText(String.valueOf(dataSet.get(position).getCostPerDu()));
     }
 
     @Override
