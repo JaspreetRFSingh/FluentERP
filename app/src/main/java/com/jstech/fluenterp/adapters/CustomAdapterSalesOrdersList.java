@@ -1,23 +1,26 @@
 package com.jstech.fluenterp.adapters;
 
-import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
+import com.jstech.fluenterp.Constants;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.WebViewActivity;
 import com.jstech.fluenterp.models.SalesOrder;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CustomAdapterSalesOrdersList extends RecyclerView.Adapter<CustomAdapterSalesOrdersList.MyViewHolder> {
 
@@ -48,56 +51,47 @@ public class CustomAdapterSalesOrdersList extends RecyclerView.Adapter<CustomAda
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cards_layout, parent, false);
-        final MyViewHolder myViewHolder = new MyViewHolder(view);
-        final Context ctx = view.getContext();
-        view.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                final String sdn = myViewHolder.textViewSalesOrderNumber.getText().toString();
-                builder.setTitle("Sales Document");
-                builder.setMessage("Do you want to generate a PDF for the sales order "+myViewHolder.textViewSalesOrderNumber.getText()+"?\n");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String urlString="http://docs.google.com/gview?embedded=true&url=http://jaspreettechnologies.000webhostapp.com/createInvoice.php?sales_doc_no="+sdn;
-                        Intent intent=new Intent(ctx, WebViewActivity.class);
-                        intent.putExtra("url", urlString);
-                        ctx.startActivity(intent);
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogThemeModified;
-                dialog.show();
-                Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                bNeg.setTextColor(view.getResources().getColor(R.color.splashback));
-                Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                bPos.setTextColor(view.getResources().getColor(R.color.splashback));
-            }
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.cards_layout, parent, false);
+        MyViewHolder myViewHolder = new MyViewHolder(view);
+        Context ctx = view.getContext();
+
+        view.setOnClickListener(v -> {
+            int pos = myViewHolder.getAdapterPosition();
+            if (pos == RecyclerView.NO_ID) return;
+            SalesOrder order = dataSet.get(pos);
+            String sdn = String.valueOf(order.getSalesDocNumber());
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+            builder.setTitle("Sales Document");
+            builder.setMessage("Generate a PDF for sales order " + sdn + "?");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                String urlString = Constants.GDOCS_VIEWER_PREFIX + Constants.URL_CREATE_INVOICE + "?sales_doc_no=" + sdn;
+                Intent intent = new Intent(ctx, WebViewActivity.class);
+                intent.putExtra("url", urlString);
+                ctx.startActivity(intent);
+            });
+            builder.setNegativeButton("No", null);
+            AlertDialog dialog = builder.create();
+            Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations =
+                    R.style.DialogThemeModified;
+            dialog.show();
+            int accent = ContextCompat.getColor(ctx, R.color.splashback);
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(accent);
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(accent);
         });
+
         return myViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
-        TextView textViewSalesOrderNumber = holder.textViewSalesOrderNumber;
-        TextView textViewCustomerNumber = holder.textViewCustomer;
-        TextView textViewOrderDate = holder.textViewDateOfOrder;
-        TextView textViewOrderPrice = holder.textViewPrice;
-        TextView textViewOrderStatus = holder.textViewOrderStatus;
-        textViewSalesOrderNumber.setText(String.valueOf(dataSet.get(position).getSalesDocNumber()));
-        textViewCustomerNumber.setText(String.valueOf(dataSet.get(position).getCustomerNumber()));
-        textViewOrderDate.setText(String.valueOf(dataSet.get(position).getOrderDate()));
-        textViewOrderPrice.setText(String.valueOf(dataSet.get(position).getOrderPrice()));
-        textViewOrderStatus.setText(String.valueOf(dataSet.get(position).getOrderStatus()));
+        SalesOrder order = dataSet.get(position);
+        holder.textViewSalesOrderNumber.setText(String.valueOf(order.getSalesDocNumber()));
+        holder.textViewCustomer.setText(String.valueOf(order.getCustomerNumber()));
+        holder.textViewDateOfOrder.setText(order.getOrderDate());
+        holder.textViewPrice.setText(String.valueOf(order.getOrderPrice()));
+        holder.textViewOrderStatus.setText(order.getOrderStatus());
     }
 
     @Override
