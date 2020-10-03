@@ -1,5 +1,7 @@
 package com.jstech.fluenterp;
 
+import com.jstech.fluenterp.Constants;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,25 +10,24 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.os.Looper;
+import androidx.annotation.NonNull;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -36,6 +37,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.jstech.fluenterp.adapters.ExpandableListAdapter;
 import com.jstech.fluenterp.adapters.MainActivityRecyclerViewAdapter;
 import com.jstech.fluenterp.dd.ActivityCheckOrderStatus;
@@ -69,6 +71,7 @@ import com.jstech.fluenterp.sd.ActivitySalesOrderList;
 import com.jstech.fluenterp.sd.ActivitySalesOrderModify;
 import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
 import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,17 +127,28 @@ public class MainActivity extends AppCompatActivity
         expandableList.setIndicatorBoundsRelative(expandableList.getRight()- 80, expandableList.getWidth());
     }
 
-    boolean isConnection(){
-        boolean connected;
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            connected = true;
+    private void requestNeededPermissions() {
+        String[] permissions = {
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+        List<String> toRequest = new ArrayList<>();
+        for (String perm : permissions) {
+            if (ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED) {
+                toRequest.add(perm);
+            }
         }
-        else {
-            connected = false;
+        if (!toRequest.isEmpty()) {
+            ActivityCompat.requestPermissions(this, toRequest.toArray(new String[0]), 101);
         }
-        return connected;
+    }
+
+    boolean isConnection() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) return false;
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
     @Override
@@ -145,58 +159,14 @@ public class MainActivity extends AppCompatActivity
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
+        window.setStatusBarColor(this.ContextCompat.getColor(this, R.color.status_bar_colour));
 
         setContentView(R.layout.activity_main);
         mDrawer = findViewById(R.id.drawer_layout);
         mDrawer.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL);
         setupToolbar();
 
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                android.Manifest.permission.ACCESS_NETWORK_STATE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.ACCESS_NETWORK_STATE)) {
-
-                        // No explanation needed; request the permission
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{Manifest.permission.ACCESS_NETWORK_STATE},
-                                101);
-                    }
-        }
-
-
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-                        // No explanation needed; request the permission
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                101);
-                    }
-        }
-
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                        // No explanation needed; request the permission
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                101);
-                    }
-        }
+        requestNeededPermissions();
 
         //Activity
         initMainContent();
@@ -208,25 +178,14 @@ public class MainActivity extends AppCompatActivity
         eTxtTCode.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_left));
         btnTCode.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce));
         txtExplore.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.blink));
-        imgLogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        View.OnClickListener openWebsite = v ->
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://herocycles.com/")));
-            }
-        });
-        txtVisitWebsite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://herocycles.com/")));
-            }
-        });
-        txtExpand.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnTCode.setVisibility(View.VISIBLE);
-                eTxtTCode.setVisibility(View.VISIBLE);
-                txtExpand.setVisibility(View.GONE);
-            }
+        imgLogo.setOnClickListener(openWebsite);
+        txtVisitWebsite.setOnClickListener(openWebsite);
+        txtExpand.setOnClickListener(v -> {
+            btnTCode.setVisibility(View.VISIBLE);
+            eTxtTCode.setVisibility(View.VISIBLE);
+            txtExpand.setVisibility(View.GONE);
         });
         //Activity
         expandableList = findViewById(R.id.navigationmenu);
@@ -393,14 +352,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        //
-        btnTCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                inspectTCode();
-            }
-        });
-        //
+        btnTCode.setOnClickListener(v -> inspectTCode());
     }
 
     void inspectTCode(){
@@ -639,16 +591,6 @@ public class MainActivity extends AppCompatActivity
                 });
     }
 
-   /* @Override
-    public void onBackPressed() {
-        *//*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }*//*
-    }*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -673,61 +615,33 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        //int id = item.getItemId();
-
-        /*if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     int doubleBackToExitPressed = 1;
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+
     @Override
     public void onBackPressed() {
-
         if (mDrawer.isMenuVisible()) {
             mDrawer.closeMenu();
-        } else {
-            if (doubleBackToExitPressed == 2) {
-                finishAffinity();
-                System.exit(0);
-            }
-            else {
-                doubleBackToExitPressed++;
-                Snackbar.make( findViewById(R.id.content), "Press Back again to exit!", Snackbar.LENGTH_LONG).show();
-                //Toast.makeText(this, "Press back again to exit!", Toast.LENGTH_SHORT).show();
-            }
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressed=1;
-                }
-            }, 2000);
+            return;
         }
+        if (doubleBackToExitPressed == 2) {
+            finishAffinity();
+            return;
+        }
+        doubleBackToExitPressed++;
+        Snackbar.make(findViewById(R.id.content), "Press Back again to exit!", Snackbar.LENGTH_LONG).show();
+        new Handler(Looper.getMainLooper()).postDelayed(() -> doubleBackToExitPressed = 1, 2000);
     }
 
     @Override
     public void onItemClick(DataModel item) {
-        String itemName = item.text;
+        String itemName = item.getText();
         switch (itemName) {
             case "Graphical Analysis": {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -754,10 +668,10 @@ public class MainActivity extends AppCompatActivity
                 dialog.show();
                 Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
                 //noinspection deprecation
-                bNeg.setTextColor(getResources().getColor(R.color.splashback));
+                bNeg.setTextColor(ContextCompat.getColor(this, R.color.splashback));
                 Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
                 //noinspection deprecation
-                bPos.setTextColor(getResources().getColor(R.color.splashback));
+                bPos.setTextColor(ContextCompat.getColor(this, R.color.splashback));
                 break;
             }
             case "Reports": {
@@ -769,17 +683,17 @@ public class MainActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int which) {
                         if(which == 0){
                             Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-                            intent.putExtra("url", "http://docs.google.com/gview?embedded=true&url=https://jaspreettechnologies.000webhostapp.com/createCustomerReport.php");
+                            intent.putExtra("url", Constants.GDOCS_VIEWER_PREFIX + Constants.URL_REPORT_CUSTOMERS);
                             startActivity(intent);
                         }
                         else if(which == 1){
                             Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-                            intent.putExtra("url", "http://docs.google.com/gview?embedded=true&url=https://jaspreettechnologies.000webhostapp.com/createMaterialReport.php");
+                            intent.putExtra("url", Constants.GDOCS_VIEWER_PREFIX + Constants.URL_REPORT_MATERIALS);
                             startActivity(intent);
                         }
                         else if(which == 2){
                             Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-                            intent.putExtra("url", "http://docs.google.com/gview?embedded=true&url=https://jaspreettechnologies.000webhostapp.com/createPriceReport.php");
+                            intent.putExtra("url", Constants.GDOCS_VIEWER_PREFIX + Constants.URL_REPORT_PRICES);
                             startActivity(intent);
                         }
                     }
@@ -823,9 +737,9 @@ public class MainActivity extends AppCompatActivity
                 Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                 dialog.show();
                 Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                bNeg.setTextColor(getResources().getColor(R.color.splashback));
+                bNeg.setTextColor(ContextCompat.getColor(this, R.color.splashback));
                 Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                bPos.setTextColor(getResources().getColor(R.color.splashback));
+                bPos.setTextColor(ContextCompat.getColor(this, R.color.splashback));
                 break;
             }
             case "T-Code Help": {
