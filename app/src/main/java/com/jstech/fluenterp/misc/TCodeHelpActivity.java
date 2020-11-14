@@ -1,11 +1,7 @@
 package com.jstech.fluenterp.misc;
 
-import android.support.v7.app.AppCompatActivity;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -14,7 +10,7 @@ import com.jstech.fluenterp.R;
 
 import java.util.ArrayList;
 
-public class TCodeHelpActivity extends AppCompatActivity {
+public class TCodeHelpActivity extends BaseActivity {
     ListView listView;
     ArrayList<String> SAPTCodeList;
     ArrayAdapter<String> adapter;
@@ -23,18 +19,8 @@ public class TCodeHelpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tcode_help);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
         listView = findViewById(R.id.listViewTCodes);
-        Toolbar toolbar = findViewById(R.id.toolbarTCH);
-        setSupportActionBar(toolbar);
-        setTitle("T-Codes");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarTCH, "T-Codes");
         initList();
     }
 
@@ -71,17 +57,9 @@ public class TCodeHelpActivity extends AppCompatActivity {
         listView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.bounce));
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 }

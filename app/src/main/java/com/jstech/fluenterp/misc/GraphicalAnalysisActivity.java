@@ -1,16 +1,18 @@
 package com.jstech.fluenterp.misc;
 
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
 import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
@@ -31,12 +33,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -47,13 +45,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-public class GraphicalAnalysisActivity extends AppCompatActivity implements OnChartValueSelectedListener {
+public class GraphicalAnalysisActivity extends BaseActivity implements OnChartValueSelectedListener {
 
     PieChart pieChart;
     BarChart barChart;
     StringRequest stringRequest;
     StringRequest stringRequest1;
-    RequestQueue requestQueue;
     ProgressBar progressBar;
 
     double ldhPrice;
@@ -78,19 +75,8 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphical_analysis);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar = findViewById(R.id.toolbarGraphical);
-        setSupportActionBar(toolbar);
-        setTitle("Graphical Analysis");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarGraphical, "Graphical Analysis");
         int mode = Objects.requireNonNull(getIntent().getExtras()).getInt("mode");
-        requestQueue = Volley.newRequestQueue(this);
         pieChart =  findViewById(R.id.piechart);
         barChart =  findViewById(R.id.barchart);
         fabBar = findViewById(R.id.fabBar);
@@ -134,7 +120,7 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
     }
 
     void retrieveSumTotal(){
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveChartResults.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_RETRIEVE_CHART_PIE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -189,7 +175,7 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     void initPieChart(float sl, float sj, float sa, float st)
@@ -232,7 +218,7 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
     }
 
     void retrieveSumsMonth(){
-        stringRequest1 = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrieveChartResultsBar.php",
+        stringRequest1 = new StringRequest(Request.Method.POST, Constants.URL_RETRIEVE_CHART_BAR,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -351,7 +337,7 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
             }
         }
         ;
-        requestQueue.add(stringRequest1);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest1);
     }
 
     void initChart(float s1, float s2, float s3, float s4, float s5, float s6){
@@ -476,17 +462,9 @@ public class GraphicalAnalysisActivity extends AppCompatActivity implements OnCh
     }
 
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 

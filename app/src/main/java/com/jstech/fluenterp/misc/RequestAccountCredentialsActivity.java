@@ -1,17 +1,17 @@
 package com.jstech.fluenterp.misc;
 
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,11 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 
 import org.json.JSONArray;
@@ -38,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class RequestAccountCredentialsActivity extends AppCompatActivity {
+public class RequestAccountCredentialsActivity extends BaseActivity {
 
     int mode;
     TextView txtViewTitle;
@@ -53,13 +51,11 @@ public class RequestAccountCredentialsActivity extends AppCompatActivity {
     Button btnSubmit;
     Button btnUpdate;
     String date;
-    RequestQueue requestQueue;
     StringRequest stringRequest;
 
     String idPass;
 
     void initViews(){
-        requestQueue = Volley.newRequestQueue(this);
         txtViewTitle = findViewById(R.id.txtChoose);
         txtDateShow = findViewById(R.id.dateShowRAC);
         progressBar = findViewById(R.id.progressBarRAC);
@@ -83,7 +79,7 @@ public class RequestAccountCredentialsActivity extends AppCompatActivity {
 
     void loadEmployees(){
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveEmployees.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_RETRIEVE_EMPLOYEES,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -124,7 +120,7 @@ public class RequestAccountCredentialsActivity extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     @SuppressLint("SetTextI18n")
@@ -132,18 +128,8 @@ public class RequestAccountCredentialsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_account_credentials);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar =  findViewById(R.id.toolbarRAC);
-        setSupportActionBar(toolbar);
         mode = Objects.requireNonNull(getIntent().getExtras()).getInt("mode");
-        setTitle("Account Credentials");
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarRAC, "Account Credentials");
         initViews();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
@@ -198,7 +184,7 @@ public class RequestAccountCredentialsActivity extends AppCompatActivity {
 
     void checkLoginCredentials(){
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/checkLogin.php", new Response.Listener<String>() {
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_CHECK_LOGIN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try{
@@ -259,13 +245,13 @@ public class RequestAccountCredentialsActivity extends AppCompatActivity {
                 return map;
             }
         };
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     void createAccount(){
         if (checkRecords()){
             progressBar.setVisibility(View.VISIBLE);
-            final String url = "https://jaspreettechnologies.000webhostapp.com/registerNewAccount.php";
+            final String url = Constants.URL_REGISTER_ACCOUNT;
             stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
@@ -329,7 +315,7 @@ public class RequestAccountCredentialsActivity extends AppCompatActivity {
                 }
             }
             ;
-            requestQueue.add(stringRequest);
+            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
         }
 
     }
@@ -365,7 +351,7 @@ public class RequestAccountCredentialsActivity extends AppCompatActivity {
     void modifyAccount(){
         if (checkRecords()){
             progressBar.setVisibility(View.VISIBLE);
-            final String url = "https://jaspreettechnologies.000webhostapp.com/updateExistingAccount.php";
+            final String url = Constants.URL_UPDATE_ACCOUNT;
             stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
@@ -429,21 +415,13 @@ public class RequestAccountCredentialsActivity extends AppCompatActivity {
                 }
             }
             ;
-            requestQueue.add(stringRequest);
+            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
         }
 
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 }
