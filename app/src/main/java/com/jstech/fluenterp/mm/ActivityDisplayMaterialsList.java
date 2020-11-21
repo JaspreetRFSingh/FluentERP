@@ -1,24 +1,22 @@
 package com.jstech.fluenterp.mm;
 
-import android.support.v7.app.AppCompatActivity;
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.adapters.AdapterDisplayMaterials;
 import com.jstech.fluenterp.models.Material;
@@ -28,20 +26,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityDisplayMaterialsList extends AppCompatActivity {
+public class ActivityDisplayMaterialsList extends BaseActivity {
 
 
     RecyclerView rvMatList;
     ProgressBar progressBar;
-    static RecyclerView.Adapter adapterMaterials;
+    RecyclerView.Adapter adapterMaterials;
     RecyclerView.LayoutManager layoutManager;
-    static ArrayList<Material> matData;
+    ArrayList<Material> matData;
     StringRequest stringRequest;
-    RequestQueue requestQueue;
 
 
     void initViews(){
-        requestQueue = Volley.newRequestQueue(this);
         rvMatList = findViewById(R.id.recyclerViewMaterialList);
         progressBar = findViewById(R.id.progressBarDML);
         rvMatList.setHasFixedSize(true);
@@ -57,24 +53,14 @@ public class ActivityDisplayMaterialsList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_materials_list);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar = findViewById(R.id.toolbarDML);
-        setSupportActionBar(toolbar);
-        setTitle("Display Materials List");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarDML, "Display Materials List");
         initViews();
     }
 
     void loadMaterials(){
 
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/loadMaterials.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_LOAD_MATERIALS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -123,20 +109,12 @@ public class ActivityDisplayMaterialsList extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 }

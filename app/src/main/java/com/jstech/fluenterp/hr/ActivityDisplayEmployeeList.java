@@ -1,15 +1,15 @@
 package com.jstech.fluenterp.hr;
 
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,11 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.Employee;
 
@@ -34,13 +32,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ActivityDisplayEmployeeList extends AppCompatActivity {
+public class ActivityDisplayEmployeeList extends BaseActivity {
 
     ListView listViewEmployees;
     ArrayList<Employee> arrEmployees, tempList;
     ArrayAdapter<String> empNameAdapter;
     StringRequest stringRequest;
-    RequestQueue requestQueue;
     ProgressBar progressBar;
     Employee emp;
     TextView txtSearchEmployee;
@@ -64,19 +61,8 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_employee_list);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        requestQueue = Volley.newRequestQueue(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbarDEL);
-        setSupportActionBar(toolbar);
-        setTitle("Display Employees List");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarDEL, "Display Employees List");
         initViews();
         showEmployeeList();
         txtViewListTitleDisplay.startAnimation(AnimationUtils.loadAnimation(this, R.anim.blink));
@@ -116,7 +102,7 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
 
     void showEmployeeList(){
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveEmployees.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_RETRIEVE_EMPLOYEES,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -170,18 +156,10 @@ public class ActivityDisplayEmployeeList extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
-    }
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home)
-        {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 }

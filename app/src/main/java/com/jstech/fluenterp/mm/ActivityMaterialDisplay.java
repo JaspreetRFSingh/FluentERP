@@ -1,13 +1,13 @@
 package com.jstech.fluenterp.mm;
 
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,11 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.Material;
 
@@ -35,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivityMaterialDisplay extends AppCompatActivity {
+public class ActivityMaterialDisplay extends BaseActivity {
 
 
     Button btnRetrieve;
@@ -43,7 +41,6 @@ public class ActivityMaterialDisplay extends AppCompatActivity {
     EditText eTxtMaterial;
     TextView txtViewMaterial;
     StringRequest stringRequest;
-    RequestQueue requestQueue;
     ArrayList<Material> materialArrayList;
     ArrayList<String> materialNameList;
     ArrayAdapter<String> adapter;
@@ -54,7 +51,6 @@ public class ActivityMaterialDisplay extends AppCompatActivity {
     Material mat;
 
     void init(){
-        requestQueue = Volley.newRequestQueue(this);
         btnRetrieve = findViewById(R.id.btnRetrieveMaterial);
         btnRetrieveAll = findViewById(R.id.btnAllM);
         txtResultView = findViewById(R.id.txtResultDetailViewMaterial);
@@ -74,17 +70,7 @@ public class ActivityMaterialDisplay extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_display);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar = findViewById(R.id.toolbarMD);
-        setSupportActionBar(toolbar);
-        setTitle("Display Material");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarMD, "Display Material");
         init();
         btnRetrieveAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +112,7 @@ public class ActivityMaterialDisplay extends AppCompatActivity {
         txtViewMaterial.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         txtViewMaterial.setText("");
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/loadMaterials.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_LOAD_MATERIALS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -178,13 +164,13 @@ public class ActivityMaterialDisplay extends AppCompatActivity {
                 error.printStackTrace();
             }
         });
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     void retrieveM(){
         txtViewMaterial.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrieveMaterialById.php",
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_RETRIEVE_MATERIAL_BY_ID,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -246,21 +232,13 @@ public class ActivityMaterialDisplay extends AppCompatActivity {
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 }

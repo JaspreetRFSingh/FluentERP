@@ -1,17 +1,17 @@
 package com.jstech.fluenterp.mm;
 
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -19,11 +19,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import org.json.JSONObject;
 
@@ -33,10 +31,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivityMaterialCreate extends AppCompatActivity {
+public class ActivityMaterialCreate extends BaseActivity {
     String date;
     ProgressBar progressBar;
-    RequestQueue requestQueue;
     StringRequest stringRequest;
     TextView txtDateShow;
     EditText eTxtDescription;
@@ -61,20 +58,9 @@ public class ActivityMaterialCreate extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_create);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
-        requestQueue = Volley.newRequestQueue(this);
-        Toolbar toolbar = findViewById(R.id.toolbarMC);
-        setSupportActionBar(toolbar);
-        setTitle("Create Material Screen");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarMC, "Create Material Screen");
         initViews();
         rgMaterialType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -124,7 +110,7 @@ public class ActivityMaterialCreate extends AppCompatActivity {
 
         if (checkRecords()){
             progressBar.setVisibility(View.VISIBLE);
-            final String url = "https://jaspreettechnologies.000webhostapp.com/createMaterial.php";
+            final String url = Constants.URL_CREATE_MATERIAL;
             stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
@@ -177,41 +163,13 @@ public class ActivityMaterialCreate extends AppCompatActivity {
                 }
             }
             ;
-            requestQueue.add(stringRequest);
+            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
         }
     }
 
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == android.R.id.home)
-        {
-            if(!eTxtDescription.getText().toString().trim().isEmpty() || !eTxtDimensionalUnit.getText().toString().trim().isEmpty() || !costPerDimensionalUnit.getText().toString().trim().isEmpty())
-            {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityMaterialCreate.this);
-                builder.setTitle("BACK!\n\n");
-                builder.setMessage("Your form is currently under progress. Are you sure you want to go back?");
-                builder.setPositiveButton("Yes, I'm sure!", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
-                dialog.show();
-            }else
-            {
-                finish();
-            }
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if(!eTxtDescription.getText().toString().trim().isEmpty() || !eTxtDimensionalUnit.getText().toString().trim().isEmpty() || !costPerDimensionalUnit.getText().toString().trim().isEmpty())
         {
             final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityMaterialCreate.this);
