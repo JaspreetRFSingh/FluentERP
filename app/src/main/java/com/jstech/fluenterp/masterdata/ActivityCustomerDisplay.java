@@ -1,16 +1,16 @@
 package com.jstech.fluenterp.masterdata;
 
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,11 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -38,14 +36,13 @@ import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.Customer;
 
 
-public class ActivityCustomerDisplay extends AppCompatActivity{
+public class ActivityCustomerDisplay extends BaseActivity{
 
     Button btnRetrieve;
     Button btnRetrieveAll;
     EditText eTxtCustomer;
     TextView txtViewCustomer;
     StringRequest stringRequest;
-    RequestQueue requestQueue;
 
     Customer cmr;
 
@@ -76,30 +73,18 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_display);
 
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
 
         progressBar = findViewById(R.id.progressBarCD);
         ctx = this;
         txtViewCustomer = findViewById(R.id.txtCustomerSingle);
         cmr = new Customer();
-        requestQueue = Volley.newRequestQueue(this);
         listView = findViewById(R.id.listViewRetrieveCustomers);
         btnRetrieve = findViewById(R.id.btnRetrieveCustomers);
         btnRetrieveAll = findViewById(R.id.btnAllCustomers);
         eTxtCustomer = findViewById(R.id.editTextCustomerNumber);
 
-        Toolbar toolbar = findViewById(R.id.toolbarCD);
-        setSupportActionBar(toolbar);
-        setTitle("Display Customer Screen");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarCD, "Display Customer Screen");
 
-        requestQueue = Volley.newRequestQueue(this);
         btnRetrieveAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,7 +130,7 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
     void retrieveCustomersWithCondition()
     {
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrieveUWC.php",
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_RETRIEVE_CUSTOMERS_WC,
 
                 new Response.Listener<String>() {
                     @Override
@@ -220,14 +205,14 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
 
     }
     void retrieveCustomers(){
 
         progressBar.setVisibility(View.VISIBLE);
         txtViewCustomer.setText("");
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveU.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_RETRIEVE_CUSTOMERS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -286,20 +271,11 @@ public class ActivityCustomerDisplay extends AppCompatActivity{
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == android.R.id.home)
-        {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
 
     }

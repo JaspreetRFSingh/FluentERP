@@ -1,13 +1,13 @@
 package com.jstech.fluenterp.purchasing;
 
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,11 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.PurchaseOrder;
 
@@ -35,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivityPurchaseOrderDisplay extends AppCompatActivity {
+public class ActivityPurchaseOrderDisplay extends BaseActivity {
 
 
     Button btnRetrieve;
@@ -43,7 +41,6 @@ public class ActivityPurchaseOrderDisplay extends AppCompatActivity {
     EditText eTxtPurchaseOrder;
     TextView txtViewPurchaseOrder;
     StringRequest stringRequest;
-    RequestQueue requestQueue;
     ArrayList<PurchaseOrder> purchaseOrderArrayList;
     ArrayList<String> purchaseOrderNameList;
     ArrayAdapter<String> adapter;
@@ -54,7 +51,6 @@ public class ActivityPurchaseOrderDisplay extends AppCompatActivity {
     PurchaseOrder po;
 
     void init(){
-        requestQueue = Volley.newRequestQueue(this);
         btnRetrieve = findViewById(R.id.btnRetrievePurchaseOrder);
         btnRetrieveAll = findViewById(R.id.btnAllPO);
         txtResultView = findViewById(R.id.txtResultDetailView);
@@ -74,17 +70,7 @@ public class ActivityPurchaseOrderDisplay extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_order_display);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar = findViewById(R.id.toolbarPOD);
-        setSupportActionBar(toolbar);
-        setTitle("Display Purchase Order");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarPOD, "Display Purchase Order");
 
         init();
         btnRetrieveAll.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +114,7 @@ public class ActivityPurchaseOrderDisplay extends AppCompatActivity {
         txtViewPurchaseOrder.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         txtViewPurchaseOrder.setText("");
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrievePurchaseOrders.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_RETRIEVE_PURCHASE_ORDERS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -178,13 +164,13 @@ public class ActivityPurchaseOrderDisplay extends AppCompatActivity {
                 error.printStackTrace();
             }
         });
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
     void retrieveSO(){
         listView.setVisibility(View.GONE);
         txtViewPurchaseOrder.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrievePurchaseOrderWithDoc.php",
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_RETRIEVE_PURCHASE_ORDER_WITH_DOC,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -242,20 +228,12 @@ public class ActivityPurchaseOrderDisplay extends AppCompatActivity {
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 }

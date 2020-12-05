@@ -1,19 +1,19 @@
 package com.jstech.fluenterp.masterdata;
 
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
 import android.app.DatePickerDialog;
-import android.support.v7.app.AppCompatActivity;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,11 +25,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.adapters.AdapterDisplayEmployees;
 import com.jstech.fluenterp.models.Employee;
@@ -43,7 +41,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivityEmployeeDisplay extends AppCompatActivity {
+public class ActivityEmployeeDisplay extends BaseActivity {
 
     ProgressBar progressBarEd;
     LinearLayout llChoiceEmployee;
@@ -69,7 +67,6 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
     String choiceSpinnerType;
     //Volley
     StringRequest stringRequest;
-    RequestQueue requestQueue;
     //
     String empId;
     String strDate1;
@@ -77,17 +74,7 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
     String empType;
     String urlCh = "";
     void initViews(){
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar = findViewById(R.id.toolbarED);
-        setSupportActionBar(toolbar);
-        setTitle("Display Employee Screen");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarED, "Display Employee Screen");
         progressBarEd = findViewById(R.id.progressBarED);
         llChoiceEmployee = findViewById(R.id.layoutChoiceEmployee);
         llResults = findViewById(R.id.layoutResultEmployees);
@@ -139,7 +126,6 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_display);
-        requestQueue = Volley.newRequestQueue(this);
         initViews();
         initChoices();
         spChoiceEmployee.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -240,14 +226,14 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
             public void onClick(View v) {
                 switch (choiceStr) {
                     case "No filters selected":
-                        urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployees.php";
+                        urlCh = Constants.URL_RETRIEVE_EMPLOYEES;
                         retrieveEmployees();
                         break;
                     case "Display by employee number":
                         if (TextUtils.isEmpty(eTxtEmployeeNumber.getText().toString())) {
                             eTxtEmployeeNumber.setError("Please enter an employee id!");
                         } else {
-                            urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByNumber.php";
+                            urlCh = Constants.URL_RETRIEVE_EMPLOYEE_BY_NUMBER;
                             empId = eTxtEmployeeNumber.getText().toString();
                             retrieveEmployees();
                         }
@@ -256,7 +242,7 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
                         if (TextUtils.isEmpty(eTxtEmpType.getText().toString())) {
                             eTxtEmpType.setError("Please select an employee type!");
                         } else {
-                            urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByType.php";
+                            urlCh = Constants.URL_RETRIEVE_EMPLOYEE_BY_TYPE;
                             empType = eTxtEmpType.getText().toString();
                             retrieveEmployees();
                         }
@@ -265,7 +251,7 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
                         if (TextUtils.isEmpty(eTxtJoiningDate.getText().toString())) {
                             eTxtJoiningDate.setError("Please select a joining date!");
                         } else {
-                            urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByDates.php";
+                            urlCh = Constants.URL_RETRIEVE_EMPLOYEE_BY_DATES;
                             strDate1 = eTxtJoiningDate.getText().toString();
                             retrieveEmployees();
                         }
@@ -274,7 +260,7 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
                         if (TextUtils.isEmpty(eTxtJoiningDate.getText().toString())) {
                             eTxtJoiningDate.setError("Please select a joining date!");
                         } else {
-                            urlCh = "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeByDates.php";
+                            urlCh = Constants.URL_RETRIEVE_EMPLOYEE_BY_DATES;
                             strDate1 = eTxtJoiningDate.getText().toString();
                             retrieveEmployees();
                         }
@@ -390,7 +376,7 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     Calendar myCalendar = Calendar.getInstance();
@@ -425,17 +411,8 @@ public class ActivityEmployeeDisplay extends AppCompatActivity {
         eTxtJoiningDate2.setText(sdf.format(myCalendar.getTime()));
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == android.R.id.home)
-        {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
 
     }

@@ -1,18 +1,18 @@
 package com.jstech.fluenterp.masterdata;
 
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,11 +23,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,7 +37,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivityEmployeeModify extends AppCompatActivity {
+public class ActivityEmployeeModify extends BaseActivity {
 
     EditText eTxtEmployeeName;
     EditText eTxtEmployeeAddress;
@@ -54,7 +52,6 @@ public class ActivityEmployeeModify extends AppCompatActivity {
     TextView txtViewDate;
     String date;
     ProgressBar progressBar;
-    RequestQueue requestQueue;
     ArrayAdapter<String> adapterType;
     ArrayAdapter<String> adapterChoice;
     StringRequest stringRequest;
@@ -88,7 +85,7 @@ public class ActivityEmployeeModify extends AppCompatActivity {
     }
     void fillEmployeeList(){
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveEmployees.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_RETRIEVE_EMPLOYEES,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -127,25 +124,14 @@ public class ActivityEmployeeModify extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_modify);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        requestQueue = Volley.newRequestQueue(this);
-        Toolbar toolbar = findViewById(R.id.toolbarEM);
-        setSupportActionBar(toolbar);
-        setTitle("Modify Employee Screen");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarEM, "Modify Employee Screen");
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
         initViews();
@@ -257,7 +243,7 @@ public class ActivityEmployeeModify extends AppCompatActivity {
 
     void fillOutFields(final String empIdPar){
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrieveEmployeeById.php",
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_RETRIEVE_EMPLOYEE_BY_ID,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -318,12 +304,12 @@ public class ActivityEmployeeModify extends AppCompatActivity {
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
     protected void updateEmployee(){
         if (checkRecords()){
             progressBar.setVisibility(View.VISIBLE);
-            final String url = "https://jaspreettechnologies.000webhostapp.com/modifyEmployee.php";
+            final String url = Constants.URL_MODIFY_EMPLOYEE;
             stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
@@ -381,7 +367,7 @@ public class ActivityEmployeeModify extends AppCompatActivity {
                 }
             }
             ;
-            requestQueue.add(stringRequest);
+            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
         }
     }
 
@@ -423,35 +409,8 @@ public class ActivityEmployeeModify extends AppCompatActivity {
     }
 
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == android.R.id.home)
-        {
-            if(!eTxtEmployeeName.getText().toString().trim().isEmpty() || !eTxtEmployeeAddress.getText().toString().trim().isEmpty() || !eTxtEmployeePhone.getText().toString().trim().isEmpty() || !eTxtEmployeeType.getText().toString().trim().isEmpty()  || !eTxtEmployeeDoj.getText().toString().trim().isEmpty() || !eTxtEmployeeDob.getText().toString().trim().isEmpty())
-            {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityEmployeeModify.this);
-                builder.setTitle("BACK!\n\n");
-                builder.setMessage("Your form is currently under progress. Are you sure you want to go back?");
-                builder.setPositiveButton("Yes, I'm sure!", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
-                dialog.show();
-            }else
-            {
-                finish();
-            }
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if(!eTxtEmployeeName.getText().toString().trim().isEmpty() || !eTxtEmployeeAddress.getText().toString().trim().isEmpty() || !eTxtEmployeePhone.getText().toString().trim().isEmpty() || !eTxtEmployeeType.getText().toString().trim().isEmpty()  || !eTxtEmployeeDoj.getText().toString().trim().isEmpty() || !eTxtEmployeeDob.getText().toString().trim().isEmpty())
         {
             final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityEmployeeModify.this);

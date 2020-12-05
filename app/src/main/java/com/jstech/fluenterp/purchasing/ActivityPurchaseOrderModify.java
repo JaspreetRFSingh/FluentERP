@@ -1,16 +1,17 @@
 package com.jstech.fluenterp.purchasing;
 
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
+import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,11 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.Material;
 import com.jstech.fluenterp.models.Seller;
@@ -40,7 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivityPurchaseOrderModify extends AppCompatActivity {
+public class ActivityPurchaseOrderModify extends BaseActivity {
 
 
     Spinner spPON;
@@ -51,7 +50,6 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
     Seller seller;
     StringRequest stringRequest;
     StringRequest stringRequest1;
-    RequestQueue requestQueue;
     EditText eTxtSellerName;
     Spinner spinnerMaterial1;
     ArrayAdapter<String> adapterSpMat1;
@@ -223,18 +221,7 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_order_modify);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar =  findViewById(R.id.toolbarMPO);
-        setSupportActionBar(toolbar);
-        setTitle("Modify Purchase Order");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        requestQueue = Volley.newRequestQueue(this);
+        setupToolbar(R.id.toolbarMPO, "Modify Purchase Order");
         dateShow = findViewById(R.id.dateShowMPO);
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
@@ -277,7 +264,7 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
         eTxtQuantity3.setText("");
         eTxtQuantity4.setText("");
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrievePurchaseOrderWithPurchaseDocument.php",
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_RETRIEVE_PURCHASE_ORDER_WITH_PURCHASE_DOC,
                 new Response.Listener<String>() {
                     @SuppressLint("SetTextI18n")
                     @Override
@@ -345,12 +332,12 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     void updatePurchaseOrder(){
         progressBar.setVisibility(View.VISIBLE);
-        final String url = "https://jaspreettechnologies.000webhostapp.com/modifyPurchaseDoc.php";
+        final String url = Constants.URL_MODIFY_PURCHASE_DOC;
         stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -359,7 +346,7 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
                             if(success == 1){
-                                stringRequest1 = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/modifyPurchaseOrder.php", new Response.Listener<String>() {
+                                stringRequest1 = new StringRequest(Request.Method.POST, Constants.URL_MODIFY_PURCHASE_ORDER, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
                                         try {
@@ -397,10 +384,10 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
                                                 dialog.show();
                                                 Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
                                                 //noinspection deprecation
-                                                bPos.setTextColor(getResources().getColor(R.color.splashback));
+                                                bPos.setTextColor(ContextCompat.getColor(this, R.color.splashback));
                                                 Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
                                                 //noinspection deprecation
-                                                bNeg.setTextColor(getResources().getColor(R.color.splashback));
+                                                bNeg.setTextColor(ContextCompat.getColor(this, R.color.splashback));
 
                                             }
                                             else{
@@ -436,7 +423,7 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
                                     }
                                 }
                                 ;
-                                requestQueue.add(stringRequest1);
+                                VolleySingleton.getInstance(this).addToRequestQueue(stringRequest1);
                                 progressBar.setVisibility(View.GONE);
                             }
                             else{
@@ -472,7 +459,7 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     void clearFields(){
@@ -489,7 +476,7 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
         }
 
     void loadPurchaseOrders(){
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/loadPurchaseOrderNumbers.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_LOAD_PURCHASE_ORDER_NUMBERS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -529,11 +516,11 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     void loadUGMaterials(){
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/loadUGMaterials.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_LOAD_UG_MATERIALS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -654,12 +641,12 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     void retrieveSellers(){
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrieveSellers.php",
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_RETRIEVE_SELLERS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -699,20 +686,12 @@ public class ActivityPurchaseOrderModify extends AppCompatActivity {
                 }
         )
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 }

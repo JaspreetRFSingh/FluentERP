@@ -1,16 +1,17 @@
 package com.jstech.fluenterp.sd;
+
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,11 +21,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.WebViewActivity;
 import com.jstech.fluenterp.models.Customer;
@@ -40,7 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivitySalesOrderModify extends AppCompatActivity {
+public class ActivitySalesOrderModify extends BaseActivity {
 
     Spinner spSON;
     ArrayAdapter<String> adapterSO;
@@ -50,7 +49,6 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
     Customer customer;
     StringRequest stringRequest;
     StringRequest stringRequest1;
-    RequestQueue requestQueue;
     EditText eTxtCustomerName;
     Spinner spinnerMaterial1;
     ArrayAdapter<String> adapterSpMat1;
@@ -265,18 +263,7 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_order_modify);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar = findViewById(R.id.toolbarSOM);
-        setSupportActionBar(toolbar);
-        setTitle("Modify Sales Order");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        requestQueue = Volley.newRequestQueue(this);
+        setupToolbar(R.id.toolbarSOM, "Modify Sales Order");
         dateShow = findViewById(R.id.dateShowSOM);
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
@@ -312,7 +299,7 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
     void updateSalesOrder(){
 
         progressBar.setVisibility(View.VISIBLE);
-        final String url = "https://jaspreettechnologies.000webhostapp.com/modifySalesDoc.php";
+        final String url = Constants.URL_MODIFY_SALES_DOC;
         stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -321,7 +308,7 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             int success = jsonObject.getInt("success");
                             if(success == 1){
-                                stringRequest1 = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/modifySalesOrder.php", new Response.Listener<String>() {
+                                stringRequest1 = new StringRequest(Request.Method.POST, Constants.URL_MODIFY_SALES_ORDER, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
                                         try {
@@ -358,9 +345,9 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
                                                 Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                                                 dialog.show();
                                                 Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                                                bNeg.setTextColor(getResources().getColor(R.color.splashback));
+                                                bNeg.setTextColor(ContextCompat.getColor(this, R.color.splashback));
                                                 Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                                                bPos.setTextColor(getResources().getColor(R.color.splashback));
+                                                bPos.setTextColor(ContextCompat.getColor(this, R.color.splashback));
 
                                             }
                                             else{
@@ -400,7 +387,7 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
                                     }
                                 }
                                 ;
-                                requestQueue.add(stringRequest1);
+                                VolleySingleton.getInstance(this).addToRequestQueue(stringRequest1);
                                 progressBar.setVisibility(View.GONE);
                             }
                             else{
@@ -437,7 +424,7 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
 
     }
 
@@ -454,7 +441,7 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
         eTxtCustomerName.setText("");
     }
     void generatePDF(final String sdn) {
-        String urlString="http://docs.google.com/gview?embedded=true&url=http://jaspreettechnologies.000webhostapp.com/createInvoice.php?sales_doc_no="+sdn;
+        String urlString=Constants.GDOCS_VIEWER_PREFIX + Constants.URL_CREATE_INVOICE + "?sales_doc_no="+sdn;
         Intent intent=new Intent(ActivitySalesOrderModify.this, WebViewActivity.class);
         intent.putExtra("url", urlString);
         startActivity(intent);
@@ -464,7 +451,7 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
     void fillOutSO(final String strSON){
 
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrieveSalesOrderWithDoc.php",
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_RETRIEVE_SALES_ORDER_WITH_DOC,
                 new Response.Listener<String>() {
                     @SuppressLint("SetTextI18n")
                     @Override
@@ -539,11 +526,11 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     void retrieveCustomers() {
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveU.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_RETRIEVE_CUSTOMERS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -580,12 +567,12 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     void loadMaterials() {
 
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/loadMaterials.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_LOAD_MATERIALS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -778,7 +765,7 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     double calculateCost() {
@@ -791,7 +778,7 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
     }
 
     void loadSalesOrders(){
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/loadSalesOrderNumbers.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_LOAD_SALES_ORDER_NUMBERS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -831,20 +818,12 @@ public class ActivitySalesOrderModify extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 }

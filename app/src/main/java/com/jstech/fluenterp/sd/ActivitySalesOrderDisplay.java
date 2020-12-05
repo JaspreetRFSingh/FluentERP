@@ -1,13 +1,13 @@
 package com.jstech.fluenterp.sd;
 
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,11 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.SalesOrder;
 
@@ -35,14 +33,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivitySalesOrderDisplay extends AppCompatActivity {
+public class ActivitySalesOrderDisplay extends BaseActivity {
 
     Button btnRetrieve;
     Button btnRetrieveAll;
     EditText eTxtSalesOrder;
     TextView txtViewSalesOrder;
     StringRequest stringRequest;
-    RequestQueue requestQueue;
     ArrayList<SalesOrder> salesOrderArrayList;
     ArrayList<String> salesOrderNameList;
     ArrayAdapter<String> adapter;
@@ -53,7 +50,6 @@ public class ActivitySalesOrderDisplay extends AppCompatActivity {
     SalesOrder so;
 
     void init(){
-        requestQueue = Volley.newRequestQueue(this);
         btnRetrieve = findViewById(R.id.btnRetrieveSalesOrder);
         btnRetrieveAll = findViewById(R.id.btnAllSO);
         txtResultView = findViewById(R.id.txtResultDetailView);
@@ -73,17 +69,7 @@ public class ActivitySalesOrderDisplay extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_order_display);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar = findViewById(R.id.toolbarSOD);
-        setSupportActionBar(toolbar);
-        setTitle("Display Sales Order");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarSOD, "Display Sales Order");
         init();
         btnRetrieveAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +108,7 @@ public class ActivitySalesOrderDisplay extends AppCompatActivity {
         txtViewSalesOrder.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         txtViewSalesOrder.setText("");
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveSalesOrder.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_RETRIEVE_SALES_ORDERS,
                 new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -174,13 +160,13 @@ public class ActivitySalesOrderDisplay extends AppCompatActivity {
                 error.printStackTrace();
             }
         });
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
     void retrieveSO(){
         listView.setVisibility(View.GONE);
         txtViewSalesOrder.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithSalesDocument.php",
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_FILTER_SALES_ORDERS_BY_DOC,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -240,21 +226,13 @@ public class ActivitySalesOrderDisplay extends AppCompatActivity {
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 

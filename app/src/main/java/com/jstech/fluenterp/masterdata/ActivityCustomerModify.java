@@ -1,17 +1,17 @@
 package com.jstech.fluenterp.masterdata;
 
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,11 +21,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,7 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivityCustomerModify extends AppCompatActivity {
+public class ActivityCustomerModify extends BaseActivity {
 
     EditText eTxtCustomerName;
     EditText eTxtCustomerAddress;
@@ -49,7 +47,6 @@ public class ActivityCustomerModify extends AppCompatActivity {
     TextView txtViewDate;
     String date;
     ProgressBar progressBar;
-    RequestQueue requestQueue;
     ArrayAdapter<String> adapterChoice;
     StringRequest stringRequest;
 
@@ -68,7 +65,6 @@ public class ActivityCustomerModify extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBarCM);
         adapterChoice = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
         adapterChoice.add("Choose a Customer");
-        requestQueue = Volley.newRequestQueue(this);
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         date = sdf.format(new Date());
         txtViewDate.setText(date.substring(6,8)+"/"+date.substring(4,6)+"/"+date.substring(0,4));
@@ -78,7 +74,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
 
     void fillCustomerSpinner(){
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveU.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_RETRIEVE_CUSTOMERS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -119,7 +115,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
 
@@ -128,17 +124,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_modify);
 
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar = findViewById(R.id.toolbarCM);
-        setSupportActionBar(toolbar);
-        setTitle("Modify Customer Screen");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarCM, "Modify Customer Screen");
 
         initViews();
         spCustChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -193,7 +179,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
 
         if (checkRecords()){
             progressBar.setVisibility(View.VISIBLE);
-            final String url = "https://jaspreettechnologies.000webhostapp.com/modifyCustomer.php";
+            final String url = Constants.URL_MODIFY_CUSTOMER;
             stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
@@ -264,7 +250,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
                 }
             }
             ;
-            requestQueue.add(stringRequest);
+            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
         }
 
     }
@@ -279,7 +265,7 @@ public class ActivityCustomerModify extends AppCompatActivity {
 
     void fillOutFields(final String strCustId){
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrieveCustomerById.php",
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_RETRIEVE_CUSTOMER_BY_ID,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -337,42 +323,15 @@ public class ActivityCustomerModify extends AppCompatActivity {
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
 
 
 
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == android.R.id.home)
-        {
-            if(!eTxtCustomerName.getText().toString().trim().isEmpty() || !eTxtCustomerAddress.getText().toString().trim().isEmpty() || !eTxtCustomerCity.getText().toString().trim().isEmpty() || !eTxtCustomerPhone.getText().toString().trim().isEmpty()  || !eTxtCustomerGST.getText().toString().trim().isEmpty())
-            {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityCustomerModify.this);
-                builder.setTitle("BACK!\n\n");
-                builder.setMessage("Your form is currently under progress. Are you sure you want to go back?");
-                builder.setPositiveButton("Yes, I'm sure!", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
-                dialog.show();
-            }else
-            {
-                finish();
-            }
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if(!eTxtCustomerName.getText().toString().trim().isEmpty() || !eTxtCustomerAddress.getText().toString().trim().isEmpty() || !eTxtCustomerCity.getText().toString().trim().isEmpty() || !eTxtCustomerPhone.getText().toString().trim().isEmpty()  || !eTxtCustomerGST.getText().toString().trim().isEmpty())
         {
             final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityCustomerModify.this);

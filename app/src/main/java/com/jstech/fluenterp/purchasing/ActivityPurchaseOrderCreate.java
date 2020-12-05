@@ -1,15 +1,16 @@
 package com.jstech.fluenterp.purchasing;
 
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
+import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,11 +20,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.models.Material;
 import org.json.JSONArray;
@@ -35,7 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivityPurchaseOrderCreate extends AppCompatActivity {
+public class ActivityPurchaseOrderCreate extends BaseActivity {
 
 
     Spinner spinnerSeller;
@@ -43,7 +42,6 @@ public class ActivityPurchaseOrderCreate extends AppCompatActivity {
     String seller_number = "";
     StringRequest stringRequest;
     StringRequest stringRequest1;
-    RequestQueue requestQueue;
     EditText eTxtSellerName;
 
     Material material1;
@@ -78,7 +76,6 @@ public class ActivityPurchaseOrderCreate extends AppCompatActivity {
         material2 = new Material();
         material3 = new Material();
         material4 = new Material();
-        requestQueue = Volley.newRequestQueue(this);
         material_code = new String[4];
         quantity = new String[4];
         material = new Material();
@@ -122,7 +119,7 @@ public class ActivityPurchaseOrderCreate extends AppCompatActivity {
 
     void retrieveSellers(){
 
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveSellers.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_RETRIEVE_SELLERS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -157,24 +154,14 @@ public class ActivityPurchaseOrderCreate extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
 
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_order_create);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar = findViewById(R.id.toolbarCPO);
-        setSupportActionBar(toolbar);
-        setTitle("Create Purchase Order");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarCPO, "Create Purchase Order");
         initViews();
         initSalesOrder();
 
@@ -211,7 +198,7 @@ public class ActivityPurchaseOrderCreate extends AppCompatActivity {
     }
 
     void loadMaterials() {
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/loadUGMaterials.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_LOAD_UG_MATERIALS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -324,18 +311,18 @@ public class ActivityPurchaseOrderCreate extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     void createPurchaseOrder(){
         progressBar.setVisibility(View.VISIBLE);
-        final String url = "https://jaspreettechnologies.000webhostapp.com/createPurchaseDoc.php";
+        final String url = Constants.URL_CREATE_PURCHASE_DOC;
         stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            stringRequest1 = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/createPurchaseOrder.php", new Response.Listener<String>() {
+                            stringRequest1 = new StringRequest(Request.Method.POST, Constants.URL_CREATE_PURCHASE_ORDER, new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
                                     try {
@@ -372,9 +359,9 @@ public class ActivityPurchaseOrderCreate extends AppCompatActivity {
                                             Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                                             dialog.show();
                                             Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                                            bNeg.setTextColor(getResources().getColor(R.color.splashback));
+                                            bNeg.setTextColor(ContextCompat.getColor(this, R.color.splashback));
                                             Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                                            bPos.setTextColor(getResources().getColor(R.color.splashback));
+                                            bPos.setTextColor(ContextCompat.getColor(this, R.color.splashback));
 
                                         }
 
@@ -422,7 +409,7 @@ public class ActivityPurchaseOrderCreate extends AppCompatActivity {
                                 }
                             }
                             ;
-                            requestQueue.add(stringRequest1);
+                            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest1);
 
                         } catch (Exception e) {
                             progressBar.setVisibility(View.GONE);
@@ -453,7 +440,7 @@ public class ActivityPurchaseOrderCreate extends AppCompatActivity {
             }
         }
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
     void clearFields(){
         eTxtQuantity1.setText("");
@@ -462,16 +449,8 @@ public class ActivityPurchaseOrderCreate extends AppCompatActivity {
         eTxtQuantity4.setText("");
         eTxtSellerName.setText("");
     }
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 }

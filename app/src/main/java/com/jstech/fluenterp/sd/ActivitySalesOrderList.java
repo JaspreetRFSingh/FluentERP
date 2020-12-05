@@ -1,22 +1,23 @@
 package com.jstech.fluenterp.sd;
 
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
+import androidx.core.content.ContextCompat;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,11 +30,9 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.MainActivity;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.adapters.CustomAdapterSalesOrdersList;
@@ -48,7 +47,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActivitySalesOrderList extends AppCompatActivity{
+public class ActivitySalesOrderList extends BaseActivity{
 
     Spinner spinnerChoice;
     Button datePicker1;
@@ -71,17 +70,16 @@ public class ActivitySalesOrderList extends AppCompatActivity{
     Spinner spinnerCustomer;
     StringRequest stringRequest;
     StringRequest stringRequest1;
-    RequestQueue requestQueue;
 
 
     //Custom
     String url = "";
     LinearLayout llChoice;
     LinearLayout llResults;
-     static CustomAdapterSalesOrdersList adapter;
-     RecyclerView.LayoutManager layoutManager;
-     RecyclerView recyclerView;
-    private static ArrayList<SalesOrder> data;
+    CustomAdapterSalesOrdersList adapter;
+    RecyclerView.LayoutManager layoutManager;
+    RecyclerView recyclerView;
+    private ArrayList<SalesOrder> data;
     String customer;
     String salesDocNo;
     String dateStr;
@@ -97,12 +95,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
     Context ctx;
 
     void initViews(){
-        Toolbar toolbar = findViewById(R.id.toolbarSOL);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        setTitle("List of Sales Order");
+        setupToolbar(R.id.toolbarSOL, "List of Sales Order");
         progressBar = findViewById(R.id.progressBarSOL);
         spinnerChoice = findViewById(R.id.spinnerChoice);
         spinnerCustomer = findViewById(R.id.spinnerCustomer);
@@ -163,12 +156,6 @@ public class ActivitySalesOrderList extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_order_list);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        requestQueue = Volley.newRequestQueue(this);
         initViews();
         spinnerChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -342,7 +329,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
             public void onClick(View v) {
                 switch (choiceStr) {
                     case "No filters selected":
-                        url = "https://jaspreettechnologies.000webhostapp.com/filterRetrieveSalesOrder.php";
+                        url = Constants.URL_FILTER_SALES_ORDERS;
                         break;
                     case "Display by customer":
                         if (TextUtils.isEmpty(eTxtCustomerNumber.getText().toString())) {
@@ -351,7 +338,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                         } else {
                             customer = eTxtCustomerNumber.getText().toString();
                         }
-                        url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithCustomer.php";
+                        url = Constants.URL_FILTER_SALES_ORDERS_BY_CUSTOMER;
                         break;
                     case "Display by sales document number":
                         if (TextUtils.isEmpty(eTxtSalesDocumentNumber.getText().toString())) {
@@ -360,7 +347,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                         } else {
                             salesDocNo = eTxtSalesDocumentNumber.getText().toString();
                         }
-                        url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithSalesDocument.php";
+                        url = Constants.URL_FILTER_SALES_ORDERS_BY_DOC;
 
                         break;
                     case "Display by date":
@@ -370,7 +357,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                         } else {
                             dateStr = editTextDate1.getText().toString();
                         }
-                        url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithOneDate.php";
+                        url = Constants.URL_FILTER_SALES_ORDERS_BY_ONE_DATE;
                         break;
                     case "Display by range of dates":
 
@@ -386,7 +373,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                         } else {
                             dateStr2 = editTextDate2.getText().toString();
                         }
-                        url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithTwoDates.php";
+                        url = Constants.URL_FILTER_SALES_ORDERS_BY_TWO_DATES;
 
                         break;
                     case "Display by order status":
@@ -399,7 +386,7 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                     {
 
                     }*/
-                        url = "https://jaspreettechnologies.000webhostapp.com/filterSalesOrderWithOrderStatus.php";
+                        url = Constants.URL_FILTER_SALES_ORDERS_BY_STATUS;
 
                         break;
                 }
@@ -507,13 +494,13 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         }
         }
         ;
-        requestQueue.add(stringRequest1);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest1);
     }
 
 
     void retrieveCustomers(){
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.GET, "https://jaspreettechnologies.000webhostapp.com/retrieveU.php",
+        stringRequest = new StringRequest(Request.Method.GET, Constants.URL_RETRIEVE_CUSTOMERS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -552,75 +539,32 @@ public class ActivitySalesOrderList extends AppCompatActivity{
                     }
                 }
         );
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
 
-    //DatePicker
-    Calendar myCalendar = Calendar.getInstance();
-    DatePickerDialog.OnDateSetListener date1 = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            myCalendar.set(Calendar.YEAR, year);
-            myCalendar.set(Calendar.MONTH, monthOfYear);
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabel1();
-        }
+    //DatePicker — each picker has its own Calendar to avoid cross-contamination.
+    final Calendar calendar1 = Calendar.getInstance();
+    final Calendar calendar2 = Calendar.getInstance();
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+
+    DatePickerDialog.OnDateSetListener date1 = (view, year, monthOfYear, dayOfMonth) -> {
+        calendar1.set(Calendar.YEAR, year);
+        calendar1.set(Calendar.MONTH, monthOfYear);
+        calendar1.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        editTextDate1.setText(new SimpleDateFormat(DATE_FORMAT, Locale.US).format(calendar1.getTime()));
     };
-    private void updateLabel1() {
-        String myFormat = "yyyy-MM-dd";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        editTextDate1.setText(sdf.format(myCalendar.getTime()));
-    }
 
-    DatePickerDialog.OnDateSetListener date2 = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            myCalendar.set(Calendar.YEAR, year);
-            myCalendar.set(Calendar.MONTH, monthOfYear);
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabel2();
-        }
+    DatePickerDialog.OnDateSetListener date2 = (view, year, monthOfYear, dayOfMonth) -> {
+        calendar2.set(Calendar.YEAR, year);
+        calendar2.set(Calendar.MONTH, monthOfYear);
+        calendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        editTextDate2.setText(new SimpleDateFormat(DATE_FORMAT, Locale.US).format(calendar2.getTime()));
     };
-    private void updateLabel2() {
-        String myFormat = "yyyy-MM-dd";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        editTextDate2.setText(sdf.format(myCalendar.getTime()));
-    }
     //Date Picker end
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == android.R.id.home)
-        {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySalesOrderList.this);
-                builder.setTitle("BACK!\n\n");
-                builder.setMessage("Where do you want to go back?");
-                builder.setPositiveButton("Home Screen", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(ActivitySalesOrderList.this, MainActivity.class));
-                    }
-                });
-                builder.setNegativeButton("Sales Order Initial Screen", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        llResults.setVisibility(View.GONE);
-                        llChoice.setVisibility(View.VISIBLE);
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
-                dialog.show();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         final AlertDialog.Builder builder1 = new AlertDialog.Builder(ActivitySalesOrderList.this);
         builder1.setTitle("BACK!\n\n");
         builder1.setMessage("Where do you want to go back?");
@@ -641,9 +585,9 @@ public class ActivitySalesOrderList extends AppCompatActivity{
         Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogTheme;
         dialog.show();
         Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        bNeg.setTextColor(getResources().getColor(R.color.splashback));
+        bNeg.setTextColor(ContextCompat.getColor(this, R.color.splashback));
         Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        bPos.setTextColor(getResources().getColor(R.color.splashback));
+        bPos.setTextColor(ContextCompat.getColor(this, R.color.splashback));
     }
 
     public void onCheckboxClicked(View view) {

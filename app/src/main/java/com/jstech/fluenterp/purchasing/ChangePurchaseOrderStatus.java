@@ -1,29 +1,27 @@
 package com.jstech.fluenterp.purchasing;
 
-import android.support.v7.app.AppCompatActivity;
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.jstech.fluenterp.R;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.adapters.AdapterOrderStatusPurchase;
 import com.jstech.fluenterp.models.PurchaseOrder;
 
@@ -32,20 +30,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ChangePurchaseOrderStatus extends AppCompatActivity {
+public class ChangePurchaseOrderStatus extends BaseActivity {
 
     ProgressBar progressBar;
-    RequestQueue requestQueue;
     StringRequest stringRequest;
     AdapterOrderStatusPurchase adapter;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView recyclerView;
-    static ArrayList<PurchaseOrder> data;
+    ArrayList<PurchaseOrder> data;
     TextView txtSearchOrderStatus;
     EditText eTxtSearchOrderStatus;
 
     void initViews(){
-        requestQueue = Volley.newRequestQueue(this);
         progressBar = findViewById(R.id.progressBarCPOS);
         progressBar.setVisibility(View.VISIBLE);
         txtSearchOrderStatus = findViewById(R.id.txtSearchOrderStatus);
@@ -56,17 +52,7 @@ public class ChangePurchaseOrderStatus extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_purchase_order_status);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar = findViewById(R.id.toolbarCPOS);
-        setSupportActionBar(toolbar);
-        setTitle("Check Order Status");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarCPOS, "Check Order Status");
         initViews();
         initRecyclerView();
         txtSearchOrderStatus.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +92,7 @@ public class ChangePurchaseOrderStatus extends AppCompatActivity {
 
     void retrieveRecords(){
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrieveOrderStatusPurchase.php",
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_RETRIEVE_ORDER_STATUS_PURCHASE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -149,21 +135,13 @@ public class ChangePurchaseOrderStatus extends AppCompatActivity {
                 }
         )
         ;
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 }

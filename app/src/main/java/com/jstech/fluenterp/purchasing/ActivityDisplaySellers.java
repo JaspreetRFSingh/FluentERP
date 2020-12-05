@@ -1,28 +1,26 @@
 package com.jstech.fluenterp.purchasing;
 
-import android.support.v7.app.AppCompatActivity;
+import com.jstech.fluenterp.network.VolleySingleton;
+
+import com.jstech.fluenterp.Constants;
+
+import com.jstech.fluenterp.BaseActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.jstech.fluenterp.R;
 import com.jstech.fluenterp.adapters.AdapterDisplaySellers;
 import com.jstech.fluenterp.models.Seller;
@@ -32,10 +30,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityDisplaySellers extends AppCompatActivity {
+public class ActivityDisplaySellers extends BaseActivity {
 
     ProgressBar progressBar;
-    RequestQueue requestQueue;
     StringRequest stringRequest;
     AdapterDisplaySellers adapter;
     RecyclerView.LayoutManager layoutManager;
@@ -46,7 +43,6 @@ public class ActivityDisplaySellers extends AppCompatActivity {
     EditText eTxtSearchSeller;
 
     void init(){
-        requestQueue = Volley.newRequestQueue(this);
         progressBar = findViewById(R.id.progressBarDS);
         progressBar.setVisibility(View.GONE);
         txtTitleHead = findViewById(R.id.txtViewTitleHeadSellersList);
@@ -64,17 +60,7 @@ public class ActivityDisplaySellers extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_sellers);
-        Window window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.getResources().getColor(R.color.status_bar_colour));
-        Toolbar toolbar = findViewById(R.id.toolbarDS);
-        setSupportActionBar(toolbar);
-        setTitle("List of Sellers");
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setupToolbar(R.id.toolbarDS, "List of Sellers");
         init();
         txtTitleHead.startAnimation(AnimationUtils.loadAnimation(this, R.anim.blink));
         txtSearchSeller.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +88,7 @@ public class ActivityDisplaySellers extends AppCompatActivity {
 
     void retrieveRecords(){
         progressBar.setVisibility(View.VISIBLE);
-        stringRequest = new StringRequest(Request.Method.POST, "https://jaspreettechnologies.000webhostapp.com/retrieveSellers.php",
+        stringRequest = new StringRequest(Request.Method.POST, Constants.URL_RETRIEVE_SELLERS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -153,19 +139,11 @@ public class ActivityDisplaySellers extends AppCompatActivity {
                 }
         )
         ;
-        requestQueue.add(stringRequest);
-    }
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         finish();
     }
 }
