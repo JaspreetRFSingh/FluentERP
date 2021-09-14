@@ -345,9 +345,9 @@ public class ActivitySalesOrderModify extends BaseActivity {
                                                 Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                                                 dialog.show();
                                                 Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                                                bNeg.setTextColor(ContextCompat.getColor(this, R.color.splashback));
+                                                bNeg.setTextColor(ContextCompat.getColor(ActivitySalesOrderModify.this, R.color.splashback));
                                                 Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                                                bPos.setTextColor(ContextCompat.getColor(this, R.color.splashback));
+                                                bPos.setTextColor(ContextCompat.getColor(ActivitySalesOrderModify.this, R.color.splashback));
 
                                             }
                                             else{
@@ -387,7 +387,7 @@ public class ActivitySalesOrderModify extends BaseActivity {
                                     }
                                 }
                                 ;
-                                VolleySingleton.getInstance(this).addToRequestQueue(stringRequest1);
+                                VolleySingleton.getInstance(ActivitySalesOrderModify.this).addToRequestQueue(stringRequest1);
                                 progressBar.setVisibility(View.GONE);
                             }
                             else{

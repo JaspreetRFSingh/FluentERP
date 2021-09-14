@@ -2,39 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/card_parent_background"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
-    android:background="@color/card_parent_background"
-    android:id="@+id/content"
     tools:showIn="@layout/app_bar_main">
 
     <ImageView
-        android:layout_marginTop="12dp"
-        android:padding="8dp"
         android:id="@+id/imgLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/hero_logo"/>
+        android:layout_marginTop="12dp"
+        android:background="@drawable/hero_logo"
+        android:padding="8dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
             android:id="@+id/txtCommandLine"
-            android:textColor="@color/colorVisible"
-            android:textSize="16dp"
-            android:layout_marginLeft="12dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/command_line"/>
+            android:layout_marginLeft="12dp"
+            android:text="@string/command_line"
+            android:textColor="@color/colorVisible"
+            android:textSize="16dp" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -43,33 +43,33 @@
             <EditText
                 android:id="@+id/editTextEnterTCode"
                 android:layout_width="match_parent"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:hint="Enter T-Code"
-                android:inputType="textPersonName" />
-        </android.support.design.widget.TextInputLayout>
+                android:inputType="textPersonName"
+                android:visibility="gone" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btnEnterTcode"
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="wrap_content"
             android:background="@drawable/roundedbutton"
-            android:drawableEnd="@drawable/arrow16" />
+            android:drawableEnd="@drawable/arrow16"
+            android:visibility="gone" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/txtExplore"
-        android:layout_marginTop="14dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:gravity="center"
         android:layout_gravity="start"
-        android:text="@string/explore"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="14dp"
         android:layout_marginBottom="10dp"
-        android:textSize="14dp"/>
+        android:gravity="center"
+        android:text="@string/explore"
+        android:textSize="14dp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -77,30 +77,31 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <android.support.v7.widget.RecyclerView
+
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbars="vertical"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/txtVisitWebsite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:text="@string/visit"
-                android:textSize="14dp"
                 android:layout_marginTop="14dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="20dp"
-                />
+                android:text="@string/visit"
+                android:textSize="14dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

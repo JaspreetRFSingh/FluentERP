@@ -384,10 +384,9 @@ public class ActivityPurchaseOrderModify extends BaseActivity {
                                                 dialog.show();
                                                 Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
                                                 //noinspection deprecation
-                                                bPos.setTextColor(ContextCompat.getColor(this, R.color.splashback));
+                                                bPos.setTextColor(ContextCompat.getColor(ActivityPurchaseOrderModify.this, R.color.splashback));
                                                 Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                                                //noinspection deprecation
-                                                bNeg.setTextColor(ContextCompat.getColor(this, R.color.splashback));
+                                                bNeg.setTextColor(ContextCompat.getColor(ActivityPurchaseOrderModify.this, R.color.splashback));
 
                                             }
                                             else{
@@ -423,7 +422,7 @@ public class ActivityPurchaseOrderModify extends BaseActivity {
                                     }
                                 }
                                 ;
-                                VolleySingleton.getInstance(this).addToRequestQueue(stringRequest1);
+                                VolleySingleton.getInstance(ActivityPurchaseOrderModify.this).addToRequestQueue(stringRequest1);
                                 progressBar.setVisibility(View.GONE);
                             }
                             else{

@@ -69,8 +69,6 @@ import com.jstech.fluenterp.sd.ActivitySalesOrderCreate;
 import com.jstech.fluenterp.sd.ActivitySalesOrderDisplay;
 import com.jstech.fluenterp.sd.ActivitySalesOrderList;
 import com.jstech.fluenterp.sd.ActivitySalesOrderModify;
-import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
-import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainActivityRecyclerViewAdapter.ItemListener {
 
 
-    private FlowingDrawer mDrawer;
+    private DrawerLayout mDrawer;
     ExpandableListAdapter mMenuAdapter;
     ExpandableListView expandableList;
     List<String> listDataHeader;
@@ -158,12 +156,10 @@ public class MainActivity extends AppCompatActivity
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //noinspection deprecation
-        window.setStatusBarColor(this.ContextCompat.getColor(this, R.color.status_bar_colour));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_colour));
 
         setContentView(R.layout.activity_main);
         mDrawer = findViewById(R.id.drawer_layout);
-        mDrawer.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL);
         setupToolbar();
 
         requestNeededPermissions();
@@ -340,7 +336,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
                 //Toast.makeText(getApplicationContext(), listDataHeader.get(groupPosition) + " -> " + listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition), Toast.LENGTH_LONG).show();
-                mDrawer.closeMenu();
+                mDrawer.closeDrawer(GravityCompat.START);
                 return false;
             }
         });
@@ -502,10 +498,11 @@ public class MainActivity extends AppCompatActivity
         setTitle(" FluentERP");
         toolbar.setLogo(R.drawable.ic_applogo);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDrawer.toggleMenu();
+        toolbar.setNavigationOnClickListener(v -> {
+            if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+                mDrawer.closeDrawer(GravityCompat.START);
+            } else {
+                mDrawer.openDrawer(GravityCompat.START);
             }
         });
     }
@@ -617,8 +614,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -626,8 +622,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (mDrawer.isMenuVisible()) {
-            mDrawer.closeMenu();
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
             return;
         }
         if (doubleBackToExitPressed == 2) {

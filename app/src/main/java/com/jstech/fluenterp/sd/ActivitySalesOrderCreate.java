@@ -433,9 +433,9 @@ public class ActivitySalesOrderCreate extends BaseActivity {
                                             dialog.show();
 
                                             Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                                            bNeg.setTextColor(ContextCompat.getColor(this, R.color.splashback));
+                                            bNeg.setTextColor(ContextCompat.getColor(ActivitySalesOrderCreate.this, R.color.splashback));
                                             Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                                            bPos.setTextColor(ContextCompat.getColor(this, R.color.splashback));
+                                            bPos.setTextColor(ContextCompat.getColor(ActivitySalesOrderCreate.this, R.color.splashback));
 
                                         }
 
@@ -487,7 +487,7 @@ public class ActivitySalesOrderCreate extends BaseActivity {
                                 }
                             }
                             ;
-                            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest1);
+                            VolleySingleton.getInstance(ActivitySalesOrderCreate.this).addToRequestQueue(stringRequest1);
                             progressBar.setVisibility(View.GONE);
 
                         } catch (Exception e) {

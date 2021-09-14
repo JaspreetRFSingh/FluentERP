@@ -15,12 +15,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
@@ -184,27 +187,20 @@ public class GraphicalAnalysisActivity extends BaseActivity implements OnChartVa
         barChart.setVisibility(View.GONE);
         pieChart.setVisibility(View.VISIBLE);
         pieChart.setUsePercentValues(true);
-        ArrayList<Entry> yvalues = new ArrayList<>();
-        yvalues.add(new Entry( sl, 0));
-        yvalues.add(new Entry( sj, 1));
-        yvalues.add(new Entry( sa, 2));
-        yvalues.add(new Entry(st - sl -sj - sa, 3));
+        ArrayList<PieEntry> yvalues = new ArrayList<>();
+        yvalues.add(new PieEntry(sl, "Ludhiana"));
+        yvalues.add(new PieEntry(sj, "Jalandhar"));
+        yvalues.add(new PieEntry(sa, "Allahabad"));
+        yvalues.add(new PieEntry(st - sl - sj - sa, "Other"));
 
         PieDataSet dataSet = new PieDataSet(yvalues, "Cities");
 
-        ArrayList<String> xVals = new ArrayList<>();
-        xVals.add("Ludhiana");
-        xVals.add("Jalandhar");
-        xVals.add("Allahabad");
-        xVals.add("Other");
-
-        PieData data = new PieData(xVals, dataSet);
-        // In Percentage term
+        PieData data = new PieData(dataSet);
         data.setValueFormatter(new PercentFormatter());
-        // Default value
-        //data.setValueFormatter(new DefaultValueFormatter(0));
         pieChart.setData(data);
-        pieChart.setDescription("City-wise sales analysis");
+        Description pieDesc = new Description();
+        pieDesc.setText("City-wise sales analysis");
+        pieChart.setDescription(pieDesc);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setTransparentCircleRadius(25f);
         pieChart.setHoleRadius(25f);
@@ -345,12 +341,12 @@ public class GraphicalAnalysisActivity extends BaseActivity implements OnChartVa
         pieChart.setVisibility(View.GONE);
         barChart.setVisibility(View.VISIBLE);
         ArrayList<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(s1, 0));
-        entries.add(new BarEntry(s2, 1));
-        entries.add(new BarEntry(s3, 2));
-        entries.add(new BarEntry(s4, 3));
-        entries.add(new BarEntry(s5, 4));
-        entries.add(new BarEntry(s6, 5));
+        entries.add(new BarEntry(0, s1));
+        entries.add(new BarEntry(1, s2));
+        entries.add(new BarEntry(2, s3));
+        entries.add(new BarEntry(3, s4));
+        entries.add(new BarEntry(4, s5));
+        entries.add(new BarEntry(5, s6));
 
         BarDataSet bardataset = new BarDataSet(entries, "Cells");
         ArrayList<String> labels = new ArrayList<>();
@@ -454,9 +450,12 @@ public class GraphicalAnalysisActivity extends BaseActivity implements OnChartVa
                 labels.add("Aug" + "\n" +"/" + String.valueOf(Integer.parseInt(dateCurr.substring(2, 4)) - 1));
                 break;
         }
-        BarData data = new BarData(labels, bardataset);
+        BarData data = new BarData(bardataset);
         barChart.setData(data);
-        barChart.setDescription("Monthwise sales for the year "+ dateCurr.substring(0,4)+" in ₹");  // set the description
+        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+        Description barDesc = new Description();
+        barDesc.setText("Monthwise sales for the year " + dateCurr.substring(0, 4) + " in \u20B9");
+        barChart.setDescription(barDesc);
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.animateY(5000);
     }
@@ -469,11 +468,9 @@ public class GraphicalAnalysisActivity extends BaseActivity implements OnChartVa
     }
 
     @Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        if (e == null)
-            return;
-        Log.i("VAL SELECTED", "Value: " + e.getVal() + ", xIndex: " + e.getXIndex()
-                        + ", DataSet index: " + dataSetIndex);
+    public void onValueSelected(Entry e, Highlight h) {
+        if (e == null) return;
+        Log.i("VAL SELECTED", "Value: " + e.getY() + ", x: " + e.getX());
     }
 
     @Override

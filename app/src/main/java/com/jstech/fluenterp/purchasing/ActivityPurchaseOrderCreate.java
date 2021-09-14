@@ -359,9 +359,9 @@ public class ActivityPurchaseOrderCreate extends BaseActivity {
                                             Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.DialogThemeModified;
                                             dialog.show();
                                             Button bNeg = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                                            bNeg.setTextColor(ContextCompat.getColor(this, R.color.splashback));
+                                            bNeg.setTextColor(ContextCompat.getColor(ActivityPurchaseOrderCreate.this, R.color.splashback));
                                             Button bPos = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                                            bPos.setTextColor(ContextCompat.getColor(this, R.color.splashback));
+                                            bPos.setTextColor(ContextCompat.getColor(ActivityPurchaseOrderCreate.this, R.color.splashback));
 
                                         }
 
@@ -409,7 +409,7 @@ public class ActivityPurchaseOrderCreate extends BaseActivity {
                                 }
                             }
                             ;
-                            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest1);
+                            VolleySingleton.getInstance(ActivityPurchaseOrderCreate.this).addToRequestQueue(stringRequest1);
 
                         } catch (Exception e) {
                             progressBar.setVisibility(View.GONE);

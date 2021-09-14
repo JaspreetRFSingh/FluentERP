@@ -592,47 +592,17 @@ public class ActivitySalesOrderList extends BaseActivity{
 
     public void onCheckboxClicked(View view) {
         boolean checked = ((CheckBox) view).isChecked();
-        switch(view.getId()) {
-            case R.id.checkBoxCreated:
-                if (checked){
-                    strCreated = " order_status = 'Created' OR ";
-                }
-                else{
-                    strCreated = "";
-                }
-                break;
-            case R.id.checkBoxProcessing:
-                if (checked){
-                    strProcessing = " order_status = 'Processing' OR ";
-                }
-                else{
-                    strProcessing = "";
-                }
-                break;
-            case R.id.checkBoxProcessed:
-                if (checked){
-                    strProcessed = " order_status = 'Processed' OR ";
-                }
-                else{
-                    strProcessed = "";
-                }
-                break;
-            case R.id.checkBoxDispatched:
-                if (checked){
-                    strDispatched = " order_status = 'Dispatched' OR ";
-                }
-                else{
-                    strDispatched = "";
-                }
-                break;
-            case R.id.checkBoxDelivered:
-                if (checked){
-                    strDelivered = " order_status = 'Delivered' OR ";
-                }
-                else{
-                    strDelivered = "";
-                }
-                break;
+        int id = view.getId();
+        if (id == R.id.checkBoxCreated) {
+            strCreated = checked ? " order_status = 'Created' OR " : "";
+        } else if (id == R.id.checkBoxProcessing) {
+            strProcessing = checked ? " order_status = 'Processing' OR " : "";
+        } else if (id == R.id.checkBoxProcessed) {
+            strProcessed = checked ? " order_status = 'Processed' OR " : "";
+        } else if (id == R.id.checkBoxDispatched) {
+            strDispatched = checked ? " order_status = 'Dispatched' OR " : "";
+        } else if (id == R.id.checkBoxDelivered) {
+            strDelivered = checked ? " order_status = 'Delivered' OR " : "";
         }
     }
 
